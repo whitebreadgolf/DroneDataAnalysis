@@ -1,0 +1,32 @@
+{
+  "name": "drone-analysis-interface",
+  "homepage": "https://github.com/ameyades/DroneDataAnalysis",
+  "authors": [
+    "Karl Campanella-Dysart <karlcd@me.com>"
+  ],
+  "description": "an interface for the visualization and interpretation of drone flight data",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "flight",
+    "data",
+    "drones",
+    "data",
+    "analyitics"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "angular": "~1.4.9",
+    "angular-route": "~1.4.9",
+    "bootstrap": "~3.3.6"
+  }
+}
