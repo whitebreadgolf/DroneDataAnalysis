@@ -1,4 +1,4 @@
-# UAV data web server (Karl and Steven)
+# UAV data web server (Karl and Stephen)
 
 ##Installing new libraries/packages
 
