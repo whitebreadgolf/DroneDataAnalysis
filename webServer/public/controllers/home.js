@@ -1,5 +1,5 @@
-angular.module('UavOpsInterface').controller('HomeCtrl', function($scope){
-
-	$scope.greeting = "hello this is dog";
-
+angular.module('UavOpsInterface')
+.controller('HomeCtrl', function($scope){
+  $scope.greeting = "hello this is home";
+  
 });
