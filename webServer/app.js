@@ -3,20 +3,24 @@
 */
 
 // import necessary modules for a basic web server
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser')
 
-// import required sub modules
+/**
+@requires express
+@requires body-parser
+@requires process
+*/
+var express = require('express');
+var bodyParser = require('body-parser')
 var sp_process = require('./app/controllers/process');
 
 // setup app listening an settings
+var app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());       
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 // setup api routes
-//require('./app/routes/routes')(app);
+require('./app/routes/routes')(app);
 
 /*
 
