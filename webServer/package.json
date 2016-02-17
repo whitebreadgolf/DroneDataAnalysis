@@ -23,7 +23,12 @@
   "dependencies": {
     "body-parser": "^1.14.2",
     "bower": "^1.7.7",
+    "cli-color": "^1.1.0",
     "express": "^4.13.4",
-    "mongoose": "^4.4.1"
+    "get-pixels": "^3.2.3",
+    "googlemaps": "^1.2.0",
+    "mongoose": "^4.4.1",
+    "ndarray": "^1.0.18",
+    "png-js": "^0.1.1"
   }
 }

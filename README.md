@@ -11,4 +11,6 @@ Creating a drone data analysis module for safety
 
 ## Database
 
-- There will be a MongoDB located at DroneDataAnalyis/webServer/database. MongoDB will need to be intstalled on the users OS before this can be run. I haven't quite figured out the specifics of the db yet but I will soon. 
+- There will be a MongoDB located at DroneDataAnalyis/webServer/database. MongoDB will need to be intstalled on the users OS before this can be run. 
+
+- The database must first be started to run. Use "mongod --dbpath <pathname>". Personally, mine is in ~/Desktop/uav_ops/DroneDataAnalysis/webServer/database. I will write a script later to automatically start the db and run the node server. Running the mongo server for the first time will initialize the db in the "database folder"
