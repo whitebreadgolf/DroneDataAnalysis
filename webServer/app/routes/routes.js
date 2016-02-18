@@ -40,7 +40,7 @@ var initRoutes = function (_app){
 
 		// req - {time_interval:{start_time:<integer>,end_time:<integer>}}
 		// res - {data_points: [<double>, ….]}
-
+		
 	});
 
 	// GET altitude
