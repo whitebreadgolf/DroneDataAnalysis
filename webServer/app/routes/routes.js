@@ -3,6 +3,7 @@
 */
 
 /**
+@requires account
 @requires altitude
 @requires daylight
 @requires direction
@@ -13,6 +14,7 @@
 @requires speed
 */
 
+var account = require('./../controllers/account');
 var altitude = require('./../controllers/altitude');
 var daylight = require('./../controllers/daylight');
 var direction = require('./../controllers/direction');
@@ -21,12 +23,6 @@ var location = require('./../controllers/location');
 var preflight = require('./../controllers/preflight');
 var safetyStatus = require('./../controllers/safetyStatus');
 var speed = require('./../controllers/speed');
-
-
-// testing
-
-
-// END testing
 
 /**
 @function initRoutes - to initialize all 

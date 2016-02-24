@@ -8,74 +8,103 @@ var reader;
 var LatLonAltVel = [];
 var previous_time = '';
 var csv_string = '';
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
-function abortRead() {
-    reader.abort();
-}
+Math.radians = function(_degrees) { return _degrees * Math.PI / 180; };
 
-function errorHandler(evt) {
-    switch (evt.target.error.code) {
-        case evt.target.error.NOT_FOUND_ERR:
-            alert('File Not Found!');
+Math.degrees = function(_radians) { return _radians * 180 / Math.PI; };
+
+/**
+@function abortRead - to abort the file reading process 
+@alias decodeDotDAT/abortRead
+*/
+var abortRead = function () { reader.abort(); }
+
+/**
+@function errorHandler - reports errors that can happen during the file reading process 
+@alias decodeDotDAT/errorHandler
+@param {object} _evt - event object
+*/
+var errorHandler = function (_evt) {
+    switch (_evt.target.error.code) {
+        case _evt.target.error.NOT_FOUND_ERR:
+            console.log('File Not Found!');
             break;
-        case evt.target.error.NOT_READABLE_ERR:
-            alert('File is not readable');
+        case _evt.target.error.NOT_READABLE_ERR:
+            console.log('File is not readable');
             break;
-        case evt.target.error.ABORT_ERR:
+        case _evt.target.error.ABORT_ERR:
             break;
         default:
-            alert('An error occurred reading this file.');
+            console.log('An error occurred reading this file.');
     };
-}
-
-function updateProgress(percentLoaded) {
-    if (percentLoaded < 100) {
-        console.log(percentLoaded + '%');
-    }
-}
-
-function convert(integer) {
-    var str = Number(integer).toString(16);
-    return str.length == 1 ? "0" + str : str;
 };
 
-function parseLittleEndianDouble(str) {
+/**
+@function updateProgress - print out the percent loaded of a given file 
+@alias decodeDotDAT/updateProgress
+@param {Number} _percentLoaded - integer representing the progress of the download
+*/
+var updateProgress = function (_percentLoaded) {
+    if (_percentLoaded < 100) { console.log(_percentLoaded + '%'); }
+}
+
+/**
+@function convert - converts int to decoded string
+@alias decodeDotDAT/convert
+@param {Number} _integer - an integer Number
+@returns {Number} the integer input with possible appended 0 
+*/
+var convert = function (_integer) {
+    var str = Number(_integer).toString(16);
+    return str.length == 1 ? '0' + str : str;
+};
+
+/**
+@function parseLittleEndianDouble - creates byte array from input string
+@alias decodeDotDAT/parseLittleEndianDouble
+@param {String} _str - the string to be converted
+@returns {Object} a Float64Array with internal byte array buffer
+*/
+var parseLittleEndianDouble = function (_str) {
     var buffer = new ArrayBuffer(8);
     var bytes = new Uint8Array(buffer);
     var doubles = new Float64Array(buffer);
-    bytes[7] = parseInt(str.substring(14, 16), 16);
-    bytes[6] = parseInt(str.substring(12, 14), 16);
-    bytes[5] = parseInt(str.substring(10, 12), 16);
-    bytes[4] = parseInt(str.substring(8, 10), 16);
-    bytes[3] = parseInt(str.substring(6, 8), 16);
-    bytes[2] = parseInt(str.substring(4, 6), 16);
-    bytes[1] = parseInt(str.substring(2, 4), 16);
-    bytes[0] = parseInt(str.substring(0, 2), 16);
+    bytes[7] = parseInt(_str.substring(14, 16), 16);
+    bytes[6] = parseInt(_str.substring(12, 14), 16);
+    bytes[5] = parseInt(_str.substring(10, 12), 16);
+    bytes[4] = parseInt(_str.substring(8, 10), 16);
+    bytes[3] = parseInt(_str.substring(6, 8), 16);
+    bytes[2] = parseInt(_str.substring(4, 6), 16);
+    bytes[1] = parseInt(_str.substring(2, 4), 16);
+    bytes[0] = parseInt(_str.substring(0, 2), 16);
     my_double = doubles[0];
     return my_double;
 }
 
-function parseLittleEndianFloat(str) {
-    var f = 0,
-        sign, order, mantiss, exp, int = 0,
-        multi = 1;
+/**
+@function parseLittleEndianFloat - converts input string into float
+@alias decodeDotDAT/parseLittleEndianFloat
+@param {String} _str - the string to be converted
+@returns {Object} a Float64Array with internal byte array buffer
+*/
+var parseLittleEndianFloat = function (_str) {
+    var f = 0, sign, order, mantiss, exp, int = 0, multi = 1;
     var reversed = '0x';
-    str = str.substring(2, str.length);
-    while (str.length > 0) {
-        reversed += str.substring(str.length - 2, str.length);
-        str = str.substring(0, str.length - 2);
+    _str = _str.substring(2, _str.length);
+    while (_str.length > 0) {
+        reversed += _str.substring(_str.length - 2, _str.length);
+        _str = _str.substring(0, _str.length - 2);
     }
-    str = reversed;
-    if (/^0x/.exec(str)) {
-        int = parseInt(str, 16);
+    _str = reversed;
+    if (/^0x/.exec(_str)) {
+        int = parseInt(_str, 16);
     } else {
-        for (var i = str.length - 1; i >= 0; i -= 1) {
-            if (str.charCodeAt(i) > 255) {
+        for (var i = _str.length - 1; i >= 0; i -= 1) {
+            if (_str.charCodeAt(i) > 255) {
                 console.log('Wrong string parameter');
                 return false;
             }
-            int += str.charCodeAt(i) * multi;
+            int += _str.charCodeAt(i) * multi;
             multi *= 256;
         }
     }
@@ -89,159 +118,171 @@ function parseLittleEndianFloat(str) {
     return f * sign;
 }
 
-function calcCrow(lat1, lon1, lat2, lon2) {
+/**
+@function calcCrow - calculates the distance between 2 latitude/longitude points
+@alias decodeDotDAT/calcCrow
+@param {Number} _lat1 - latitude point 1
+@param {Number} _lon1 - longitude point 1
+@param {Number} _lat2 - latitude point 2
+@param {Number} _lon2 - longitude point 2
+@returns {Number} distance from point 1 to point 2
+*/
+var calcCrow = function (_lat1, _lon1, _lat2, _lon2) {
     var R = 6371;
-    var dLat = toRad(lat2 - lat1);
-    var dLon = toRad(lon2 - lon1);
-    var lat1 = toRad(lat1);
-    var lat2 = toRad(lat2);
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    var dLat = toRad(_lat2 - _lat1);
+    var dLon = toRad(_lon2 - _lon1);
+    var lat1 = toRad(_lat1);
+    var lat2 = toRad(_lat2);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d;
 }
 
-function toRad(Value) {
-    return Value * Math.PI / 180;
-}
+/**
+@function toRad - convert arclength to radians
+@alias decodeDotDAT/toRad
+@param {Number} _value - the value of the arclength
+@returns {Number} radian value
+*/
+var toRad = function (_value) { return _value * Math.PI / 180; }
 
-function parseLittleEndianSigned32(hex) {
+/**
+@function parseLittleEndianSigned32 - calculates decimal value from 32 bit unsigned hexidecimal string
+@alias decodeDotDAT/parseLittleEndianSigned32
+@param {string} _hex - hexidecimal value
+@returns {Number} decimal value 
+*/
+var parseLittleEndianSigned32 = function (_hex) {
     var result = 0;
     var pow = 0;
-    while (hex.length > 0) {
-        result += parseInt(hex.substring(0, 2), 16) * Math.pow(2, pow);
-        hex = hex.substring(2, hex.length);
+    while (_hex.length > 0) {
+        result += parseInt(_hex.substring(0, 2), 16) * Math.pow(2, pow);
+        _hex = _hex.substring(2, _hex.length);
         pow += 8;
     }
-    if ((result & 0x80000000) != 0) {
-        result = result - 0x100000000;
-    }
+
+    if ((result & 0x80000000) != 0) { result = result - 0x100000000; }
     return result;
 }
 
-function parseLittleEndianUnsigned32(hex) {
+/**
+@function parseLittleEndianUnsigned32 - calculates decimal value from 32 bit unsigned hexidecimal string
+@alias decodeDotDAT/parseLittleEndianUnsigned32
+@param {string} _hex - hexidecimal value
+@returns {Number} decimal value 
+*/
+var parseLittleEndianUnsigned32 = function (_hex) {
     var result = 0;
     var pow = 0;
-    while (hex.length > 0) {
-        result += parseInt(hex.substring(0, 2), 16) * Math.pow(2, pow);
-        hex = hex.substring(2, hex.length);
-        pow += 8;
-    }
-    return result;
-}
-
-function parseLittleEndianSigned16(hex) {
-    var result = 0;
-    var pow = 0;
-    while (hex.length > 0) {
-        result += parseInt(hex.substring(0, 2), 16) * Math.pow(2, pow);
-        hex = hex.substring(2, hex.length);
-        pow += 8;
-    }
-    if ((result & 0x8000) != 0) {
-        result = result - 0x10000;
-    }
-    return result;
-}
-
-function parseLittleEndianUnsigned16(hex) {
-    var result = 0;
-    var pow = 0;
-    while (hex.length > 0) {
-        result += parseInt(hex.substring(0, 2), 16) * Math.pow(2, pow);
-        hex = hex.substring(2, hex.length);
+    while (_hex.length > 0) {
+        result += parseInt(_hex.substring(0, 2), 16) * Math.pow(2, pow);
+        _hex = _hex.substring(2, _hex.length);
         pow += 8;
     }
     return result;
 }
 
-function subtract_offset(in_byte, mask) {
-    var the_byte = parseInt(in_byte, 16) ^ mask;
-    if (the_byte < 0)
-        the_byte = 255 + the_byte;
+/**
+@function parseLittleEndianSigned16 - calculates decimal value from 16 bit signed hexidecimal string
+@alias decodeDotDAT/parseLittleEndianSigned16
+@param {string} _hex - hexidecimal value
+@returns {Number} decimal value 
+*/
+var parseLittleEndianSigned16 = function (_hex) {
+    var result = 0;
+    var pow = 0;
+    while (_hex.length > 0) {
+        result += parseInt(_hex.substring(0, 2), 16) * Math.pow(2, pow);
+        _hex = _hex.substring(2, _hex.length);
+        pow += 8;
+    }
+    if ((result & 0x8000) != 0) { result = result - 0x10000; }
+    return result;
+}
+
+/**
+@function parseLittleEndianUnsigned16 - calculates decimal value from 16 bit unsigned hexidecimal string
+@alias decodeDotDAT/parseLittleEndianUnsigned16
+@param {string} _hex - hexidecimal value
+@returns {Number} decimal value 
+*/
+var parseLittleEndianUnsigned16 = function (_hex) {
+    var result = 0;
+    var pow = 0;
+    while (_hex.length > 0) {
+        result += parseInt(_hex.substring(0, 2), 16) * Math.pow(2, pow);
+        _hex = _hex.substring(2, _hex.length);
+        pow += 8;
+    }
+    return result;
+}
+
+/**
+@function subtract_offset - calculates the hex value of an incoming byte value
+@alias decodeDotDAT/subtract_offset
+@param {string} _in_byte - hexidecimal value
+@param {string} _mask - hexidecimal value
+@returns {Number} masked byte in hex
+*/
+var subtract_offset = function (_in_byte, _mask) {
+    var the_byte = parseInt(_in_byte, 16) ^ _mask;
+    if (the_byte < 0) { the_byte = 255 + the_byte; }
     return dec2hex(the_byte);
 }
 
-function zeroFill(number, width) {
-    width -= number.toString().length;
-    if (width > 0) {
-        return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
-    }
-    return number + "";
+/**
+@function subtract_offset - calculates the hex value of an incoming byte value
+@alias decodeDotDAT/subtract_offset
+@param {string} _number - hexidecimal value
+@param {string} _width - hexidecimal value
+@returns {Number} 
+*/
+var zeroFill = function (_number, _width) {
+    _width -= _number.toString().length;
+    if (_width > 0) { return new Array(_width + (/\./.test(_number) ? 2 : 1)).join('0') + _number; }
+    return _number + '';
 }
-Math.radians = function(degrees) {
-    return degrees * Math.PI / 180;
-};
-Math.degrees = function(radians) {
-    return radians * 180 / Math.PI;
-};
 
-function clean_message(in_string, offset) {
+var clean_message = function (_in_string, _offset) {
     var new_string = '';
-    var hex_string = in_string;
+    var hex_string = _in_string;
     for (i = 0; i < hex_string.length; i += 2) {
         var the_byte_hex = hex_string.substring(i, i + 2);
-        var the_fixed_byte = subtract_offset(the_byte_hex, offset);
+        var the_fixed_byte = subtract_offset(the_byte_hex, _offset);
         new_string += zeroFill(the_fixed_byte, 2);
     }
     return new_string;
 }
 
-function round3(num) {
-    var result = Math.round(num * 1000) / 1000;
-    return result;
-}
+var round3 = function (_num) { return Math.round(_num * 1000) / 1000; }
 
-function drawChart() {
+var drawChart = function () {
     if (csv_string != '') {
-        var csvblob = new Blob([csv_string], {
-            type: 'text/csv'
-        });
+        var csvblob = new Blob([csv_string], {type: 'text/csv'});
         var csvurl = URL.createObjectURL(csvblob);
-        var csvlink = document.createElement('a');
-        csvlink.download = "flight_data.csv";
-        csvlink.href = csvurl;
-        csvlink.textContent = "Download Full Data CSV";
-        document.getElementById('kml_download').appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0'));
-        document.getElementById('kml_download').appendChild(csvlink);
     }
 }
 
-(function() {
-    var convertBase = function(num) {
-        this.from = function(baseFrom) {
-            this.to = function(baseTo) {
-                return parseInt(num, baseFrom).toString(baseTo);
-            };
-            return this;
-        };
+var convertBase = function(_num) {
+    this.from = function(_baseFrom) {
+        this.to = function(_baseTo) { return parseInt(_num, _baseFrom).toString(_baseTo); };
         return this;
     };
-    this.bin2dec = function(num) {
-        return convertBase(num).from(2).to(10);
-    };
-    this.bin2hex = function(num) {
-        return convertBase(num).from(2).to(16);
-    };
-    this.dec2bin = function(num) {
-        return convertBase(num).from(10).to(2);
-    };
-    this.dec2hex = function(num) {
-        return convertBase(num).from(10).to(16);
-    };
-    this.hex2bin = function(num) {
-        return convertBase(num).from(16).to(2);
-    };
-    this.hex2dec = function(num) {
-        return convertBase(num).from(16).to(10);
-    };
     return this;
-})();
+};
+  
+var bin2dec = function(_num) { return convertBase(_num).from(2).to(10); };
 
-function handleFileSelect(evt) {
+var dec2bin = function(_num) { return convertBase(_num).from(10).to(2); };
+
+var dec2hex = function(_num) { return convertBase(_num).from(10).to(16); };
+
+var hex2dec = function(_num) { return convertBase(_num).from(16).to(10); };
+
+var handleFileSelect = function (_evt) {
     reader = new FileReader();
-    var file = evt.target.files[0];
+    var file = _evt.target.files[0];
     var blob;
     var file_valid = false;
     var blob_count = 0;
@@ -255,15 +296,12 @@ function handleFileSelect(evt) {
     var main_voltage = 0;
     var can_voltage = 0;
     var ec_voltage = 0;
-    document.getElementById('kml_download').innerHTML = "";
     reader.onerror = errorHandler;
     
     reader.onload = function(e) {
         var view = new Uint8Array(reader.result);
         var data = '';
-        for (i = 0; i < view.length; i++) {
-            data += convert(view[i]);
-        }
+        for (i = 0; i < view.length; i++) { data += convert(view[i]); }
         var segments = data.split('558400cf01');
         if (segments.length > 10) {
             file_valid = true;
@@ -280,71 +318,65 @@ function handleFileSelect(evt) {
                     var longitude = Math.degrees(parseLittleEndianDouble(longitude_substring));
                     var latitude = Math.degrees(parseLittleEndianDouble(latitude_substring));
                     var gps_altitude_substring = cleaned_payload.substring(32, 40);
-                    var altitude = parseLittleEndianFloat("0x" + gps_altitude_substring);
+                    var altitude = parseLittleEndianFloat('0x' + gps_altitude_substring);
                     var accx_bytes = cleaned_payload.substring(40, 48);
-                    var accx = parseLittleEndianFloat("0x" + accx_bytes);
+                    var accx = parseLittleEndianFloat('0x' + accx_bytes);
                     var accy_bytes = cleaned_payload.substring(48, 56);
-                    var accy = parseLittleEndianFloat("0x" + accy_bytes);
+                    var accy = parseLittleEndianFloat('0x' + accy_bytes);
                     var accz_bytes = cleaned_payload.substring(56, 64);
-                    var accz = parseLittleEndianFloat("0x" + accz_bytes);
+                    var accz = parseLittleEndianFloat('0x' + accz_bytes);
                     var gyrox_bytes = cleaned_payload.substring(64, 72);
-                    var gyrox = parseLittleEndianFloat("0x" + gyrox_bytes);
+                    var gyrox = parseLittleEndianFloat('0x' + gyrox_bytes);
                     var gyroy_bytes = cleaned_payload.substring(72, 80);
-                    var gyroy = parseLittleEndianFloat("0x" + gyroy_bytes);
+                    var gyroy = parseLittleEndianFloat('0x' + gyroy_bytes);
                     var gyroz_bytes = cleaned_payload.substring(80, 88);
-                    var gyroz = parseLittleEndianFloat("0x" + gyroz_bytes);
+                    var gyroz = parseLittleEndianFloat('0x' + gyroz_bytes);
                     var barometric_altitude_substring = cleaned_payload.substring(88, 96);
-                    var baro_alt = parseLittleEndianFloat("0x" + barometric_altitude_substring);
+                    var baro_alt = parseLittleEndianFloat('0x' + barometric_altitude_substring);
                     var quatw_bytes = cleaned_payload.substring(96, 104);
-                    var quatw = parseLittleEndianFloat("0x" + quatw_bytes);
+                    var quatw = parseLittleEndianFloat('0x' + quatw_bytes);
                     var quatx_bytes = cleaned_payload.substring(104, 112);
-                    var quatx = parseLittleEndianFloat("0x" + quatx_bytes);
+                    var quatx = parseLittleEndianFloat('0x' + quatx_bytes);
                     var quaty_bytes = cleaned_payload.substring(112, 120);
-                    var quaty = parseLittleEndianFloat("0x" + quaty_bytes);
+                    var quaty = parseLittleEndianFloat('0x' + quaty_bytes);
                     var quatz_bytes = cleaned_payload.substring(120, 128);
-                    var quatz = parseLittleEndianFloat("0x" + quatz_bytes);
+                    var quatz = parseLittleEndianFloat('0x' + quatz_bytes);
                     var roll = Math.degrees(Math.atan2(2.0 * (quaty * quatz + quatw * quatx), quatw * quatw - quatx * quatx - quaty * quaty + quatz * quatz));
                     var pitch = Math.degrees(Math.asin(-2.0 * (quatx * quatz - quatw * quaty)));
                     var yaw = Math.degrees(Math.atan2(2.0 * (quatx * quaty + quatw * quatz), quatw * quatw + quatx * quatx - quaty * quaty - quatz * quatz));
                     var magx_bytes = cleaned_payload.substring(128, 136);
-                    var magx = parseLittleEndianFloat("0x" + magx_bytes);
+                    var magx = parseLittleEndianFloat('0x' + magx_bytes);
                     var magy_bytes = cleaned_payload.substring(136, 144);
-                    var magy = parseLittleEndianFloat("0x" + magy_bytes);
+                    var magy = parseLittleEndianFloat('0x' + magy_bytes);
                     var magz_bytes = cleaned_payload.substring(144, 152);
-                    var magz = parseLittleEndianFloat("0x" + magz_bytes);
+                    var magz = parseLittleEndianFloat('0x' + magz_bytes);
                     var velocity_north_substring = cleaned_payload.substring(152, 160);
                     var velocity_east_substring = cleaned_payload.substring(160, 168);
                     var velocity_down_substring = cleaned_payload.substring(168, 176);
-                    var velocity_north = parseLittleEndianFloat("0x" + velocity_north_substring);
-                    var velocity_east = parseLittleEndianFloat("0x" + velocity_east_substring);
-                    var velocity_down = parseLittleEndianFloat("0x" + velocity_down_substring);
+                    var velocity_north = parseLittleEndianFloat('0x' + velocity_north_substring);
+                    var velocity_east = parseLittleEndianFloat('0x' + velocity_east_substring);
+                    var velocity_down = parseLittleEndianFloat('0x' + velocity_down_substring);
                     var ground_speed = Math.sqrt(Math.pow(velocity_north, 2) + Math.pow(velocity_east, 2))
                     var velocity = Math.sqrt(velocity_north * velocity_north + velocity_east * velocity_east + velocity_down * velocity_down);
                     var sats_bytes = cleaned_payload.substring(232, 236);
                     var sats = parseLittleEndianSigned16(sats_bytes);
                     var time_scale = sequence_number * 1.68;
-                    var time_string = parseInt(time_scale / 1000 / 3600) + ":" + parseInt(time_scale / 1000 / 60) + ":" + parseInt((time_scale / 1000) % 60);
+                    var time_string = parseInt(time_scale / 1000 / 3600) + ':' + parseInt(time_scale / 1000 / 60) + ':' + parseInt((time_scale / 1000) % 60);
                     var time_is_new = true;
-                    if (previous_time == time_string) {
-                        time_is_new = false;
-                    }
-                    if (time_string == '0:0:0') {
-                        time_is_new = false;
-                    }
+
+                    if (previous_time == time_string) { time_is_new = false; }
+                    if (time_string == '0:0:0') { time_is_new = false; }
+
                     previous_time = time_string;
+
                     if (time_is_new && longitude > -180 && longitude < 180 && longitude != 0 && latitude > -90 && latitude < 90 && latitude != 0) {
-                        LatLonAltVel.push({
-                            lat: latitude,
-                            lon: longitude,
-                            alt: altitude,
-                            vel: ground_speed,
-                            time: time_string
-                        });
+                        LatLonAltVel.push({lat: latitude, lon: longitude, alt: altitude, vel: ground_speed, time: time_string});
                     }
-                    if (csv_string == '')
-                        csv_string = "Latitude (Deg), Longitude (Deg), GPS Altitude (m), N Velocity(m/s), E Velocity(m/s), D Velocity(m/s), Velocity(m/s), Ground Speed(m/s), AccelerometerX(g), AccelerometerY(g), AccelerometerZ(g), GyroX(rad/s), GyroY(rad/s), GyroZ(rad/s), Barometric Alt(m), QuaternionX, QuaternionY, QuaternionZ, QuaternionW, Roll(deg), Pitch(deg), Yaw(deg), MagneticX, MagneticY, MagneticZ, Satellites, Sequence(135 Hz) \n";
+                    if (csv_string == ''){
+                        csv_string = 'Latitude (Deg), Longitude (Deg), GPS Altitude (m), N Velocity(m/s), E Velocity(m/s), D Velocity(m/s), Velocity(m/s), Ground Speed(m/s), AccelerometerX(g), AccelerometerY(g), AccelerometerZ(g), GyroX(rad/s), GyroY(rad/s), GyroZ(rad/s), Barometric Alt(m), QuaternionX, QuaternionY, QuaternionZ, QuaternionW, Roll(deg), Pitch(deg), Yaw(deg), MagneticX, MagneticY, MagneticZ, Satellites, Sequence(135 Hz) \n';
+                    }
                     if (velocity_north > -1000 && velocity_north < 1000 && latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180 && altitude < 30000 && altitude > -1000 && quatx >= -1 && quatx <= 1 && quaty >= -1 && quaty <= 1 && quatz >= -1 && quatz <= 1 && quatw >= -1 && quatw <= 1) {
-                        var dataline = latitude + ", " + longitude + ", " + altitude + ", " + velocity_north + ", " + velocity_east + ", " + velocity_down + ", " + velocity + ", " + ground_speed + ", " + accx + ", " + accy + ", " + accz + ", " + gyrox + ", " + gyroy + ", " + gyroz + ", " + baro_alt + ", " + quatx + ", " + quaty + ", " + quatz + ", " + quatw + ", " + roll + ", " + pitch + ", " + yaw + ", " + magx + ", " + magy + ", " + magz + ", " + sats + ", " + sequence_number + ", " + "\n";
+                        var dataline = latitude + ', ' + longitude + ', ' + altitude + ', ' + velocity_north + ', ' + velocity_east + ', ' + velocity_down + ', ' + velocity + ', ' + ground_speed + ', ' + accx + ', ' + accy + ', ' + accz + ', ' + gyrox + ', ' + gyroy + ', ' + gyroz + ', ' + baro_alt + ', ' + quatx + ', ' + quaty + ', ' + quatz + ', ' + quatw + ', ' + roll + ', ' + pitch + ', ' + yaw + ', ' + magx + ', ' + magy + ', ' + magz + ', ' + sats + ', ' + sequence_number + ', ' + '\n';
                         csv_string += dataline;
                     }
                 }
@@ -400,38 +432,38 @@ function handleFileSelect(evt) {
                                 var latitude_bytes = clean_message(all_bytes_09.substring(x + 28, x + 44), mask);
                                 var latitude = Math.degrees(parseLittleEndianDouble(latitude_bytes));
                                 var altitude_bytes = clean_message(all_bytes_09.substring(x + 44, x + 52), mask);
-                                var altitude = parseLittleEndianFloat("0x" + altitude_bytes);
+                                var altitude = parseLittleEndianFloat('0x' + altitude_bytes);
                                 var accx_bytes = clean_message(all_bytes_09.substring(x + 52, x + 60), mask);
-                                var accx = parseLittleEndianFloat("0x" + accx_bytes);
+                                var accx = parseLittleEndianFloat('0x' + accx_bytes);
                                 var accy_bytes = clean_message(all_bytes_09.substring(x + 60, x + 68), mask);
-                                var accy = parseLittleEndianFloat("0x" + accy_bytes);
+                                var accy = parseLittleEndianFloat('0x' + accy_bytes);
                                 var accz_bytes = clean_message(all_bytes_09.substring(x + 68, x + 76), mask);
-                                var accz = parseLittleEndianFloat("0x" + accz_bytes);
+                                var accz = parseLittleEndianFloat('0x' + accz_bytes);
                                 var gyrox_bytes = clean_message(all_bytes_09.substring(x + 76, x + 84), mask);
-                                var gyrox = parseLittleEndianFloat("0x" + gyrox_bytes);
+                                var gyrox = parseLittleEndianFloat('0x' + gyrox_bytes);
                                 var gyroy_bytes = clean_message(all_bytes_09.substring(x + 84, x + 92), mask);
-                                var gyroy = parseLittleEndianFloat("0x" + gyroy_bytes);
+                                var gyroy = parseLittleEndianFloat('0x' + gyroy_bytes);
                                 var gyroz_bytes = clean_message(all_bytes_09.substring(x + 92, x + 100), mask);
-                                var gyroz = parseLittleEndianFloat("0x" + gyroz_bytes);
+                                var gyroz = parseLittleEndianFloat('0x' + gyroz_bytes);
                                 var baro_bytes = clean_message(all_bytes_09.substring(x + 100, x + 108), mask);
-                                var baro_alt = parseLittleEndianFloat("0x" + baro_bytes);
+                                var baro_alt = parseLittleEndianFloat('0x' + baro_bytes);
                                 var quatw_bytes = clean_message(all_bytes_09.substring(x + 108, x + 116), mask);
-                                var quatw = parseLittleEndianFloat("0x" + quatw_bytes);
+                                var quatw = parseLittleEndianFloat('0x' + quatw_bytes);
                                 var quatx_bytes = clean_message(all_bytes_09.substring(x + 116, x + 124), mask);
-                                var quatx = parseLittleEndianFloat("0x" + quatx_bytes);
+                                var quatx = parseLittleEndianFloat('0x' + quatx_bytes);
                                 var quaty_bytes = clean_message(all_bytes_09.substring(x + 124, x + 132), mask);
-                                var quaty = parseLittleEndianFloat("0x" + quaty_bytes);
+                                var quaty = parseLittleEndianFloat('0x' + quaty_bytes);
                                 var quatz_bytes = clean_message(all_bytes_09.substring(x + 132, x + 140), mask);
-                                var quatz = parseLittleEndianFloat("0x" + quatz_bytes);
+                                var quatz = parseLittleEndianFloat('0x' + quatz_bytes);
                                 var roll = Math.degrees(Math.atan2(2.0 * (quaty * quatz + quatw * quatx), quatw * quatw - quatx * quatx - quaty * quaty + quatz * quatz));
                                 var pitch = Math.degrees(Math.asin(-2.0 * (quatx * quatz - quatw * quaty)));
                                 var yaw = Math.degrees(Math.atan2(2.0 * (quatx * quaty + quatw * quatz), quatw * quatw + quatx * quatx - quaty * quaty - quatz * quatz));
                                 var north_bytes = clean_message(all_bytes_09.substring(x + 164, x + 172), mask);
-                                var north_vel = parseLittleEndianFloat("0x" + north_bytes);
+                                var north_vel = parseLittleEndianFloat('0x' + north_bytes);
                                 var east_bytes = clean_message(all_bytes_09.substring(x + 172, x + 180), mask);
-                                var east_vel = parseLittleEndianFloat("0x" + east_bytes);
+                                var east_vel = parseLittleEndianFloat('0x' + east_bytes);
                                 var down_bytes = clean_message(all_bytes_09.substring(x + 180, x + 188), mask);
-                                var down_vel = parseLittleEndianFloat("0x" + down_bytes);
+                                var down_vel = parseLittleEndianFloat('0x' + down_bytes);
                                 var velocity = Math.sqrt(north_vel * north_vel + east_vel * east_vel + down_vel * down_vel);
                                 var ground_speed = Math.sqrt(north_vel * north_vel + east_vel * east_vel);
                                 var magx_bytes = clean_message(all_bytes_09.substring(x + 212, x + 216), mask);
@@ -442,10 +474,11 @@ function handleFileSelect(evt) {
                                 var magz = parseLittleEndianSigned16(magz_bytes);
                                 var sequence_bytes = clean_message(all_bytes_09.substring(x + 248, x + 252), mask);
                                 var sequence = parseLittleEndianUnsigned16(sequence_bytes);
-                                if (csv_string == '')
-                                    csv_string = "Latitude (Deg), Longitude (Deg), GPS Altitude (m), N Velocity(m/s), E Velocity(m/s), D Velocity(m/s), Velocity(m/s), Ground Speed(m/s), AccelerometerX(g), AccelerometerY(g), AccelerometerZ(g), GyroX(rad/s), GyroY(rad/s), GyroZ(rad/s), Barometric Alt(m), QuaternionX, QuaternionY, QuaternionZ, QuaternionW, Roll(deg), Pitch(deg), Yaw(deg), MagneticX, MagneticY, MagneticZ, Satellites, Main Voltage(V), CAN Voltage(V), Elec Voltage(V), Sequence(200 Hz) \n";
+                                if (csv_string == ''){
+                                    csv_string = 'Latitude (Deg), Longitude (Deg), GPS Altitude (m), N Velocity(m/s), E Velocity(m/s), D Velocity(m/s), Velocity(m/s), Ground Speed(m/s), AccelerometerX(g), AccelerometerY(g), AccelerometerZ(g), GyroX(rad/s), GyroY(rad/s), GyroZ(rad/s), Barometric Alt(m), QuaternionX, QuaternionY, QuaternionZ, QuaternionW, Roll(deg), Pitch(deg), Yaw(deg), MagneticX, MagneticY, MagneticZ, Satellites, Main Voltage(V), CAN Voltage(V), Elec Voltage(V), Sequence(200 Hz) \n';
+                                }
                                 if (north_vel > -1000 && north_vel < 1000 && latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180 && altitude < 30000 && altitude > -1000 && quatx >= -1 && quatx <= 1 && quaty >= -1 && quaty <= 1 && quatz >= -1 && quatz <= 1 && quatw >= -1 && quatw <= 1) {
-                                    var dataline = latitude + ", " + longitude + ", " + altitude + ", " + north_vel + ", " + east_vel + ", " + down_vel + ", " + velocity + ", " + ground_speed + ", " + accx + ", " + accy + ", " + accz + ", " + gyrox + ", " + gyroy + ", " + gyroz + ", " + baro_alt + ", " + quatx + ", " + quaty + ", " + quatz + ", " + quatw + ", " + roll + ", " + pitch + ", " + yaw + ", " + magx + ", " + magy + ", " + magz + ", " + sats + ", " + main_voltage + ", " + can_voltage + ", " + ec_voltage + ", " + sequence + "\n";
+                                    var dataline = latitude + ', ' + longitude + ', ' + altitude + ', ' + north_vel + ', ' + east_vel + ', ' + down_vel + ', ' + velocity + ', ' + ground_speed + ', ' + accx + ', ' + accy + ', ' + accz + ', ' + gyrox + ', ' + gyroy + ', ' + gyroz + ', ' + baro_alt + ', ' + quatx + ', ' + quaty + ', ' + quatz + ', ' + quatw + ', ' + roll + ', ' + pitch + ', ' + yaw + ', ' + magx + ', ' + magy + ', ' + magz + ', ' + sats + ', ' + main_voltage + ', ' + can_voltage + ', '' + ec_voltage + ', '' + sequence + '\n';
                                     csv_string += dataline;
                                 }
                             }
@@ -458,7 +491,7 @@ function handleFileSelect(evt) {
                         seconds = time_int_str.substring(time_int_str.length - 2, time_int_str.length);
                         minutes = time_int_str.substring(time_int_str.length - 4, time_int_str.length - 2);
                         hours = time_int_str.substring(0, time_int_str.length - 4);
-                        var time_val = hours + ":" + minutes + ":" + seconds;
+                        var time_val = hours + ':' + minutes + ':' + seconds;
                         var lon_bytes = message7F[1].substring(20, 24) + message7F[2].substring(8, 12);
                         var lon_val = parseLittleEndianSigned32(lon_bytes) * 1e-7;
                         var lat_bytes = message7F[2].substring(12, 20);
@@ -466,11 +499,11 @@ function handleFileSelect(evt) {
                         var alt_bytes = message7F[2].substring(20, 24) + message7F[3].substring(8, 12);
                         var alt_val = parseLittleEndianSigned32(alt_bytes) / 1000.0;
                         var north_bytes = message7F[3].substring(12, 20);
-                        var north_val = parseLittleEndianFloat("0x" + north_bytes);
+                        var north_val = parseLittleEndianFloat('0x' + north_bytes);
                         var east_bytes = message7F[3].substring(20, 24) + message7F[4].substring(8, 12);
-                        var east_val = parseLittleEndianFloat("0x" + east_bytes);
+                        var east_val = parseLittleEndianFloat('0x' + east_bytes);
                         var down_bytes = message7F[4].substring(12, 20);
-                        var down_val = parseLittleEndianFloat("0x" + down_bytes);
+                        var down_val = parseLittleEndianFloat('0x' + down_bytes);
                         var vel_val = Math.sqrt(north_val * north_val + east_val * east_val + down_val * down_val) / 100;
                         var time_is_new = true;
                         if (previous_time == time_val) {
@@ -487,22 +520,10 @@ function handleFileSelect(evt) {
                         if (time_is_new && lon_val > -180 && lon_val < 180 && lon_val != 0 && lat_val > -90 && lat_val < 90 && lat_val != 0 && north_val > -10000 && north_val < 10000 && east_val > -10000 && east_val < 10000) {
                             if (LatLonAltVel.length > 0) {
                                 if (calcCrow(LatLonAltVel[LatLonAltVel.length - 1].lat, LatLonAltVel[LatLonAltVel.length - 1].lon, lat_val, lon_val) < 1) {
-                                    LatLonAltVel.push({
-                                        lat: lat_val,
-                                        lon: lon_val,
-                                        alt: alt_val,
-                                        vel: vel_val,
-                                        time: time_val
-                                    });
+                                    LatLonAltVel.push({lat: lat_val, lon: lon_val, alt: alt_val, vel: vel_val, time: time_val});
                                 }
                             } else {
-                                LatLonAltVel.push({
-                                    lat: lat_val,
-                                    lon: lon_val,
-                                    alt: alt_val,
-                                    vel: vel_val,
-                                    time: time_val
-                                });
+                                LatLonAltVel.push({lat: lat_val, lon: lon_val, alt: alt_val, vel: vel_val, time: time_val});
                             }
                         }
                     }
@@ -523,7 +544,7 @@ function handleFileSelect(evt) {
                             bytes = message10.substring(m, m + 2);
                             masked_bytes = dec2hex(hex2dec(bytes) ^ hex2dec(mask_hex));
                             if (masked_bytes.length == 1)
-                                masked_bytes = "0" + masked_bytes;
+                                masked_bytes = '0' + masked_bytes;
                             masked_message += masked_bytes;
                         }
                         message10 = masked_message;
@@ -574,7 +595,7 @@ function handleFileSelect(evt) {
                         if (parseInt(day) >= 32 || parseInt(day) < 0 || parseInt(month) >= 13 || parseInt(month) < 0 || parseInt(year) <= 0 || parseInt(year) >= 20) {
                             time_is_new = false;
                         }
-                        if (date_val == '0/0/0' || date_val.indexOf("NaN") != -1) {
+                        if (date_val == '0/0/0' || date_val.indexOf('NaN') != -1) {
                             time_is_new = false;
                         }
                         previous_time_int = time_int;
@@ -582,22 +603,10 @@ function handleFileSelect(evt) {
                         if (fix_type == 3 && time_is_new && lon_val > -180 && lon_val < 180 && lon_val != 0 && lat_val > -90 && lat_val < 90 && lat_val != 0 && north_val > -10000 && north_val < 10000 && east_val > -10000 && east_val < 10000) {
                             if (LatLonAltVel.length > 0) {
                                 if (calcCrow(LatLonAltVel[LatLonAltVel.length - 1].lat, LatLonAltVel[LatLonAltVel.length - 1].lon, lat_val, lon_val) < 1) {
-                                    LatLonAltVel.push({
-                                        lat: lat_val,
-                                        lon: lon_val,
-                                        alt: alt_val,
-                                        vel: vel_val,
-                                        time: time_val
-                                    });
+                                    LatLonAltVel.push({lat: lat_val, lon: lon_val, alt: alt_val, vel: vel_val, time: time_val});
                                 }
                             } else {
-                                LatLonAltVel.push({
-                                    lat: lat_val,
-                                    lon: lon_val,
-                                    alt: alt_val,
-                                    vel: vel_val,
-                                    time: time_val
-                                });
+                                LatLonAltVel.push({lat: lat_val, lon: lon_val, alt: alt_val, vel: vel_val, time: time_val});
                             }
                         }
                     }
@@ -605,7 +614,6 @@ function handleFileSelect(evt) {
             }
         }
         if (file_length == last_byte) {
-            
             drawChart();
         }
         if (file_length - (blob_count * 500000) > 500000) {
@@ -624,3 +632,8 @@ function handleFileSelect(evt) {
     reader.readAsArrayBuffer(blob);
     blob_count = 0;
 }
+
+// export module
+module.exports = {
+    handleFileSelect: handleFileSelect
+};
