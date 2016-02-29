@@ -1,0 +1,97 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'd3.js',
+1 verbose cli   '-save' ]
+2 info using npm@2.14.12
+3 info using node@v4.2.6
+4 verbose install initial load of /Users/csong/Workspace/DroneDataAnalysis/webServer/package.json
+5 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/body-parser/package.json
+6 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/bower/package.json
+7 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/cli-color/package.json
+8 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/express/package.json
+9 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/get-pixels/package.json
+10 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/googlemaps/package.json
+11 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/mongoose/package.json
+12 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/ndarray/package.json
+13 verbose installManyTop reading scoped package data from /Users/csong/Workspace/DroneDataAnalysis/webServer/node_modules/png-js/package.json
+14 info package.json googlemaps@1.2.0 No license field.
+15 info package.json png-js@0.1.1 No license field.
+16 verbose readDependencies loading dependencies from /Users/csong/Workspace/DroneDataAnalysis/webServer/package.json
+17 silly cache add args [ 'd3.js', null ]
+18 verbose cache add spec d3.js
+19 silly cache add parsed spec Result {
+19 silly cache add   raw: 'd3.js',
+19 silly cache add   scope: null,
+19 silly cache add   name: 'd3.js',
+19 silly cache add   rawSpec: '',
+19 silly cache add   spec: 'latest',
+19 silly cache add   type: 'tag' }
+20 silly addNamed d3.js@latest
+21 verbose addNamed "latest" is being treated as a dist-tag for d3.js
+22 info addNameTag [ 'd3.js', 'latest' ]
+23 silly mapToRegistry name d3.js
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry uri https://registry.npmjs.org/d3.js
+27 verbose addNameTag registry:https://registry.npmjs.org/d3.js not in flight; fetching
+28 verbose request uri https://registry.npmjs.org/d3.js
+29 verbose request no auth needed
+30 info attempt registry request try #1 at 3:17:13 PM
+31 verbose request id 7aa35ca62270e602
+32 http request GET https://registry.npmjs.org/d3.js
+33 http 404 https://registry.npmjs.org/d3.js
+34 verbose headers { 'content-type': 'application/json',
+34 verbose headers   'cache-control': 'max-age=0',
+34 verbose headers   'content-length': '2',
+34 verbose headers   'accept-ranges': 'bytes',
+34 verbose headers   date: 'Sun, 21 Feb 2016 23:17:13 GMT',
+34 verbose headers   via: '1.1 varnish',
+34 verbose headers   age: '0',
+34 verbose headers   connection: 'keep-alive',
+34 verbose headers   'x-served-by': 'cache-sjc3126-SJC',
+34 verbose headers   'x-cache': 'MISS',
+34 verbose headers   'x-cache-hits': '0',
+34 verbose headers   'x-timer': 'S1456096632.886972,VS0,VE173' }
+35 silly get cb [ 404,
+35 silly get   { 'content-type': 'application/json',
+35 silly get     'cache-control': 'max-age=0',
+35 silly get     'content-length': '2',
+35 silly get     'accept-ranges': 'bytes',
+35 silly get     date: 'Sun, 21 Feb 2016 23:17:13 GMT',
+35 silly get     via: '1.1 varnish',
+35 silly get     age: '0',
+35 silly get     connection: 'keep-alive',
+35 silly get     'x-served-by': 'cache-sjc3126-SJC',
+35 silly get     'x-cache': 'MISS',
+35 silly get     'x-cache-hits': '0',
+35 silly get     'x-timer': 'S1456096632.886972,VS0,VE173' } ]
+36 verbose stack Error: Registry returned 404 for GET on https://registry.npmjs.org/d3.js
+36 verbose stack     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:242:14)
+36 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+36 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:198:22)
+36 verbose stack     at emitTwo (events.js:87:13)
+36 verbose stack     at Request.emit (events.js:172:7)
+36 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1082:10)
+36 verbose stack     at emitOne (events.js:82:20)
+36 verbose stack     at Request.emit (events.js:169:7)
+36 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+37 verbose statusCode 404
+38 verbose pkgid d3.js
+39 verbose cwd /Users/csong/Workspace/DroneDataAnalysis/webServer
+40 error Darwin 14.5.0
+41 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "d3.js" "-save"
+42 error node v4.2.6
+43 error npm  v2.14.12
+44 error code E404
+45 error 404 Registry returned 404 for GET on https://registry.npmjs.org/d3.js
+45 error 404
+45 error 404 'd3.js' is not in the npm registry.
+45 error 404 You should bug the author to publish it (or use the name yourself!)
+45 error 404 It was specified as a dependency of 'drone-data-analysis-web-server'
+45 error 404
+45 error 404 Note that you can also install from a
+45 error 404 tarball, folder, http url, or git url.
+46 verbose exit [ 1, true ]

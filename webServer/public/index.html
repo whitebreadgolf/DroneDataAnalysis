@@ -1,10 +1,12 @@
 <html>
 <head>
 	<title></title>
+	<meta charset="utf-8">  <!-- it's important for d3.js -->
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css"> <!-- https://github.com/krispo/angular-nvd3 -->
 </head>
-<body ng-app="UavOpsInterface">
 
+<body ng-app="UavOpsInterface">
 <div ng-view="" class="container"></div>
 
 </body>
@@ -12,9 +14,21 @@
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="main.js"></script>
-<script src="controllers/home.js"></script>
 
+<!-- https://github.com/krispo/angular-nvd3 -begin -->
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/nvd3/build/nv.d3.js"></script> <!-- or use another assembly -->
+<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+<!-- https://github.com/krispo/angular-nvd3 -end -->
+
+
+
+<script src="main.js"></script>
+<!--   CONTROLLERS   -->
 <script src="controllers/home.js"></script>
+<script src="controllers/speed.js"></script>
+<script src="controllers/altitude.js"></script>
+<script src="controllers/preflight.js"></script>
+
 
 </html>
