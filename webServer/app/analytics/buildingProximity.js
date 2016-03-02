@@ -340,7 +340,6 @@ var getMapDimentions = function (_center){
     };
 }
 
-
 // export all submodules
 module.exports = {
     generateMapWithRange: generateMapWithRange

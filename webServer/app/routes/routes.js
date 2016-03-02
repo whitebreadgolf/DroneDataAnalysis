@@ -12,6 +12,7 @@
 @requires preflight
 @requires safetyStatus
 @requires speed
+<<<<<<< HEAD
 @requires process
 */
 
@@ -25,7 +26,6 @@ var preflight = require('./../controllers/preflight');
 var safetyStatus = require('./../controllers/safetyStatus');
 var speed = require('./../controllers/speed');
 var sp_process = require('./../interProcessCommunication/process');
-
 
 /**
 @function initRoutes - to initialize all 
@@ -130,8 +130,6 @@ var initRoutes = function (_app){
 
 	});	
 
-
-
 	// POST preflight inspection
 	// this is also used to start a flight
 	_app.post('/api/preflight', function (req, res){
@@ -178,14 +176,14 @@ var initRoutes = function (_app){
 
 	// GET safety analysis
 	_app.get('/api/safetyStatus', function (req, res){
-		
+	
 		// res - {operation: {is_unsafe:<boolean>, type: <string>, degree:<double>}, location: {is_unsafe:<boolean>, type: <string>, degree:<double>}}
 
 	});	
 
 	// POST safety analysis
 	_app.post('/api/safetyStatus', function (req, res){
-		
+
 		// req - {is_unsafe:<boolean>, type: <string>, degree:<double>}
 		// res - {status: <boolean>}
 

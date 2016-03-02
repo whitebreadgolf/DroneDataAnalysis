@@ -397,6 +397,7 @@ var importDataBlob = function (_blob){
                         wss.broadcast(JSON.stringify(data_stream));
 
                         //
+
                         csv_string += dataline;
                     }
                 }
@@ -475,6 +476,7 @@ var importDataBlob = function (_blob){
                                 var quaty = parseLittleEndianFloat('0x' + quaty_bytes);
                                 var quatz_bytes = clean_message(all_bytes_09.substring(x + 132, x + 140), mask);
                                 var quatz = parseLittleEndianFloat('0x' + quatz_bytes);
+
                                 var roll = Math.degrees(Math.atan2(2.0 * (quaty * quatz + quatw * quatx), quatw * quatw - quatx * quatx - quaty * quaty + quatz * quatz));
                                 var pitch = Math.degrees(Math.asin(-2.0 * (quatx * quatz - quatw * quaty)));
                                 var yaw = Math.degrees(Math.atan2(2.0 * (quatx * quaty + quatw * quatz), quatw * quatw + quatx * quatx - quaty * quaty - quatz * quatz));
@@ -484,6 +486,7 @@ var importDataBlob = function (_blob){
                                 var east_vel = parseLittleEndianFloat('0x' + east_bytes);
                                 var down_bytes = clean_message(all_bytes_09.substring(x + 180, x + 188), mask);
                                 var down_vel = parseLittleEndianFloat('0x' + down_bytes);
+
                                 var velocity = Math.sqrt(north_vel * north_vel + east_vel * east_vel + down_vel * down_vel);
                                 var ground_speed = Math.sqrt(north_vel * north_vel + east_vel * east_vel);
                                 var magx_bytes = clean_message(all_bytes_09.substring(x + 212, x + 216), mask);
@@ -512,6 +515,7 @@ var importDataBlob = function (_blob){
                                     };
                                     wss.broadcast(JSON.stringify(data_stream));
                                     //csv_string += dataline;
+
                                 }
                             }
                         }
@@ -524,6 +528,7 @@ var importDataBlob = function (_blob){
                         minutes = time_int_str.substring(time_int_str.length - 4, time_int_str.length - 2);
                         hours = time_int_str.substring(0, time_int_str.length - 4);
                         var time_val = hours + ':' + minutes + ':' + seconds;
+
                         var lon_bytes = message7F[1].substring(20, 24) + message7F[2].substring(8, 12);
                         var lon_val = parseLittleEndianSigned32(lon_bytes) * 1e-7;
                         var lat_bytes = message7F[2].substring(12, 20);
@@ -536,6 +541,7 @@ var importDataBlob = function (_blob){
                         var east_val = parseLittleEndianFloat('0x' + east_bytes);
                         var down_bytes = message7F[4].substring(12, 20);
                         var down_val = parseLittleEndianFloat('0x' + down_bytes);
+
                         var vel_val = Math.sqrt(north_val * north_val + east_val * east_val + down_val * down_val) / 100;
                         var time_is_new = true;
                         if (previous_time == time_val) {
@@ -639,6 +645,7 @@ var importDataBlob = function (_blob){
                                 }
                             } else {
                                 LatLonAltVel.push({lat: lat_val, lon: lon_val, alt: alt_val, vel: vel_val, time: time_val});
+
                             }
                         }
                     }

@@ -22,7 +22,6 @@ var safetyReport = require('./safetyReport');
 var speed = require('./speed');
 var user = require('./user');
 
-
 //var session = require('express-session');
 //var MongoStore = require('connect-mongo/es5')(session);
 
@@ -50,3 +49,4 @@ var connectDb = function (_app){
 
 // export empty module
 module.exports = connectDb;
+

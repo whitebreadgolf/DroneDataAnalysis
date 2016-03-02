@@ -15,6 +15,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+
 // setup app listening an settings
 var app = express();
 app.use(express.static(__dirname + '/public'));
@@ -39,10 +40,15 @@ require('./app/models/models')(app);
 // setup api routes
 require('./app/routes/routes')(app);
 
-
 /*
 
 Testing section, not finalized code
+
+*/
+
+/*
+
+END testing section
 
 */
 
