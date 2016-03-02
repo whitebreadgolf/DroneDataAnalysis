@@ -1,0 +1,37 @@
+{
+  "name": "drone-data-analysis-web-server",
+  "version": "0.0.1",
+  "description": "a server to both process the flow of data from a signal processing program to an interface and analyze the data in real-time",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "DroneDataAnalysis"
+  },
+  "keywords": [
+    "drone",
+    "dji",
+    "data",
+    "analysis",
+    "flight",
+    "data"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "bower": "^1.7.7",
+    "connect-mongo": "^1.1.0",
+    "express": "^4.13.4",
+    "file-api": "^0.10.4",
+    "filereader": "^0.10.3",
+    "get-pixels": "^3.2.3",
+    "mongoose": "^4.4.1",
+    "ndarray": "^1.0.18",
+    "png-js": "^0.1.1",
+    "sleep": "^3.0.1",
+    "ws": "^1.0.1"
+  }
+}
