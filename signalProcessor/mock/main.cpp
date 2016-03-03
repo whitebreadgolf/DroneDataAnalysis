@@ -11,6 +11,7 @@
 
 void populateMap (std::map<std::string, std::string>& map, const std::string& extn);
 void outputDAT (std::ifstream& ifile, bool sleep);
+void outputCSV (std::ifstream& ifile, bool sleep);
 
 int main(int argc, char* argv[]){
 	const std::string FAIL_STRING = "MOCK FAILED";
@@ -71,7 +72,14 @@ int main(int argc, char* argv[]){
 	std::ifstream ifile;
 
 	// open .dat or .csv file
-	ifile.open( file, std::ios::in | std::ios::binary | std::ios::ate );
+	if (extn == "dat")
+	{
+		ifile.open( file, std::ios::in | std::ios::binary | std::ios::ate );
+	}
+	else
+	{
+		ifile.open(file);
+	}
 
 	// make sure our file actually exists
 	if(ifile.fail())
@@ -84,9 +92,14 @@ int main(int argc, char* argv[]){
 	{
 		outputDAT(ifile, sleep);
 	}
+	else if (extn == "csv")
+	{
+		outputCSV(ifile, sleep);
+	}
 	return 0;
 }
 
+/* output DAT file data */
 void outputDAT(std::ifstream &ifile, bool sleep)
 {
 	// declarations
@@ -135,6 +148,19 @@ void outputDAT(std::ifstream &ifile, bool sleep)
 	}
 }
 
+void outputCSV(std::ifstream& ifile, bool sleep)
+{
+	std::string output;	
+	while(std::getline(ifile, output))
+	{
+		std::cout << output << std::endl;
+		if (sleep)
+		{
+			std::this_thread::sleep_for (std::chrono::seconds(2));
+		}
+	}
+	
+}
 
 /* Map that maps the file type to the file name */
 void populateMap(std::map<std::string, std::string> &map, const std::string &extn)
