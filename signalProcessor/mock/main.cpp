@@ -6,10 +6,8 @@
 
 using namespace std;
 
-// this is the number of bytes we are sending
+// this is the number of bytes we are sending at a time for the DAT file
 #define BLOB 500000
-//#define BLOB 50
-//#define BLOB 32768
 
 int main(int argc, char* argv[]){
 	
@@ -19,7 +17,7 @@ int main(int argc, char* argv[]){
 	ifstream file;
 
 	// open .dat file
-	file.open( "/Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/signalProcessor/mock/FLY000.DAT", ios::in|ios::binary|ios::ate );
+	file.open( "/Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/signalProcessor/mock/data/DAT/FLY000.DAT", ios::in|ios::binary|ios::ate );
 
 	// make sure our file is actually there
 	if(file == false){ return 1; }
