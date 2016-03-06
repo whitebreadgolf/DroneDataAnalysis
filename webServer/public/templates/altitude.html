@@ -1,3 +1,11 @@
+<h1>HELLO</h1>
 <div ng-repeat="altitude in altitudes track by $index">
 	{{altitude}}
+</div>
+<div ng-app="myApp">
+    <div ng-controller="AltitudeCtrl">
+    	<style>.rChart{background-color: white}</style>
+        <nvd3 options="options" data="data"></nvd3>
+       
+    </div>
 </div>
