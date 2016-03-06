@@ -12,6 +12,7 @@ angular.module('UavOpsInterface')
 		$scope.options = {
             chart: {
                 type: 'lineChart',
+                fill: black,
                 height: 450,
                 margin : {
                     top: 20,
