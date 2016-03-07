@@ -2,31 +2,29 @@ angular.module('UavOpsInterface')
 .service('Websocket', function (){
 
 	var ws;
-	var speed = [{
-		key: "x velocity",
-		values: []
+	var speed = [
+		{
+			key: "x velocity",
+			values: []
+		},
+		{
+			key: "y velocity",
+			values: []
+		},
+		{
+			key: "z velocity",
+			values: []
+		}
+	];
 
-	}];
-	var altitude = [{ 
+	var altitude = [{
 	 	key: "Altitude",
-	 	values: [
-	 		{ "label" : "0" , "value" : 10 },
-	 		{ "label" : "1" , "value" : 20 },
-	 		{ "label" : "3" , "value" : 10 }
-	 	]
+	 	values: []
 	 }];
+
 	var warnings = [];
+	var notifications = [];
 	var overallCount = 0;
-
-	// speed = [{ 
-	// 	key: "Cumulative Return",
-	// 	values: [
-	// 		{ "label" : "A" , "value" : -29.765957771107 },
-	// 		{ "label" : "B" , "value" : 0 },
-	// 		{ "label" : "C" , "value" : 32.807804682612 }
-	// 	]
-	// }];
-
 
 	return {
 	     create: function (){ 
@@ -37,13 +35,19 @@ angular.module('UavOpsInterface')
 
 			 	var jsonData = JSON.parse(event.data);
 
-				if(jsonData.type === 'data'){			
-	
-					var pushVal = { "label" : overallCount++ , "value" : jsonData.speed_x};
-					speed[0].values.push(pushVal);
+				if(jsonData.type === 'data'){
+
+					var pushAlt = { "label" : jsonData.time/1000 , "value" : jsonData.altitude};
+					altitude[0].values.push(pushAlt);
+
+					var pushX = { "label" : jsonData.time/1000 , "value" : jsonData.speed_x};
+					speed[0].values.push(pushX);
+					var pushY = { "label" : jsonData.time/1000 , "value" : jsonData.speed_y};
+					speed[0].values.push(pushY);
+					var pushZ = { "label" : jsonData.time/1000 , "value" : jsonData.speed_z};
+					speed[0].values.push(pushZ);					
+
 					console.log(jsonData);
-					//speed.push({x: jsonData.speed_x, y: jsonData.speed_y, z: jsonData.speed_z});
-					altitude.push(jsonData.altitude);
 				}
 				else if(jsonData.type === 'notification'){
 
@@ -61,6 +65,7 @@ angular.module('UavOpsInterface')
 	    getNumSpeed: function(){ return speed.length;},
 	    getAltitude: function(){ return altitude; },
 	    getNumAltitude: function(){ return altitude.length;},
-	    getWarnings: function(){ return warnings; }
+	    //getWarnings: function(){ return warnings; }
+	    getNotifications: function(){ return notifications; }
 	};
 });

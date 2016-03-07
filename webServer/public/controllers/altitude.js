@@ -5,14 +5,13 @@ angular.module('UavOpsInterface')
   		$scope.altitudes = Websocket.getAltitude();
 	}, 100); 
 
-	$scope.speedNum = function(){
-  		return Websocket.getNumAltitude();
-  	};
+	// $scope.speedNum = function(){
+ //  		return Websocket.getNumAltitude();
+ //  	};
 
 		$scope.options = {
             chart: {
                 type: 'lineChart',
-                fill: black,
                 height: 450,
                 margin : {
                     top: 20,
@@ -20,8 +19,8 @@ angular.module('UavOpsInterface')
                     bottom: 40,
                     left: 55
                 },
-                x: function(d){ return d.x; },
-                y: function(d){ return d.y; },
+                x: function(d){ return d.label; },
+                y: function(d){ return d.value; },
                 useInteractiveGuideline: true,
                 dispatch: {
                     stateChange: function(e){ console.log("stateChange"); },
@@ -65,7 +64,7 @@ angular.module('UavOpsInterface')
             }
         };
 
-        $scope.data = sinAndCos();
+        // $scope.data = sinAndCos();
 
         /*Random Data Generator */
         function sinAndCos() {
@@ -84,7 +83,8 @@ angular.module('UavOpsInterface')
                 {
                     values: sin,      //values - represents the array of {x,y} data points
                     key: 'Sine Wave', //key  - the name of the series.
-                    color: '#ff7f0e'  //color - optional: choose your own line color.
+                    //color: '#ff7f0e' //color - optional: choose your own line color.
+                    color: '#ffffff' 
                 },
                 {
                     values: cos,
