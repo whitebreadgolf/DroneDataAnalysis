@@ -51,9 +51,6 @@ var initializeMock = function(_readExt, _readType){
 		map["high"] = "FLY000.DAT";
 	}
 
-	console.log(_readExt);
-	console.log(_readType);
-
 	// any initalizations pre-function call
 	sp = spawn(MOCK_SP_FP, [MOCK_SP_DIR+map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time']);
 

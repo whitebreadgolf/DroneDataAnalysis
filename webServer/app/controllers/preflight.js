@@ -30,10 +30,8 @@ var startFlight = function (_readExt, _readType, _callback) {
 @param {function} _callback - a callback function
 */
 var endFlight = function (_callback){
-
-	regulationConfig.cur_flight[0].start_time = null;
 	sp_process.endMock();
-
+	regulationConfig.cur_flight[0].start_time = null;
 	_callback();
 };
 

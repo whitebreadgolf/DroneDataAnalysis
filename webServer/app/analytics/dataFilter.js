@@ -11,6 +11,7 @@
 var wss = require('../interProcessCommunication/websocket');
 var sleep = require('sleep');
 var regulationConfig = require('../config/regulationConfig');
+var magneticWarningFilter = require('./magneticWarningFilter');
 
 /**
 @function routeParameters - routes all data parameters to certain functions
@@ -19,6 +20,7 @@ var regulationConfig = require('../config/regulationConfig');
 var routeDataParameters = function (latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number){
 
 	// send data to interface
+	magneticWarningFilter.magFilter(magx, magy, magz, gyrox, gyroy, gyroz);
     sendLiveData(velocity_east, velocity_north, velocity_down, baro_alt);
 };
 
@@ -68,12 +70,13 @@ var filterCsvString = function (_csvString){
 
     // broadcast with websocket and filter for warnings
     warningFilter(data_stream);
+    magneticWarningFilter.magFilter(/* find out splitData indicies */);
     wss.broadcast(JSON.stringify(data_stream));
 }
 
 /**
-@function warningFilter - to detect warning worthy
-@alias analytics
+@function warningFilter - to detect warning worthy of throwing notification
+@alias analytics/data
 */
 
 var warningFilter = function (data_stream){

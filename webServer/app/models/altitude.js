@@ -14,6 +14,7 @@ var Schema = mongoose.Schema;
 // describe user in schema
 var altitudeSchema = new Schema({
 	pilot: { type: Schema.Types.ObjectId, ref: 'User' },
+	flight_id: Number,
 	val: { type: Number, required: true},
 	created_at: Date
 });

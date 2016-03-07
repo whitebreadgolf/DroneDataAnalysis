@@ -4,9 +4,11 @@
 
 /**
 @requires mongoose
+@requires passport-local-mongoose
 */
 
 var mongoose = require('mongoose');
+var passportLocalMongoose = require('passport-local-mongoose');
 
 // initalize scheme object
 var Schema = mongoose.Schema;
@@ -21,8 +23,11 @@ var userSchema = new Schema({
 	created_at: Date
 });
 
+userSchema.plugin(passportLocalMongoose);
+
 // declare exported module
 var User = mongoose.model('User', userSchema);
+
 
 // export module 
 module.exports = User;

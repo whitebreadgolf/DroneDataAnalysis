@@ -1,14 +1,18 @@
-<h1>{{greeting}}</h1>
-
-<div ng-app="myApp">
-    <div ng-controller="NotificationsCtrl">
-        <nvd3 options="options" data="data"></nvd3>
-
-       	<div class="alert alert-danger fade in">
-		 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
- 		 	<strong>Danger!</strong> Indicates a dangerous or potentially negative action.
-		</div> 
-		
+<div ng-repeat="note in notifications">
+    <div ng-if="note.type == 'hazard'" class="alert alert-danger">
+        <button type="button" class="close" ng-click="notificationClicked($index)">×</button>
+        <strong>{{note.param}} (at {{note.time}} ms): </strong> {{note.text}}
+    </div>
+    <div ng-if="note.type == 'warning'" class="alert alert-warning">
+        <button type="button" class="close" ng-click="notificationClicked($index)">×</button>
+        <strong>{{note.param}} (at {{note.time}} ms): </strong> {{note.text}}
+    </div>
+    <div ng-if="note.type == 'update'" class="alert alert-info">
+        <button type="button" class="close" ng-click="notificationClicked($index)">×</button>
+        <strong>{{note.param}} (at {{note.time}} ms): </strong> {{note.text}}
     </div>
 </div>
+
+
+
 

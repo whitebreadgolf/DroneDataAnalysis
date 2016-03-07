@@ -14,6 +14,7 @@ var Schema = mongoose.Schema;
 // describe user in schema
 var preflightSchema = new Schema({
 	pilot: { type: Schema.Types.ObjectId, ref: 'User' },
+	flight_id: Number,
 	remote_controller_charge: Number, 
 	intelligent_flight_battery: Number, 
 	propeller_0: Boolean, 
