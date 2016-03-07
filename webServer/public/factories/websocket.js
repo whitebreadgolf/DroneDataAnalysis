@@ -1,7 +1,6 @@
 angular.module('UavOpsInterface')
 .service('Websocket', function (){
 
-	//var thisCpy = this;
 	var ws;
 	var speed = [{
 		key: "x velocity",
@@ -29,38 +28,32 @@ angular.module('UavOpsInterface')
 	// 	]
 	// }];
 
+
 	return {
 	     create: function (){ 
 
-	  //   	// init internal arrays
-	  //   	//thisCpy.speed = [];
-			// //thisCpy.altitude = [];
-			// //thisCpy.warnings = [];
-
-	  //   	// configure the websocket and incoming data flow
-			 ws = new WebSocket('ws://localhost:5001');
-			 ws.onmessage = function (event) {
+	    	// configure the websocket and incoming data flow
+			ws = new WebSocket('ws://localhost:5001');
+			ws.onmessage = function (event) {
 
 			 	var jsonData = JSON.parse(event.data);
 
-			// 	if(jsonData.type === 'data'){
-					
-			// 		// if(jsonData.speed_x < 0.0001 && jsonData.speed_x > -0.0001){
-			// 		// 	jsonData.speed_x = 0;
-			// 		// }
-			// 		var pushVal = { "label" : overallCount++ , "value" : jsonData.speed_x};
-			// 		console.log(pushVal);
-			// 		speed[0].values.push(pushVal);
-			// 		//speed.push({x: jsonData.speed_x, y: jsonData.speed_y, z: jsonData.speed_z});
-			// 		altitude.push(jsonData.altitude);
-			// 	}
-			// 	else if(jsonData.type === 'warning'){
+				if(jsonData.type === 'data'){			
+	
+					var pushVal = { "label" : overallCount++ , "value" : jsonData.speed_x};
+					speed[0].values.push(pushVal);
+					console.log(jsonData);
+					//speed.push({x: jsonData.speed_x, y: jsonData.speed_y, z: jsonData.speed_z});
+					altitude.push(jsonData.altitude);
+				}
+				else if(jsonData.type === 'notification'){
 
-			// 		// push warning here
-			// 	}
-			// 	else{
-			// 		console.log('invalid websocket data');
-			// 	}
+					// push warning here
+					console.log(jsonData);
+				}
+				else{
+					console.log('invalid websocket data');
+				}
 			}
 	    },
 

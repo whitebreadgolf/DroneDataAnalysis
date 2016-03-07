@@ -1,5 +1,0 @@
-/**
-@module manuverDetection
-*/
-
-module.exports = {};
