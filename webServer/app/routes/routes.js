@@ -12,8 +12,6 @@
 @requires preflight
 @requires safetyStatus
 @requires speed
-<<<<<<< HEAD
-@requires process
 */
 
 var account = require('./../controllers/account');
@@ -25,7 +23,7 @@ var location = require('./../controllers/location');
 var preflight = require('./../controllers/preflight');
 var safetyStatus = require('./../controllers/safetyStatus');
 var speed = require('./../controllers/speed');
-var sp_process = require('./../interProcessCommunication/process');
+
 
 /**
 @function initRoutes - to initialize all 
@@ -138,8 +136,9 @@ var initRoutes = function (_app){
 		// res - {status: <boolean>}
 
 		// init the mock sp input
-		sp_process.initializeMock();
-		res.json({status: 'simulation started'});
+		preflight.startFlight(req.body.ext, req.body.type, function(){
+			res.json({status: 'simulation started'});
+		});
 	});
 
 	// POST end flight
@@ -149,8 +148,9 @@ var initRoutes = function (_app){
 		// res - {status: <boolean>}
 
 		// end the simulation
-		sp_process.endMock();
-		res.json({status: 'simulation ended'});
+		preflight.endFlight(function(){
+			res.json({status: 'simulation ended'});
+		});
 	});
 
 	// GET inital conditions

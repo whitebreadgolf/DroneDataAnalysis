@@ -9,6 +9,9 @@
 // this is the number of bytes we are sending at a time for the DAT file
 #define BLOB 500000
 
+#define SLEEP_DAT 5
+#define SLEEP_CSV 1
+
 void populateMap (std::map<std::string, std::string>& map, const std::string& extn);
 void outputDAT (std::ifstream& ifile, bool sleep);
 void outputCSV (std::ifstream& ifile, bool sleep);
@@ -43,18 +46,18 @@ int main(int argc, char* argv[]){
 	}
 
 	// create map relating the type of file to the filename and the extension
-	std::map<std::string, std::string> datMap;
-	populateMap(datMap, extn);
+	//std::map<std::string, std::string> datMap;
+	//populateMap(datMap, extn);
 
 	// check whether the filename is a filetype or filename
 	// if the filetype exists it will be replaced by the right filename
-	if (datMap.find(file) != datMap.end())
-	{
-		file = datMap[file];	
-	}
+	// if (datMap.find(file) != datMap.end())
+	// {
+	// 	file = datMap[file];	
+	// }
 
 	// add the data folder, to point towards the 'data' subdirectory which holds all the files
-	file = "data/" + file;
+	//file = "data/" + file;
 
 	// validate the arguments
 	bool sleep = true;
@@ -143,7 +146,7 @@ void outputDAT(std::ifstream &ifile, bool sleep)
 		std::cout << out_string << std::endl;
 		if (sleep)
 		{
-			std::this_thread::sleep_for (std::chrono::seconds(5));
+			std::this_thread::sleep_for (std::chrono::seconds(SLEEP_DAT));
 		}
 	}
 }
@@ -151,7 +154,7 @@ void outputDAT(std::ifstream &ifile, bool sleep)
 void outputCSV(std::ifstream& ifile, bool sleep)
 {
 	std::string output;	
-	while(std::getline(ifile, output))
+	while(ifile >> output)
 	{
 		std::cout << output << std::endl;
 		if (sleep)
@@ -159,28 +162,27 @@ void outputCSV(std::ifstream& ifile, bool sleep)
 			std::this_thread::sleep_for (std::chrono::seconds(2));
 		}
 	}
-	
 }
 
 /* Map that maps the file type to the file name */
-void populateMap(std::map<std::string, std::string> &map, const std::string &extn)
-{
-	if (extn == "csv")
-	{
-		map["dummy"] = "flight_data.csv";
-		map["normal"] = "flight_data.csv";
-		map["fast"] = "flight_data.csv";
-		map["high"] = "flight_data.csv";
-		map["building"] = "flight_data.csv";
-	}
+// void populateMap(std::map<std::string, std::string> &map, const std::string &extn)
+// {
+// 	if (extn == "csv")
+// 	{
+// 		map["dummy"] = "flight_data.csv";
+// 		map["normal"] = "flight_data.csv";
+// 		map["fast"] = "flight_data.csv";
+// 		map["high"] = "flight_data_height_error.csv";
+// 		map["building"] = "flight_data.csv";
+// 	}
 
-	if (extn == "dat")
-	{
-		map["dummy"] = "FLY000.DAT";
-		map["normal"] = "FLY000.DAT";
-		map["fast"] = "FLY000.DAT";
-		map["high"] = "FLY000.DAT";
-		map["building"] = "FLY000.DAT";
-	}
+// 	if (extn == "dat")
+// 	{
+// 		map["dummy"] = "FLY000.DAT";
+// 		map["normal"] = "FLY000.DAT";
+// 		map["fast"] = "FLY000.DAT";
+// 		map["high"] = "FLY000.DAT";
+// 		map["building"] = "FLY000.DAT";
+// 	}
 	
-}
+// }

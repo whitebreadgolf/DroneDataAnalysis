@@ -1,11 +1,32 @@
 <div class="row">
 	<div class="col-sm-12">
-		<button ng-click="startFlight()">Start flight simulation</button>
+		<button class="btn" ng-click="startFlight('DAT', 'DUMMY')">Start dummy DAT flight simulation</button>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<button class="btn" ng-click="startFlight('CSV', 'DUMMY')">Start dummy csv flight simulation</button>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<button class="btn" ng-click="startFlight('DAT', 'NORMAL')">Start normal DAT flight simulation</button>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<button class="btn" ng-click="startFlight('CSV', 'HIGH')">Start height safety CSV flight simulation</button>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<button class="btn" ng-click="endFlight()">End flight simulation</button>
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-sm-12">
-		<button ng-click="endFlight()">End flight simulation</button>
-	</div>
-</div>
+
+
