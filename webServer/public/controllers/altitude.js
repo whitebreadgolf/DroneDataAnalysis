@@ -12,7 +12,6 @@ angular.module('UavOpsInterface')
 		$scope.options = {
             chart: {
                 type: 'lineChart',
-                fill: black,
                 height: 450,
                 margin : {
                     top: 20,
@@ -84,7 +83,8 @@ angular.module('UavOpsInterface')
                 {
                     values: sin,      //values - represents the array of {x,y} data points
                     key: 'Sine Wave', //key  - the name of the series.
-                    color: '#ff7f0e'  //color - optional: choose your own line color.
+                    //color: '#ff7f0e' //color - optional: choose your own line color.
+                    color: '#ffffff' 
                 },
                 {
                     values: cos,

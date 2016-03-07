@@ -8,7 +8,7 @@ angular.module('UavOpsInterface')
 		values: []
 
 	}];
-	var altitude = [{ 
+	var altitude = [{  // graphing purposes
 	 	key: "Altitude",
 	 	values: [
 	 		{ "label" : "0" , "value" : 10 },
@@ -17,6 +17,7 @@ angular.module('UavOpsInterface')
 	 	]
 	 }];
 	var warnings = [];
+	var notifications = [];
 	var overallCount = 0;
 
 	// speed = [{ 
@@ -68,6 +69,7 @@ angular.module('UavOpsInterface')
 	    getNumSpeed: function(){ return speed.length;},
 	    getAltitude: function(){ return altitude; },
 	    getNumAltitude: function(){ return altitude.length;},
-	    getWarnings: function(){ return warnings; }
+	    //getWarnings: function(){ return warnings; }
+	    getNotifications: function(){ return notifications; }
 	};
 });

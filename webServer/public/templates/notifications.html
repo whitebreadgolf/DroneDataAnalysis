@@ -1,7 +1,14 @@
 <h1>{{greeting}}</h1>
 
-<!-- <div class="alert alert-danger">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
-</div>  -->
+<div ng-app="myApp">
+    <div ng-controller="NotificationsCtrl">
+        <nvd3 options="options" data="data"></nvd3>
+
+       	<div class="alert alert-danger fade in">
+		 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+ 		 	<strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+		</div> 
+		
+    </div>
+</div>
 
