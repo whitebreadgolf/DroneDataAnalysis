@@ -42,6 +42,10 @@ angular.module('UavOpsInterface')
 	
 					var pushVal = { "label" : time/1000 , "value" : jsonData.altitude};
 					altitude[0].values.push(pushVal);
+					if (altitude[0].values.length > 15)
+					{
+						altitude[0].values.shift();
+					}
 					console.log(jsonData);
 				}
 				else if(jsonData.type === 'notification'){
