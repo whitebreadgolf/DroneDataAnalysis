@@ -1,14 +1,27 @@
+<link rel="stylesheet" type="text/css" href="notifications.css">
+
 <h1>{{greeting}}</h1>
 
 <div ng-app="myApp">
     <div ng-controller="NotificationsCtrl">
-        <nvd3 options="options" data="data"></nvd3>
+        <nvd3 options="options" data="notifications"></nvd3>
 
-       	<div class="alert alert-danger fade in">
-		 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
- 		 	<strong>Danger!</strong> Indicates a dangerous or potentially negative action.
-		</div> 
-		
-    </div>
+		<button class="btn btn-info" ng-class="{hide: !isHideAlert}" ng-click="isHideAlert=false;">Show the alert again...</button>
+
+	    <div ng-class="{hide: isHideAlert}">
+	        <div class="alert" ng-class="alertType">
+	            <button type="button" class="close" ng-click="isHideAlert=true;">×</button>
+	            {{alertMessage}}
+	        </div>
+	    </div>
+        
+<!--     <h3>Change the alert type</h3>
+      <button class="btn" ng-click="alertType='alert-error';">alert-error</button>
+      <button class="btn" ng-click="alertType='alert-success';">alert-success</button>
+      <button class="btn" ng-click="alertType='alert-info';">alert-info</button>
+      <button class="btn" ng-click="alertType='';">default</button>
+ -->
+
+	</div>
 </div>
 
