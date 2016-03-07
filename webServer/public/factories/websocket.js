@@ -40,11 +40,9 @@ angular.module('UavOpsInterface')
 
 				if(jsonData.type === 'data'){			
 	
-					var pushVal = { "label" : overallCount++ , "value" : jsonData.speed_x};
-					speed[0].values.push(pushVal);
+					var pushVal = { "label" : time/1000 , "value" : jsonData.altitude};
+					altitude[0].values.push(pushVal);
 					console.log(jsonData);
-					//speed.push({x: jsonData.speed_x, y: jsonData.speed_y, z: jsonData.speed_z});
-					altitude.push(jsonData.altitude);
 				}
 				else if(jsonData.type === 'notification'){
 

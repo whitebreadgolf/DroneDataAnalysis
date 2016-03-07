@@ -5,9 +5,9 @@ angular.module('UavOpsInterface')
   		$scope.altitudes = Websocket.getAltitude();
 	}, 100); 
 
-	$scope.speedNum = function(){
-  		return Websocket.getNumAltitude();
-  	};
+	// $scope.speedNum = function(){
+ //  		return Websocket.getNumAltitude();
+ //  	};
 
 		$scope.options = {
             chart: {
@@ -19,8 +19,8 @@ angular.module('UavOpsInterface')
                     bottom: 40,
                     left: 55
                 },
-                x: function(d){ return d.x; },
-                y: function(d){ return d.y; },
+                x: function(d){ return d.label; },
+                y: function(d){ return d.value; },
                 useInteractiveGuideline: true,
                 dispatch: {
                     stateChange: function(e){ console.log("stateChange"); },
@@ -64,7 +64,7 @@ angular.module('UavOpsInterface')
             }
         };
 
-        $scope.data = sinAndCos();
+        // $scope.data = sinAndCos();
 
         /*Random Data Generator */
         function sinAndCos() {
