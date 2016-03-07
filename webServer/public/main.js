@@ -29,6 +29,10 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3'])
 			templateUrl: 'templates/flight.html',
 			controller: 'FlightCtrl'
 		})
+		.when('/notifications', {
+			templateUrl: 'templates/notifications.html',
+			controller: 'NotificationsCtrl'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
