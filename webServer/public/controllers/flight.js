@@ -1,5 +1,5 @@
 angular.module('UavOpsInterface')
-.controller('FlightCtrl', function($scope, $http){
+.controller('FlightCtrl', function($scope, $http, Websocket){
 	
 	$scope.startFlight = function (fileExt, fileType){
 
@@ -23,6 +23,11 @@ angular.module('UavOpsInterface')
 
 		$http(req).then(function(data){
 			console.log(data);
+
+			// delete all internal data
+			Websocket.deleteAllNotifications();
+			Websocket.deleteAllSpeeds();
+			Websocket.deleteAllAltitudes();
 		});		
 	}
 });

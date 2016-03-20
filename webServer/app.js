@@ -16,23 +16,18 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 
-// setup app listening an settings
+// setup app listening and settings
 var app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());       
 app.use(bodyParser.urlencoded({ extended: true })); 
-
-app.set('trust proxy', 1); // trust first proxy
 app.use(session({
 	secret: 'keyboard cat',
-	duration: 30 * 60 * 1000,
-	resave: false,
-	saveUninitialized: true,
-	cookie: { 
-		maxAge: 60000 
-	},
-	rolling: true
+ 	resave: false,
+ 	saveUninitialized: true
 }));
+
+require('./app/config/passport')(app);
 
 // setup and start db
 require('./app/models/models')(app);
@@ -46,11 +41,6 @@ Testing section, not finalized code
 
 */
 
-/*
-
-END testing section
-
-*/
 
 /*
 

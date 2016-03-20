@@ -1,33 +1,30 @@
 angular.module('UavOpsInterface')
-.service('Websocket', function (){
+.factory('Websocket', function (){
 
 	var ws;
-	var speed = [{
-		key: "x velocity",
-		values: []
+	var speed = [
+		{
+			key: "x velocity",
+			values: []
+		},
+		{
+			key: "y velocity",
+			values: []
+		},
+		{
+			key: "z velocity",
+			values: []
+		}
+	];
 
-	}];
-	var altitude = [{  // graphing purposes
-	 	key: "Altitude",
-	 	values: [
-	 		{ "label" : "0" , "value" : 10 },
-	 		{ "label" : "1" , "value" : 20 },
-	 		{ "label" : "3" , "value" : 10 }
-	 	]
-	 }];
-	var warnings = [];
+	var altitude = [
+		{
+	 		key: "Altitude",
+	 		values: []
+		}
+	];
+
 	var notifications = [];
-	var overallCount = 0;
-
-	// speed = [{ 
-	// 	key: "Cumulative Return",
-	// 	values: [
-	// 		{ "label" : "A" , "value" : -29.765957771107 },
-	// 		{ "label" : "B" , "value" : 0 },
-	// 		{ "label" : "C" , "value" : 32.807804682612 }
-	// 	]
-	// }];
-
 
 	return {
 	     create: function (){ 
@@ -38,20 +35,46 @@ angular.module('UavOpsInterface')
 
 			 	var jsonData = JSON.parse(event.data);
 
-				if(jsonData.type === 'data'){			
-	
-					var pushVal = { "label" : time/1000 , "value" : jsonData.altitude};
-					altitude[0].values.push(pushVal);
-					if (altitude[0].values.length > 15)
-					{
+				if(jsonData.type === 'data'){
+
+					// build altitude data
+					var pushAlt = { "label" : jsonData.time/1000 , "value":jsonData.altitude};
+					altitude[0].values.push(pushAlt);
+					if (altitude[0].values.length > 15){
 						altitude[0].values.shift();
 					}
-					console.log(jsonData);
+
+					// build velocity x data
+					var pushX = {"label":jsonData.time/1000, "value":jsonData.speed_x};
+					speed[0].values.push(pushX);
+					if (speed[0].values.length > 15){
+						speed[0].values.shift();
+					}
+
+					// build velocity y data
+					var pushY = {"label":jsonData.time/1000, "value":jsonData.speed_y};
+					speed[1].values.push(pushY);
+					if (speed[1].values.length > 15){
+						speed[1].values.shift();
+					}
+
+					// build velocity z data
+					var pushZ = {"label":jsonData.time/1000, "value":jsonData.speed_z};
+					speed[2].values.push(pushZ);
+					if (speed[2].values.length > 15){
+						speed[2].values.shift();
+					}					
 				}
 				else if(jsonData.type === 'notification'){
 
 					// push warning here
-					console.log(jsonData);
+					var pushNotif = {
+						text: jsonData.text,
+						type: jsonData.level, 
+						param: jsonData.param,
+						time: jsonData.time
+					};
+					notifications.push(pushNotif);
 				}
 				else{
 					console.log('invalid websocket data');
@@ -61,10 +84,19 @@ angular.module('UavOpsInterface')
 
 	    // all getters
 	    getSpeed: function(){ return speed; },
-	    getNumSpeed: function(){ return speed.length;},
 	    getAltitude: function(){ return altitude; },
-	    getNumAltitude: function(){ return altitude.length;},
-	    //getWarnings: function(){ return warnings; }
-	    getNotifications: function(){ return notifications; }
+	    getNotifications: function(){ return notifications; },
+
+	    // setters
+	    deleteNotification: function(id){
+	    	notifications.splice(id, 1);
+	    },
+	    deleteAllNotifications: function(){ notifications = []; },
+	    deleteAllSpeeds: function(){ 
+	    	speed[0].values = []; 
+	    	speed[1].values = []; 
+	    	speed[2].values = []; 
+	    },
+	    deleteAllAltitudes: function(){ altitude[0].values = []; }
 	};
 });

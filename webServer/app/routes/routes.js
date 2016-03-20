@@ -12,6 +12,7 @@
 @requires preflight
 @requires safetyStatus
 @requires speed
+@requires passport
 */
 
 var account = require('./../controllers/account');
@@ -23,6 +24,9 @@ var location = require('./../controllers/location');
 var preflight = require('./../controllers/preflight');
 var safetyStatus = require('./../controllers/safetyStatus');
 var speed = require('./../controllers/speed');
+
+var passport = require('passport');
+var User = require('../models/user');
 
 
 /**
@@ -50,12 +54,10 @@ var initRoutes = function (_app){
 		// req - {latLngStart: <object>, latLngEnd: <object>}
 		// res - {status: ("error"|"success")}
 
-		// if(!(req.session && req.session.user)){ res.json({status: 'error'}); }
-		// else{
-			account.configureUserMap(req.body.latLngStart, req.body.latLngEnd, req.session.user, function(_status){		
-				res.json({status: _status});	
-			});
-		//}
+		
+		account.configureUserMap(req.body.latLngStart, req.body.latLngEnd, req.session.user, function(_status){		
+			res.json({status: _status});	
+		});
 	});
 
 	// POST login
@@ -63,27 +65,30 @@ var initRoutes = function (_app){
 		// req - {username: <string>, pass: <string>}
 		// res - {status: ("error"|"success")}
 
-		var session = req.session;
+		User.authenticate()(req.body.username, req.body.pass, function (err, user, options) {
+	        if (err) return res.json('user not logged in');;
+	        if (user === false) {
+	            res.send({
+	                message: options.message,
+	                success: false
+	            });
+	        } else {
+	            req.login(user, function (err) {
+	                res.send({
+	                    success: true,
+	                    user: user
+	                });
+	            });
+	        }
+	    });
+	});
 
-		if(session.user){
-			//console.log(session.cookie);
-			//req.session.user = session.user;
-			//req.session._garbage = Date();
-    		//req.session.touch();
-			//req.session.save(function(err){ if (err) console.log(err); });
-		}
+	// GET login
+	_app.get('/api/login', function (req, res){
 
-		account.loginUser(req.body.username, req.body.pass, function(_status, _username){
-			if(_username !== null){
+		// res - {user: <Object>}
 
-				// create session
-				req.session.user = _username;
-				res.json({status: _status});
-			}
-			else{
-				res.json({status: _status});
-			}
-		});
+		res.json(req.user);
 	});
 
 	// POST createprofile
@@ -91,9 +96,21 @@ var initRoutes = function (_app){
 		// req - {username: <string>, pass: <string>, name:<string>}
 		// res - {status: <string>}
 
-		// create a user if not already created
-		account.createNewUser(req.body.username, req.body.pass, req.body.name, function(status){
-			res.json({status: status});
+		User.register(new User({
+			username: req.body.username,
+			name: req.body.name,
+			password: req.body.pass,
+			admin: false,
+			map: null
+		}), req.body.pass, function(err) {
+			if (err) {
+				console.log('error while user register!', err);
+				res.json('user not registered');
+			}
+			else{
+				console.log('user registered!');
+				res.json('user registered');
+			}
 		});
 	});
 

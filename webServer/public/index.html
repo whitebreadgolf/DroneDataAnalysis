@@ -3,8 +3,6 @@
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link href="bower_components/nvd3/build/nv.d3.min.css" rel="stylesheet">
-
-
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 </head>
 <body ng-app="UavOpsInterface">
@@ -47,6 +45,7 @@
             <li><a href="#/login">Login</a></li>
             <li><a href="#/newprofile">New Account</a></li>
             <li><a href="#/configmap">Configure Map</a></li>
+            <li><a href="#/addobstacle">Add Obstacle</a></li>
           </ul>
         </li>
       </ul>
@@ -68,6 +67,7 @@
 <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
 <script src="main.js"></script>
 <script src="factories/websocket.js"></script>
+<script src="factories/session.js"></script>
 <script src="controllers/home.js"></script>
 <script src="controllers/login.js"></script>
 <script src="controllers/newprofile.js"></script>
@@ -76,7 +76,6 @@
 <script src="controllers/altitude.js"></script>
 <script src="controllers/flight.js"></script>
 <script src="controllers/notifications.js"></script>
-
-<script src="controllers/home.js"></script>
+<script src="controllers/addobstacle.js"></script>
 
 </html>

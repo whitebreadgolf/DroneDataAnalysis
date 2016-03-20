@@ -17,6 +17,10 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3'])
 			templateUrl: 'templates/configmap.html',
 			controller: 'ConfigMapCtrl'
 		})
+		.when('/addobstacle', {
+			templateUrl: 'templates/addobstacle.html',
+			controller: 'AddObstacleCtrl'
+		})
 		.when('/speed', {
 			templateUrl: 'templates/speed.html',
 			controller: 'SpeedCtrl'
