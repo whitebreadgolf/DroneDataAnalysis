@@ -18,10 +18,10 @@ var velocityAltitudeFilter = require('./velocityAltitudeFilter');
 @function routeParameters - routes all data parameters to certain functions
 @alias analytics/routeParameters
 */
-var routeDataParameters = function (latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number){
+var routeDataParameters = function (_id, latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number){
 
 	// send data to interface
-	magneticWarningFilter.magFilter(magx, magy, magz, gyrox, gyroy, gyroz);
+    magneticWarningFilter.magFilter(gyrox, gyroy, gyroz, magx, magy, magz);
     sendLiveData(_id, velocity_east, velocity_north, velocity_down, baro_alt);
 };
 
@@ -63,14 +63,19 @@ var filterCsvString = function (_id, _csvString){
         type: 'data',
         speed_x: splitData[4], 
         speed_y: splitData[3], 
-        speed_z: splitData[5], 
-        altitude: splitData[14],
+        speed_z: splitData[5],
+        gyro_x: splitData[11],
+        gyro_y: splitData[12],
+        gyro_z: splitData[13],
+		altitude: splitData[14],
+		mag_x: splitData[22],
+        mag_y: splitData[23],
+        mag_z: splitData[24],
         time: (new Date()) - regulationConfig.cur_flight[_id].start_time
     };
-
-    // broadcast with websocket and apply all filters 
+    // broadcast with websocket and filter for warnings
     velocityAltitudeFilter.velAltFilter(_id, data_stream);
-    magneticWarningFilter.magFilter(/* find out splitData indicies */);
+    magneticWarningFilter.magFilter(data_stream.gyro_x, data_stream.gyro_y, data_stream.gyro_z, data_stream.mag_x, data_stream.mag_y, data_stream.mag_z );
     wss.broadcast(JSON.stringify(data_stream));
 }
 

@@ -1,0 +1,46 @@
+<h1> Configure Constraints</h1>
+<h3> The default constraint configurations follow the Federal Aviation Association (FAA) regulations. If want to change your flight contraints, edit the configuration settings below. </h3>
+<nvd3 options="options" data="configuration"></nvd3>
+   
+
+<div class="row">
+	<div class="col-sm-6">
+		<form>
+		  Max Altitude Constraint:<br>
+		  <input type="int" name="altitude"><br>
+		  <input type="submit" value="Set Max Altitude">
+		</form>
+
+		<form>
+		  Max Speed Constraint:<br>
+		  <input type="int" name="speed"><br>
+		  <input type="submit" value="Set Max Speed">
+		</form>
+	
+		<div ng-if="altitudeConfiguration.isValid">
+			<button ng-click="updateAltitudeConfig()" class="btn btn-danger" style="width:100%;border-radius:0px">Set Max Altitude</button>
+		</div>
+		<div ng-if="altitudeConfiguration.isInvalid">
+			<button ng-click="updateAltitudeConfig()" class="btn btn-danger" disabled="disabled" style="width:100%;border-radius:0px">Set Max Altitude</button>
+		</div>
+		
+	</div>
+</div>
+
+<br>
+
+<h4> FAA Regulations mandate the following rules for Unmanned Aviation Vehicles:
+	<ul>
+	  <li>Max Altitude: XX</li>
+	  <li>Max Speed: XX</li>
+	  <li>Must be at least XX miles from airport.</li>
+	</ul>
+</h4>
+<div class="row">
+	<div class="wrapper">
+		<button ng-click="updateAltitudeConfig()" class="btn" style="width:100%;border-radius:0px"> Restore to Default Configurations</button>
+	</div>
+</div>
+
+
+

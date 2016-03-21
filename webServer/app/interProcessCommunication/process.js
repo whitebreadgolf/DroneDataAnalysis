@@ -45,6 +45,7 @@ var initializeMock = function(_id, _readExt, _readType){
 		map['dummy'] = "flight_data.csv";
 		map['normal'] = "flight_data.csv";
 		map['high'] = "flight_data_height_error.csv";
+		map['mag'] = "flight_data_mag_error.csv";
 	}
 	else if (_readExt == 'DAT'){
 		map['dummy'] = "FLY000.DAT";

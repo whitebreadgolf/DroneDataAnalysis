@@ -90,6 +90,8 @@ angular.module('UavOpsInterface')
 	    getSpeed: function(){ return speed; },
 	    getAltitude: function(){ return altitude; },
 	    getNotifications: function(){ return notifications; },
+	    getHistory: function(){ return history; },
+	    getConstraints: function(){ return constraints; },	
 
 	    // setters
 	    deleteNotification: function(id){
