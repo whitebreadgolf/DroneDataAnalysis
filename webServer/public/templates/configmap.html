@@ -40,6 +40,7 @@
 			center="current-location" 
 			on-click="mapClicked()">
 			<marker ng-repeat="pos in allMarkers" position="{{pos.lat}},{{pos.lon}}"></marker>
+			<marker ng-repeat="pos in configMarkers" position="{{pos.lat}},{{pos.lon}}"></marker>
 		</ng-map>
 	</div>
 </div>

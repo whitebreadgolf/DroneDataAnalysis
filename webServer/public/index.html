@@ -2,7 +2,8 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <link href="bower_components/nvd3/build/nv.d3.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="bower_components/nvd3/build/nv.d3.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/angular-ui-notification/dist/angular-ui-notification.min.css">
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 </head>
 <body ng-app="UavOpsInterface">
@@ -21,7 +22,14 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#/flight">Flight</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Flight <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/flight">Flight Simulations</a></li>
+            <li><a href="#/preflight">Preflight</a></li>
+            <li><a href="#/flightconsole">Flight Console</a></li>
+          </ul>
+        </li>
         <li><a href="#/notifications">Notifications</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Real-time charts <span class="caret"></span></a>
@@ -31,12 +39,7 @@
           </ul>
         </li>
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
+      
       <ul class="nav navbar-nav navbar-right">
 
         <li class="dropdown">
@@ -61,10 +64,11 @@
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
-<script src="/bower_components/ngmap/build/scripts/ng-map.min.js"></script>
+<script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
 <script src="bower_components/d3/d3.js"></script>
-<script src="bower_components/nvd3/build/nv.d3.js"></script> <!-- or use another assembly -->
+<script src="bower_components/nvd3/build/nv.d3.js"></script> 
 <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+<script src="bower_components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
 <script src="main.js"></script>
 <script src="factories/websocket.js"></script>
 <script src="factories/session.js"></script>
@@ -75,6 +79,8 @@
 <script src="controllers/speed.js"></script>
 <script src="controllers/altitude.js"></script>
 <script src="controllers/flight.js"></script>
+<script src="controllers/flightconsole.js"></script>
+<script src="controllers/preflight.js"></script>
 <script src="controllers/notifications.js"></script>
 <script src="controllers/addobstacle.js"></script>
 

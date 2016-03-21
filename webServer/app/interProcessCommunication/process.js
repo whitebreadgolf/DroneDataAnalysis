@@ -21,7 +21,7 @@ var MOCK_SP_DIR = __dirname + "/../../../signalProcessor/mock/data/";
 var SP_FP = __dirname + "/../../../signalProcessor/";
 
 // our signal processing spawned process
-var sp;
+var sp = {};
 
 /**
 @function initialize - to initialize the real cpp program and stdout callbacks on the spawed process
@@ -37,8 +37,9 @@ var initialize = function(){
 @function initializeMock - to initialize the mock cpp program and stdout callbacks on the spawed process
 @alias interProcessCommunication/process.initializeMock
 */
-var initializeMock = function(_readExt, _readType){
+var initializeMock = function(_id, _readExt, _readType){
 
+	// get our filename
 	var map = {};
 	if (_readExt == 'CSV'){
 		map['dummy'] = "flight_data.csv";
@@ -52,35 +53,44 @@ var initializeMock = function(_readExt, _readType){
 	}
 
 	// any initalizations pre-function call
-	sp = spawn(MOCK_SP_FP, [MOCK_SP_DIR+map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time']);
+	sp[_id] = spawn(MOCK_SP_FP, [MOCK_SP_DIR + map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time', _id]);
 
 	// set stdout callback, just print for now
-	sp.stdout.on('data', function(data){
+	sp[_id].stdout.on('data', function(data){
 
-		if(regulationConfig.cur_flight[0].simulation.file_read === 'DAT'){
+		// advance index to index after the first space
+		// accumulate the characters up till then and use it as id
+		var id = "";
+		var space_index = 0;
+		var dataString = data.toString();
+		while(dataString.charAt(space_index) !== " "){
+	        id += dataString.charAt(space_index);
+	        space_index++;
+	    }
+	    space_index++;
 
-			// convert to uint8 array
-			var ab = new ArrayBuffer(data.length);
-	    	var view = new Uint8Array(ab);
-	    	for (var i = 0; i < data.length; ++i) {
+	    // check read type and filter accordingly
+		if(regulationConfig.cur_flight[id].simulation.file_read === 'DAT'){
+
+			// convert to uint8 array 
+	    	var view = new Uint8Array(new ArrayBuffer(data.length));
+	    	for (var i = space_index; i < data.length; ++i) {
 	        	view[i] = data[i];
 	    	}
 
 			// decode sequence
-			decode.importDataBlob(view);
+			decode.importDataBlob(id, view);
 		}
-		else if(regulationConfig.cur_flight[0].simulation.file_read === 'CSV'){
+		else if(regulationConfig.cur_flight[id].simulation.file_read === 'CSV'){
 
 			// feed in csv data			
-			dataFilter.filterCsvString(data.toString());
+			dataFilter.filterCsvString(id, dataString.substr(space_index, data.length));
 		}
-		else{
-			console.log('unknown data output');
-		}
+		else console.log('unknown data output');
 	});
 
 	// when sp exits
-	sp.on('close', function(code){
+	sp[_id].on('close', function(code){
 		console.log("sp exited with code: " + code);
 	});
 };
@@ -89,8 +99,8 @@ var initializeMock = function(_readExt, _readType){
 @function endMock - ends the mock flight data stream
 @alias interProcessCommunication/process.endMock
 */
-var endMock = function (){
-	sp.kill('SIGHUP');
+var endMock = function (_id){
+	sp[_id].kill('SIGHUP');
 }
 
 

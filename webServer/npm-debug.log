@@ -1,0 +1,915 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'png' ]
+2 info using npm@2.10.1
+3 info using node@v0.12.1
+4 verbose install initial load of /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/package.json
+5 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/body-parser/package.json
+6 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/bower/package.json
+7 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/cli-color/package.json
+8 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/connect-mongo/package.json
+9 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/cookie-parser/package.json
+10 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/cookie-session/package.json
+11 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/express/package.json
+12 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/express-session/package.json
+13 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/file-api/package.json
+14 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/filereader/package.json
+15 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/get-pixels/package.json
+16 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/google-maps/package.json
+17 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/googlemaps/package.json
+18 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/mongoose/package.json
+19 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/ndarray/package.json
+20 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/passport/package.json
+21 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/passport-local/package.json
+22 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/passport-local-mongoose/package.json
+23 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/password-hash/package.json
+24 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png-js/package.json
+25 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/request/package.json
+26 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/sleep/package.json
+27 verbose installManyTop reading scoped package data from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/ws/package.json
+28 info package.json passport@0.3.2 No README data
+29 info package.json passport-local@1.0.0 No license field.
+30 info package.json password-hash@1.2.2 No license field.
+31 info package.json png-js@0.1.1 No license field.
+32 info package.json file-api@0.10.4 No repository field.
+33 info package.json file-api@0.10.4 No license field.
+34 info package.json filereader@0.10.3 No repository field.
+35 info package.json filereader@0.10.3 No license field.
+36 info package.json googlemaps@1.2.0 No license field.
+37 verbose readDependencies loading dependencies from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/package.json
+38 silly cache add args [ 'png', null ]
+39 verbose cache add spec png
+40 silly cache add parsed spec { raw: 'png',
+40 silly cache add   scope: null,
+40 silly cache add   name: 'png',
+40 silly cache add   rawSpec: '',
+40 silly cache add   spec: '*',
+40 silly cache add   type: 'range' }
+41 silly addNamed png@*
+42 verbose addNamed "*" is a valid semver range for png
+43 silly addNameRange { name: 'png', range: '*', hasData: false }
+44 silly mapToRegistry name png
+45 silly mapToRegistry using default registry
+46 silly mapToRegistry registry https://registry.npmjs.org/
+47 silly mapToRegistry uri https://registry.npmjs.org/png
+48 verbose addNameRange registry:https://registry.npmjs.org/png not in flight; fetching
+49 verbose request uri https://registry.npmjs.org/png
+50 verbose request no auth needed
+51 info attempt registry request try #1 at 2:04:59 PM
+52 verbose request id cb5c7c80ceddb9fe
+53 http request GET https://registry.npmjs.org/png
+54 http 200 https://registry.npmjs.org/png
+55 silly get cb [ 200,
+55 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+55 silly get     etag: '"5AIL5TW5RXHYWS33R2175WJPH"',
+55 silly get     'content-type': 'application/json',
+55 silly get     'cache-control': 'max-age=300',
+55 silly get     'content-length': '17728',
+55 silly get     'accept-ranges': 'bytes',
+55 silly get     date: 'Thu, 17 Mar 2016 18:04:59 GMT',
+55 silly get     via: '1.1 varnish',
+55 silly get     age: '0',
+55 silly get     connection: 'keep-alive',
+55 silly get     'x-served-by': 'cache-jfk1030-JFK',
+55 silly get     'x-cache': 'MISS',
+55 silly get     'x-cache-hits': '0',
+55 silly get     'x-timer': 'S1458237899.282088,VS0,VE37',
+55 silly get     vary: 'Accept' } ]
+56 verbose get saving png to /Users/karlcd/.npm/registry.npmjs.org/png/.cache.json
+57 silly addNameRange number 2 { name: 'png', range: '*', hasData: true }
+58 silly addNameRange versions [ 'png',
+58 silly addNameRange   [ '1.0.0',
+58 silly addNameRange     '1.0.1',
+58 silly addNameRange     '1.0.2',
+58 silly addNameRange     '1.0.3',
+58 silly addNameRange     '2.0.0',
+58 silly addNameRange     '2.0.1',
+58 silly addNameRange     '2.1.0',
+58 silly addNameRange     '2.1.1',
+58 silly addNameRange     '3.0.0',
+58 silly addNameRange     '3.0.1',
+58 silly addNameRange     '3.0.2',
+58 silly addNameRange     '3.0.3' ] ]
+59 silly addNamed png@3.0.3
+60 verbose addNamed "3.0.3" is a plain semver version for png
+61 silly mapToRegistry name png
+62 silly mapToRegistry using default registry
+63 silly mapToRegistry registry https://registry.npmjs.org/
+64 silly mapToRegistry uri https://registry.npmjs.org/png
+65 verbose addRemoteTarball https://registry.npmjs.org/png/-/png-3.0.3.tgz not in flight; adding
+66 verbose addRemoteTarball [ 'https://registry.npmjs.org/png/-/png-3.0.3.tgz',
+66 verbose addRemoteTarball   '15024958b2135af55349f60763a066b24ed9e283' ]
+67 info retry fetch attempt 1 at 2:04:59 PM
+68 info attempt registry request try #1 at 2:04:59 PM
+69 http fetch GET https://registry.npmjs.org/png/-/png-3.0.3.tgz
+70 http fetch 200 https://registry.npmjs.org/png/-/png-3.0.3.tgz
+71 silly fetchAndShaCheck shasum 15024958b2135af55349f60763a066b24ed9e283
+72 verbose addTmpTarball /tmp/npm-26616-b0a7f92b/registry.npmjs.org/png/-/png-3.0.3.tgz not in flight; adding
+73 verbose addTmpTarball already have metadata; skipping unpack for png@3.0.3
+74 silly cache afterAdd png@3.0.3
+75 verbose afterAdd /Users/karlcd/.npm/png/3.0.3/package/package.json not in flight; writing
+76 verbose afterAdd /Users/karlcd/.npm/png/3.0.3/package/package.json written
+77 silly install resolved [ { name: 'png',
+77 silly install resolved     version: '3.0.3',
+77 silly install resolved     main: './build/Release/png',
+77 silly install resolved     description: 'A C++ module for node-js that converts an RGB and RGBA buffers to PNG images (in memory).',
+77 silly install resolved     keywords: [ 'png', 'rgb', 'rgba', 'image', 'picture', 'encode' ],
+77 silly install resolved     author:
+77 silly install resolved      { name: 'Peteris Krumins',
+77 silly install resolved        email: 'peteris.krumins@gmail.com',
+77 silly install resolved        url: 'http://www.catonmat.net' },
+77 silly install resolved     license: { type: 'MIT' },
+77 silly install resolved     repository: { type: 'git', url: 'http://github.com/pkrumins/node-png.git' },
+77 silly install resolved     directories: { examples: 'examples', src: 'src' },
+77 silly install resolved     engines: { node: '>=0.6.0' },
+77 silly install resolved     scripts: { install: 'node-gyp rebuild' },
+77 silly install resolved     gypfile: true,
+77 silly install resolved     _id: 'png@3.0.3',
+77 silly install resolved     dist:
+77 silly install resolved      { shasum: '15024958b2135af55349f60763a066b24ed9e283',
+77 silly install resolved        tarball: 'http://registry.npmjs.org/png/-/png-3.0.3.tgz' },
+77 silly install resolved     _from: 'png@*',
+77 silly install resolved     _npmVersion: '1.2.14',
+77 silly install resolved     _npmUser: { name: 'pkrumins', email: 'peteris.krumins@gmail.com' },
+77 silly install resolved     maintainers: [ [Object] ],
+77 silly install resolved     _shasum: '15024958b2135af55349f60763a066b24ed9e283',
+77 silly install resolved     _resolved: 'https://registry.npmjs.org/png/-/png-3.0.3.tgz' } ]
+78 info install png@3.0.3 into /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer
+79 info installOne png@3.0.3
+80 verbose installOne of png to /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer not in flight; installing
+81 verbose lock using /Users/karlcd/.npm/_locks/png-78817227c25446fa.lock for /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+82 silly install write writing png 3.0.3 to /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+83 verbose unbuild node_modules/png
+84 silly gentlyRm /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png is being purged from base /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer
+85 verbose gentlyRm don't care about contents; nuking /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+86 verbose tar unpack /Users/karlcd/.npm/png/3.0.3/package.tgz
+87 verbose tar unpacking to /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+88 silly gentlyRm /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png is being purged
+89 verbose gentlyRm don't care about contents; nuking /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+90 silly gunzTarPerm modes [ '755', '644' ]
+91 silly gunzTarPerm extractEntry package.json
+92 silly gunzTarPerm extractEntry .npmignore
+93 silly gunzTarPerm extractEntry readme.md
+94 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp_addon
+95 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/addon.gypi
+96 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/.npmignore
+97 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/LICENSE
+98 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/DEPS
+99 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/OWNERS
+100 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/README
+101 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/pretty_sln.py
+102 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/Xcode/README
+103 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/Xcode/Specifications/gyp.xclangspec
+104 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/Xcode/Specifications/gyp.pbfilespec
+105 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/pretty_gyp.py
+106 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/pretty_vcproj.py
+107 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/tools/graphviz.py
+108 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/gyp.bat
+109 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/easy_xml.py
+110 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSUserFile.py
+111 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/mac_tool.py
+112 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/xcode_emulation.py
+113 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/xml_fix.py
+114 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/xcodeproj_file.py
+115 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSToolFile.py
+116 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSVersion.py
+117 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/ninja_syntax.py
+118 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/sun_tool.py
+119 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/SCons.py
+120 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSSettings.py
+121 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/system_test.py
+122 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/gypd.py
+123 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/msvs_test.py
+124 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/ninja.py
+125 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/xcode.py
+126 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/gypsh.py
+127 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/msvs.py
+128 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/make.py
+129 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/ninja_test.py
+130 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/scons.py
+131 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/__init__.py
+132 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/generator/dump_dependency_json.py
+133 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSNew.py
+134 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/input.py
+135 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/common.py
+136 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSProject.py
+137 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/MSVSSettings_test.py
+138 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/__init__.py
+139 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylib/gyp/easy_xml_test.py
+140 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/MANIFEST
+141 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/pylintrc
+142 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/gyptest.py
+143 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/samples/samples.bat
+144 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/samples/samples
+145 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/AUTHORS
+146 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/codereview.settings
+147 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/gyp_dummy.c
+148 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/buildbot/buildbot_run.py
+149 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/PRESUBMIT.py
+150 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/setup.py
+151 silly gunzTarPerm extractEntry .node-gyp/0.6.14/tools/gyp/gyp
+152 silly gunzTarPerm extractEntry .node-gyp/0.6.14/Debug/node.lib
+153 silly gunzTarPerm extractEntry .node-gyp/0.6.14/installVersion
+154 silly gunzTarPerm extractEntry .node-gyp/0.6.14/common.gypi
+155 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/tree.h
+156 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/ev.h
+157 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/ngx-queue.h
+158 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/uv-win.h
+159 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/uv-unix.h
+160 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv-private/eio.h
+161 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/uv.h
+162 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/ares.h
+163 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/include/ares_version.h
+164 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/win/internal.h
+165 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/win/winapi.h
+166 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/win/winsock.h
+167 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_ipv6.h
+168 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_iphlpapi.h
+169 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/nameser.h
+170 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_getenv.h
+171 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_library_init.h
+172 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/inet_net_pton.h
+173 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_nowarn.h
+174 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_win32/ares_config.h
+175 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/bitncmp.h
+176 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_setup.h
+177 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_netbsd/ares_config.h
+178 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_strdup.h
+179 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/inet_ntop.h
+180 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_freebsd/ares_config.h
+181 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_darwin/ares_config.h
+182 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/setup_once.h
+183 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_platform.h
+184 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_writev.h
+185 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_getopt.h
+186 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_rules.h
+187 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_dns.h
+188 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_private.h
+189 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_llist.h
+190 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_strcasecmp.h
+191 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_sunos/ares_config.h
+192 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/ares_data.h
+193 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_openbsd/ares_config.h
+194 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_cygwin/ares_config.h
+195 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/ares/config_linux/ares_config.h
+196 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/internal.h
+197 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/uv-eio.h
+198 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/xthread.h
+199 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/ecb.h
+200 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_freebsd.h
+201 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_openbsd.h
+202 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_sunos.h
+203 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_darwin.h
+204 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_cygwin.h
+205 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_linux.h
+206 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/eio/config_netbsd.h
+207 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_cygwin.h
+208 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_freebsd.h
+209 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/ev_vars.h
+210 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_sunos.h
+211 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_darwin.h
+212 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_openbsd.h
+213 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/ev++.h
+214 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/event.h
+215 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_linux.h
+216 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/config_netbsd.h
+217 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/unix/ev/ev_wrap.h
+218 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/src/uv-common.h
+219 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/test-list.h
+220 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/runner-win.h
+221 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/runner-unix.h
+222 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/benchmark-list.h
+223 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/runner.h
+224 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/uv/test/task.h
+225 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8-debug.h
+226 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8-preparser.h
+227 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8.h
+228 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8-testing.h
+229 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8stdint.h
+230 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/include/v8-profiler.h
+231 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/scanner.h
+232 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8-counters.h
+233 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/preparser.h
+234 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/compilation-cache.h
+235 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/natives.h
+236 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/hydrogen.h
+237 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/rewriter.h
+238 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/snapshot.h
+239 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/disassembler.h
+240 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/allocation.h
+241 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/parser.h
+242 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/log.h
+243 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/vm-state-inl.h
+244 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ic.h
+245 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/heap-inl.h
+246 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/char-predicates-inl.h
+247 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/lithium.h
+248 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/regexp-macro-assembler-tracer.h
+249 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8memory.h
+250 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ast.h
+251 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/debug-agent.h
+252 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/strtod.h
+253 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/lithium-allocator.h
+254 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/debug.h
+255 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/cached-powers.h
+256 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8checks.h
+257 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/messages.h
+258 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/vm-state.h
+259 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/dtoa.h
+260 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/frames-ia32.h
+261 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/codegen-ia32.h
+262 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/simulator-ia32.h
+263 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/macro-assembler-ia32.h
+264 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/assembler-ia32-inl.h
+265 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/code-stubs-ia32.h
+266 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/lithium-codegen-ia32.h
+267 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/lithium-ia32.h
+268 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/assembler-ia32.h
+269 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/lithium-gap-resolver-ia32.h
+270 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ia32/regexp-macro-assembler-ia32.h
+271 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops_internals_arm_gcc.h
+272 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/jsregexp.h
+273 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/deoptimizer.h
+274 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/zone-inl.h
+275 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/global-handles.h
+276 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ast-inl.h
+277 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/full-codegen.h
+278 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/unicode.h
+279 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8globals.h
+280 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/dateparser-inl.h
+281 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/d8-debug.h
+282 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/frames.h
+283 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/frames-inl.h
+284 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/stub-cache.h
+285 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/unbound-queue.h
+286 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/contexts.h
+287 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/scopeinfo.h
+288 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/log-utils.h
+289 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/code.h
+290 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/runtime.h
+291 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/hashmap.h
+292 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/cpu-profiler.h
+293 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/builtins.h
+294 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/code-stubs-x64.h
+295 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/assembler-x64.h
+296 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/codegen-x64.h
+297 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/lithium-codegen-x64.h
+298 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/macro-assembler-x64.h
+299 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/simulator-x64.h
+300 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/regexp-macro-assembler-x64.h
+301 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/lithium-x64.h
+302 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/assembler-x64-inl.h
+303 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/frames-x64.h
+304 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/x64/lithium-gap-resolver-x64.h
+305 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/list-inl.h
+306 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/profile-generator.h
+307 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/circular-queue-inl.h
+308 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/string-search.h
+309 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/regexp-macro-assembler.h
+310 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/simulator.h
+311 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/data-flow.h
+312 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/counters.h
+313 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/heap-profiler.h
+314 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/liveedit.h
+315 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/objects-inl.h
+316 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/scanner-character-streams.h
+317 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/splay-tree.h
+318 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/json-parser.h
+319 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/smart-array-pointer.h
+320 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/checks.h
+321 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/bignum-dtoa.h
+322 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/gdb-jit.h
+323 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/disasm.h
+324 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/elements.h
+325 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/compiler.h
+326 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8.h
+327 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/globals.h
+328 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/list.h
+329 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/platform-tls.h
+330 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/fast-dtoa.h
+331 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/safepoint-table.h
+332 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops.h
+333 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arguments.h
+334 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/small-pointer-list.h
+335 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/cpu-profiler-inl.h
+336 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops_internals_mips_gcc.h
+337 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/conversions-inl.h
+338 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/regexp-macro-assembler-irregexp-inl.h
+339 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/spaces-inl.h
+340 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/interpreter-irregexp.h
+341 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/runtime-profiler.h
+342 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/fixed-dtoa.h
+343 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/liveobjectlist.h
+344 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/execution.h
+345 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/objects-visiting.h
+346 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/allocation-inl.h
+347 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/token.h
+348 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/utils.h
+349 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/serialize.h
+350 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/conversions.h
+351 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/macro-assembler.h
+352 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/inspector.h
+353 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/preparse-data-format.h
+354 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/isolate-inl.h
+355 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/platform-tls-win32.h
+356 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/cpu.h
+357 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/string-stream.h
+358 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/break-iterator.h
+359 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/i18n-natives.h
+360 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/number-format.h
+361 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/i18n-extension.h
+362 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/i18n-utils.h
+363 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/language-matcher.h
+364 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/datetime-format.h
+365 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/i18n-locale.h
+366 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/experimental/collator.h
+367 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/externalize-string-extension.h
+368 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/extensions/gc-extension.h
+369 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mark-compact.h
+370 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/spaces.h
+371 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8conversions.h
+372 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/circular-queue.h
+373 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/assembler-mips-inl.h
+374 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/lithium-codegen-mips.h
+375 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/macro-assembler-mips.h
+376 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/code-stubs-mips.h
+377 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/regexp-macro-assembler-mips.h
+378 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/codegen-mips.h
+379 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/simulator-mips.h
+380 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/frames-mips.h
+381 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/constants-mips.h
+382 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/assembler-mips.h
+383 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/mips/lithium-mips.h
+384 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/lithium-allocator-inl.h
+385 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/type-info.h
+386 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/variables.h
+387 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/handles.h
+388 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/profile-generator-inl.h
+389 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/liveobjectlist-inl.h
+390 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/preparse-data.h
+391 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/unbound-queue-inl.h
+392 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/prettyprinter.h
+393 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/apiutils.h
+394 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/heap.h
+395 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/char-predicates.h
+396 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/platform.h
+397 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/regexp-macro-assembler-irregexp.h
+398 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/version.h
+399 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/assembler.h
+400 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/third_party/valgrind/valgrind.h
+401 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8threads.h
+402 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/log-inl.h
+403 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/win32-math.h
+404 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/api.h
+405 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/unicode-inl.h
+406 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/flags.h
+407 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/accessors.h
+408 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/zone.h
+409 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/flag-definitions.h
+410 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/factory.h
+411 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/codegen.h
+412 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/utils-inl.h
+413 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/bootstrapper.h
+414 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/ic-inl.h
+415 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops_internals_x86_msvc.h
+416 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/win32-headers.h
+417 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops_internals_x86_macosx.h
+418 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/objects.h
+419 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/bytecodes-irregexp.h
+420 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/scopes.h
+421 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/double.h
+422 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/misc-intrinsics.h
+423 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/regexp-stack.h
+424 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/dateparser.h
+425 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/code-stubs.h
+426 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/diy-fp.h
+427 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/v8utils.h
+428 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/bignum.h
+429 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/hydrogen-instructions.h
+430 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/regexp-macro-assembler-arm.h
+431 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/lithium-gap-resolver-arm.h
+432 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/code-stubs-arm.h
+433 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/lithium-arm.h
+434 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/macro-assembler-arm.h
+435 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/constants-arm.h
+436 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/codegen-arm.h
+437 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/frames-arm.h
+438 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/assembler-arm-inl.h
+439 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/simulator-arm.h
+440 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/lithium-codegen-arm.h
+441 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/arm/assembler-arm.h
+442 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/splay-tree-inl.h
+443 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/platform-tls-mac.h
+444 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/property.h
+445 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/isolate.h
+446 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/d8.h
+447 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/func-name-inferrer.h
+448 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/handles-inl.h
+449 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/v8/src/atomicops_internals_x86_gcc.h
+450 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/e_os2.h
+451 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/dso.h
+452 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/bio.h
+453 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/cast.h
+454 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ssl.h
+455 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/md5.h
+456 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/rand.h
+457 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/des_old.h
+458 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/conf.h
+459 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ec.h
+460 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ui_compat.h
+461 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/symhacks.h
+462 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ssl2.h
+463 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/x509.h
+464 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ecdh.h
+465 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pkcs12.h
+466 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/blowfish.h
+467 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/kssl.h
+468 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/rc2.h
+469 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/fips.h
+470 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ssl3.h
+471 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ocsp.h
+472 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/bn.h
+473 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/idea.h
+474 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/crypto.h
+475 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/evp.h
+476 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/txt_db.h
+477 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/asn1.h
+478 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/comp.h
+479 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/store.h
+480 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/engine.h
+481 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ssl23.h
+482 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/obj_mac.h
+483 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/md4.h
+484 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/fips_rand.h
+485 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/lhash.h
+486 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/asn1_mac.h
+487 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ripemd.h
+488 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pqueue.h
+489 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/e_os2.h
+490 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/krb5_asn.h
+491 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/dsa.h
+492 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ossl_typ.h
+493 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/stack.h
+494 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/buffer.h
+495 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/x509_vfy.h
+496 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/aes.h
+497 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/dtls1.h
+498 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ebcdic.h
+499 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pem2.h
+500 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ui.h
+501 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/md2.h
+502 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/tmdiff.h
+503 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/asn1t.h
+504 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/ecdsa.h
+505 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/dh.h
+506 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/safestack.h
+507 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/sha.h
+508 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/des.h
+509 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/objects.h
+510 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/hmac.h
+511 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/opensslv.h
+512 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pq_compat.h
+513 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/rsa.h
+514 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pem.h
+515 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/rc4.h
+516 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/x509v3.h
+517 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/conf_api.h
+518 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/tls1.h
+519 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/pkcs7.h
+520 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/include/openssl/err.h
+521 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ms/tlhelp32.h
+522 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ms/uplink.h
+523 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/s_apps.h
+524 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/progs.h
+525 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/testdsa.h
+526 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/testrsa.h
+527 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/apps.h
+528 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/apps/timeouts.h
+529 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/seed/seed_locl.h
+530 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/seed/seed.h
+531 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ui/ui_compat.h
+532 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ui/ui_locl.h
+533 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ui/ui.h
+534 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/jpake/jpake.h
+535 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/x509/x509.h
+536 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/x509/x509_vfy.h
+537 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/store/store.h
+538 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/store/str_locl.h
+539 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/x509v3/pcy_int.h
+540 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/x509v3/ext_dat.h
+541 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/x509v3/x509v3.h
+542 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc5/rc5_locl.h
+543 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc5/rc5.h
+544 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/txt_db/txt_db.h
+545 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/o_str.h
+546 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/des_ver.h
+547 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/des_old.h
+548 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/des_locl.h
+549 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/spr.h
+550 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/des.h
+551 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/des/rpc_des.h
+552 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/symhacks.h
+553 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md32_common.h
+554 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/aes/aes.h
+555 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/aes/aes_locl.h
+556 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/stack/stack.h
+557 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/stack/safestack.h
+558 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bf/blowfish.h
+559 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bf/bf_locl.h
+560 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bf/bf_pi.h
+561 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ripemd/ripemd.h
+562 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ripemd/rmdconst.h
+563 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ripemd/rmd_locl.h
+564 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rand/rand.h
+565 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rand/rand_lcl.h
+566 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/fips_err.h
+567 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/camellia/camellia.h
+568 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/camellia/cmll_locl.h
+569 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/evp/evp.h
+570 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/evp/evp_locl.h
+571 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/hmac/hmac.h
+572 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/o_dir.h
+573 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/engine/engine.h
+574 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/engine/eng_int.h
+575 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cms/cms.h
+576 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cms/cms_lcl.h
+577 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/crypto.h
+578 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/err/err.h
+579 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pkcs12/pkcs12.h
+580 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/dso/dso.h
+581 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pem/pem2.h
+582 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pem/pem.h
+583 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/o_time.h
+584 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pkcs7/example.h
+585 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pkcs7/pkcs7.h
+586 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md5/md5.h
+587 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md5/md5_locl.h
+588 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/asn1/asn1_mac.h
+589 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/asn1/charmap.h
+590 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/asn1/asn1.h
+591 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/asn1/asn1t.h
+592 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/comp/comp.h
+593 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/sha/sha.h
+594 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/sha/sha_locl.h
+595 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ocsp/ocsp.h
+596 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ec/ec.h
+597 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ec/ec_lcl.h
+598 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/idea/idea.h
+599 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/idea/idea_lcl.h
+600 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/mdc2/mdc2.h
+601 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md4/md4_locl.h
+602 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md4/md4.h
+603 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/dsa/dsa.h
+604 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/dh/dh.h
+605 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc2/rc2.h
+606 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc2/rc2_locl.h
+607 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ossl_typ.h
+608 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bn/bn.h
+609 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bn/bn_lcl.h
+610 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bn/bn_prime.h
+611 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ecdsa/ecs_locl.h
+612 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ecdsa/ecdsa.h
+613 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ecdh/ech_locl.h
+614 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ecdh/ecdh.h
+615 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rsa/rsa.h
+616 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/ebcdic.h
+617 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pqueue/pqueue.h
+618 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/pqueue/pq_compat.h
+619 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/buffer/buffer.h
+620 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cryptlib.h
+621 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/tmdiff.h
+622 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cast/cast.h
+623 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cast/cast_s.h
+624 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/cast/cast_lcl.h
+625 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bio/bio_lcl.h
+626 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/bio/bio.h
+627 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/krb5/krb5_asn.h
+628 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/md2/md2.h
+629 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/opensslv.h
+630 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc4/rc4_locl.h
+631 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/rc4/rc4.h
+632 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/conf/conf.h
+633 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/conf/conf_def.h
+634 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/conf/conf_api.h
+635 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/objects/obj_mac.h
+636 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/objects/obj_dat.h
+637 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/objects/objects.h
+638 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/crypto/lhash/lhash.h
+639 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/fips/rand/fips_rand.h
+640 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/fips/fips.h
+641 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/fips/fips_locl.h
+642 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/fips/fips_utl.h
+643 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/fnv1a64.h
+644 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/ssl.h
+645 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/ssl2.h
+646 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/kssl.h
+647 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/ssl_locl.h
+648 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/ssl3.h
+649 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/kssl_lcl.h
+650 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/ssl23.h
+651 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/dtls1.h
+652 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/ssl/tls1.h
+653 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/GetHTTPS.src/MacSocket.h
+654 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/_MWERKS_GUSI_prefix.h
+655 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/_MWERKS_prefix.h
+656 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/buildinf.h
+657 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/opensslconf.h
+658 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/MacOS/Randomizer.h
+659 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/e_os.h
+660 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/tunala/tunala.h
+661 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/easy_tls/easy-tls.h
+662 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/easy_tls/test.h
+663 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/maurice/loadkeys.h
+664 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/zencod/hw_zencod_err.h
+665 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/zencod/hw_zencod.h
+666 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/rsaref/rsaref_err.h
+667 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/cluster_labs/hw_cluster_labs_err.h
+668 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/cluster_labs/cluster_labs.h
+669 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/ibmca/hw_ibmca_err.h
+670 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/demos/engines/ibmca/ica_openssl_api.h
+671 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_atalla_err.h
+672 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/aep.h
+673 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/hwcryptohook.h
+674 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/hw_4758_cca.h
+675 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/cswift.h
+676 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/atalla.h
+677 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/hw_ubsec.h
+678 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/vendor_defns/sureware.h
+679 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_gmp_err.h
+680 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_sureware_err.h
+681 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_nuron_err.h
+682 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_4758cca_err.h
+683 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_chil_err.h
+684 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_ubsec_err.h
+685 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_aep_err.h
+686 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_capi_err.h
+687 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/openssl/engines/e_cswift_err.h
+688 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/buildinf.h
+689 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/piii/openssl/opensslconf-win32.h
+690 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/piii/openssl/opensslconf.h
+691 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/piii/openssl/opensslconf-posix.h
+692 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/k8/openssl/opensslconf-win32.h
+693 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/k8/openssl/opensslconf.h
+694 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/openssl/config/k8/openssl/opensslconf-posix.h
+695 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/zconf.h
+696 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/inflate.h
+697 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/crc32.h
+698 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/trees.h
+699 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/zlib.h
+700 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/inffixed.h
+701 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/mozzconf.h
+702 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/inffast.h
+703 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/deflate.h
+704 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/iowin32.h
+705 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/unzip.h
+706 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/zip.h
+707 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/mztools.h
+708 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/ioapi.h
+709 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/contrib/minizip/crypt.h
+710 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/inftrees.h
+711 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/zlib/zutil.h
+712 silly gunzTarPerm extractEntry .node-gyp/0.6.14/deps/http_parser/http_parser.h
+713 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/pipe_wrap.h
+714 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_http_parser.h
+715 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_file.h
+716 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/handle_wrap.h
+717 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/platform_win32.h
+718 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_root_certs.h
+719 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/req_wrap.h
+720 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_signal_watcher.h
+721 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/v8constants.h
+722 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/tcp_wrap.h
+723 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_javascript.h
+724 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/stream_wrap.h
+725 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_string.h
+726 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_buffer.h
+727 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/platform.h
+728 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_script.h
+729 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node.h
+730 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_io_watcher.h
+731 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/v8_typed_array.h
+732 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_os.h
+733 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_extensions.h
+734 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_crypto.h
+735 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_stat_watcher.h
+736 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_object_wrap.h
+737 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_constants.h
+738 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_version.h
+739 silly gunzTarPerm extractEntry .node-gyp/0.6.14/src/node_dtrace.h
+740 silly gunzTarPerm extractEntry .node-gyp/0.6.14/Release/node.lib
+741 silly gunzTarPerm extractEntry wscript
+742 silly gunzTarPerm extractEntry tests/fixed-png-stack-async.js
+743 silly gunzTarPerm extractEntry tests/fixed-png-stack.js
+744 silly gunzTarPerm extractEntry tests/dynamic-png-stack.js
+745 silly gunzTarPerm extractEntry tests/dynamic-png-stack-async.js
+746 silly gunzTarPerm extractEntry tests/push-data/05-rgba-96-397-32-2.dat
+747 silly gunzTarPerm extractEntry tests/push-data/10-rgba-112-397-32-2.dat
+748 silly gunzTarPerm extractEntry tests/push-data/19-rgba-160-397-32-2.dat
+749 silly gunzTarPerm extractEntry tests/push-data/20-rgba-176-386-16-10.dat
+750 silly gunzTarPerm extractEntry tests/push-data/04-rgba-96-386-16-10.dat
+751 silly gunzTarPerm extractEntry tests/push-data/16-rgba-144-397-32-2.dat
+752 silly gunzTarPerm extractEntry tests/push-data/12-rgba-128-397-32-2.dat
+753 silly gunzTarPerm extractEntry tests/push-data/07-rgba-112-386-16-10.dat
+754 silly gunzTarPerm extractEntry tests/push-data/02-rgba-96-390-16-5.dat
+755 silly gunzTarPerm extractEntry tests/push-data/09-rgba-112-389-32-7.dat
+756 silly gunzTarPerm extractEntry tests/push-data/17-rgba-160-393-16-6.dat
+757 silly gunzTarPerm extractEntry tests/push-data/14-rgba-144-397-32-2.dat
+758 silly gunzTarPerm extractEntry tests/push-data/11-rgba-128-386-16-10.dat
+759 silly gunzTarPerm extractEntry tests/push-data/06-rgba-96-397-32-2.dat
+760 silly gunzTarPerm extractEntry tests/push-data/08-rgba-112-397-32-2.dat
+761 silly gunzTarPerm extractEntry tests/push-data/13-rgba-144-386-16-10.dat
+762 silly gunzTarPerm extractEntry tests/push-data/01-rgba-80-389-16-7.dat
+763 silly gunzTarPerm extractEntry tests/push-data/15-rgba-144-389-16-7.dat
+764 silly gunzTarPerm extractEntry tests/push-data/18-rgba-176-397-16-2.dat
+765 silly gunzTarPerm extractEntry tests/push-data/03-rgba-80-397-32-2.dat
+766 silly gunzTarPerm extractEntry examples/png-example.js
+767 silly gunzTarPerm extractEntry examples/png-example-async.js
+768 silly gunzTarPerm extractEntry examples/png-example2.js
+769 silly gunzTarPerm extractEntry examples/png-example3.js
+770 silly gunzTarPerm extractEntry examples/png-example4.js
+771 silly gunzTarPerm extractEntry examples/rgba-terminal.dat
+772 silly gunzTarPerm extractEntry src/buffer_compat.h
+773 silly gunzTarPerm extractEntry src/fixed_png_stack.cpp
+774 silly gunzTarPerm extractEntry src/dynamic_png_stack.cpp
+775 silly gunzTarPerm extractEntry src/buffer_compat.cpp
+776 silly gunzTarPerm extractEntry src/common.h
+777 silly gunzTarPerm extractEntry src/dynamic_png_stack.h
+778 silly gunzTarPerm extractEntry src/fixed_png_stack.h
+779 silly gunzTarPerm extractEntry src/common.cpp
+780 silly gunzTarPerm extractEntry src/png_encoder.h
+781 silly gunzTarPerm extractEntry src/module.cpp
+782 silly gunzTarPerm extractEntry src/png.cpp
+783 silly gunzTarPerm extractEntry src/png.h
+784 silly gunzTarPerm extractEntry src/png_encoder.cpp
+785 silly gunzTarPerm extractEntry package.json~
+786 silly gunzTarPerm extractEntry gyp/include/pngconf.h
+787 silly gunzTarPerm extractEntry gyp/include/libpng12/pngconf.h
+788 silly gunzTarPerm extractEntry gyp/include/libpng12/png.h
+789 silly gunzTarPerm extractEntry gyp/include/zlib.h
+790 silly gunzTarPerm extractEntry gyp/include/zconf.h
+791 silly gunzTarPerm extractEntry gyp/include/png.h
+792 silly gunzTarPerm extractEntry gyp/lib/libpng12.def
+793 silly gunzTarPerm extractEntry gyp/lib/libpng.dll.a
+794 silly gunzTarPerm extractEntry gyp/lib/libpng12.dll.a
+795 silly gunzTarPerm extractEntry gyp/lib/zlib.lib
+796 silly gunzTarPerm extractEntry gyp/lib/zlib-bcc.lib
+797 silly gunzTarPerm extractEntry gyp/lib/pkgconfig/libpng.pc
+798 silly gunzTarPerm extractEntry gyp/lib/pkgconfig/libpng12.pc
+799 silly gunzTarPerm extractEntry gyp/lib/libpng.lib
+800 silly gunzTarPerm extractEntry gyp/lib/libz.a
+801 silly gunzTarPerm extractEntry gyp/lib/zlib.def
+802 silly gunzTarPerm extractEntry gyp/lib/libpng.la
+803 silly gunzTarPerm extractEntry gyp/lib/libpng-bcc.lib
+804 silly gunzTarPerm extractEntry gyp/lib/libz.dll.a
+805 silly gunzTarPerm extractEntry gyp/lib/libpng12.la
+806 silly gunzTarPerm extractEntry binding.gyp
+807 verbose write writing to /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png/package.json
+808 info preinstall png@3.0.3
+809 verbose readDependencies loading dependencies from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png/package.json
+810 verbose readDependencies loading dependencies from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png/package.json
+811 silly install resolved []
+812 verbose about to build /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+813 info build /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+814 info linkStuff png@3.0.3
+815 silly linkStuff png@3.0.3 has /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules as its parent node_modules
+816 verbose linkBins png@3.0.3
+817 verbose linkMans png@3.0.3
+818 verbose rebuildBundles png@3.0.3
+819 info install png@3.0.3
+820 verbose unsafe-perm in lifecycle false
+821 info png@3.0.3 Failed to exec install script
+822 verbose unlock done using /Users/karlcd/.npm/_locks/png-78817227c25446fa.lock for /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+823 verbose stack Error: png@3.0.3 install: `node-gyp rebuild`
+823 verbose stack Exit status 1
+823 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
+823 verbose stack     at EventEmitter.emit (events.js:110:17)
+823 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+823 verbose stack     at ChildProcess.emit (events.js:110:17)
+823 verbose stack     at maybeClose (child_process.js:1008:16)
+823 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1080:5)
+824 verbose pkgid png@3.0.3
+825 verbose cwd /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer
+826 error Darwin 14.5.0
+827 error argv "node" "/usr/local/bin/npm" "install" "png"
+828 error node v0.12.1
+829 error npm  v2.10.1
+830 error code ELIFECYCLE
+831 error png@3.0.3 install: `node-gyp rebuild`
+831 error Exit status 1
+832 error Failed at the png@3.0.3 install script 'node-gyp rebuild'.
+832 error This is most likely a problem with the png package,
+832 error not with npm itself.
+832 error Tell the author that this fails on your system:
+832 error     node-gyp rebuild
+832 error You can get their info via:
+832 error     npm owner ls png
+832 error There is likely additional logging output above.
+833 verbose exit [ 1, true ]
+834 verbose unbuild node_modules/png
+835 info preuninstall png@3.0.3
+836 info uninstall png@3.0.3
+837 verbose unbuild rmStuff png@3.0.3 from /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules
+838 info postuninstall png@3.0.3
+839 silly gentlyRm /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png is being purged from base /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer
+840 verbose gentlyRm don't care about contents; nuking /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+841 silly vacuum-fs purging /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules/png
+842 silly vacuum-fs quitting because other entries in /Users/karlcd/Desktop/uav_ops/DroneDataAnalysis/webServer/node_modules
