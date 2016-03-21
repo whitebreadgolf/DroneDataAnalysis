@@ -19,4 +19,7 @@ angular.module('UavOpsInterface')
 		$scope.altitudeConfiguration.isValid = false; 
 	}
 
+	$scope.updateAltitudeConfig = function (){
+			
+	}
 });
