@@ -1,3 +1,5 @@
+<h1> Notifcations </h1>
+<h4> The following notifications have been prompted in reference to the configured constraints. </h4>
 <div ng-repeat="note in notifications">
     <div ng-if="note.type == 'hazard'" class="alert alert-danger">
         <button type="button" class="close" ng-click="notificationClicked($index)">×</button>
@@ -13,6 +15,7 @@
     </div>
 </div>
 
-
+<br> </br>
+<h5> To edit your constraints, go to Flight > Configurations to manage your configuration settings.  </h5>
 
 
