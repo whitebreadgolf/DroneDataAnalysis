@@ -73,7 +73,6 @@ var filterCsvString = function (_csvString){
         mag_z: splitData[24],
         time: (new Date()) - regulationConfig.cur_flight[0].start_time
     };
-
     // broadcast with websocket and filter for warnings
     warningFilter(data_stream);
     magneticWarningFilter.magFilter(data_stream.gyro_x, data_stream.gyro_y, data_stream.gyro_z,

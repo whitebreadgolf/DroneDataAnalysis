@@ -29,15 +29,17 @@ var gm_queue = [];
 @param {Number} magz - magnetic field data in the z plane
 */
 var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
+
 	// create datapoint of magnetic and gyro data to add to queue
 	var magData = {
-		gyro_x: gyrox,
-		gyro_y: gyroy,
-		gyro_z: gyroz,
-		mag_x: magx,
-		mag_y: magy,
-		mag_z: magz
+		gyro_x: Number.parseFloat(gyrox),
+		gyro_y: Number.parseFloat(gyroy),
+		gyro_z: Number.parseFloat(gyroz),
+		mag_x: Number.parseFloat(magx),
+		mag_y: Number.parseFloat(magy),
+		mag_z: Number.parseFloat(magz)
  	};
+ 	console.log("gyro: " + magData.gyro_x);
  	if (Math.abs(magData.gyro_x) < zero_threshold) {
  		magData.gyro_x = 0;
  	}
@@ -66,9 +68,10 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
  	// analyze the most recent 10 datapoints to see if the gyroscope and magnetic data are in sync
  	var magwarn = false;
 
- 	for (var i = 0; i < gm_queue.length; i++) {
- 		
+ 	for (var i = 1; i < gm_queue.length; i++) {
+ 		var gm_diff = gyromagDiff(i);
  	}
+ 	
 
 
 
@@ -90,6 +93,18 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 		wss.broadcast(JSON.stringify(warning));
 	}
 	
+}
+
+var gyromagDiff = function(i) {
+	var gm_diff = {
+		gyro_x: gm_queue[i].gyro_x - gm_queue[i-1].gyro_x,
+		gyro_y: gm_queue[i].gyro_y - gm_queue[i-1].gyro_y,
+		gyro_z: gm_queue[i].gyro_z - gm_queue[i-1].gyro_z,
+		mag_x: gm_queue[i].mag_x - gm_queue[i-1].mag_x,
+		mag_y: gm_queue[i].mag_y - gm_queue[i-1].mag_y,
+		mag_z: gm_queue[i].mag_z - gm_queue[i-1].mag_z,
+	}
+	return gm_diff;
 }
 
 module.exports = {
