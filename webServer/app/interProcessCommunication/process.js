@@ -54,6 +54,7 @@ var initializeMock = function(_readExt, _readType){
 
 	// any initalizations pre-function call
 	sp = spawn(MOCK_SP_FP, [MOCK_SP_DIR+map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time']);
+	console.log(map[_readType.toLowerCase()]);
 
 	// set stdout callback, just print for now
 	sp.stdout.on('data', function(data){

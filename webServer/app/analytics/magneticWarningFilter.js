@@ -40,22 +40,22 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 		mag_z: Number.parseFloat(magz)
  	};
  	console.log("gyro: " + magData.gyro_x);
- 	if (Math.abs(magData.gyro_x) < zero_threshold) {
+ 	if (Math.abs(magData.gyro_x) < zero_threshold || magData.gyro_x == null) {
  		magData.gyro_x = 0;
  	}
- 	if (Math.abs(magData.gyro_y) < zero_threshold) {
+ 	if (Math.abs(magData.gyro_y) < zero_threshold || magData.gyro_y == null) {
  		magData.gyro_y = 0;
  	}
- 	if (Math.abs(magData.gyro_z) < zero_threshold) {
+ 	if (Math.abs(magData.gyro_z) < zero_threshold || magData.gyro_z == null) {
  		magData.gyro_z = 0;
  	}
- 	if (Math.abs(magData.mag_x) < zero_threshold) {
+ 	if (Math.abs(magData.mag_x) < zero_threshold || magData.mag_x == null) {
  		magData.mag_x = 0;
  	}
- 	if (Math.abs(magData.mag_y) < zero_threshold) {
+ 	if (Math.abs(magData.mag_y) < zero_threshold || magData.mag_y == null) {
  		magData.mag_y = 0;
  	}
- 	if (Math.abs(magData.mag_z) < zero_threshold) {
+ 	if (Math.abs(magData.mag_z) < zero_threshold || magData.mag_z == null) {
  		magData.mag_z = 0;
  	}
 
@@ -70,16 +70,17 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 
  	for (var i = 1; i < gm_queue.length; i++) {
  		var gm_diff = gyromagDiff(i);
+ 		if (Math.abs(gm_diff.mag_x - gm_diff.gyro_x) > mag_threshold) {
+			magwarn = true;
+		}
+ 		if (Math.abs(gm_diff.mag_y - gm_diff.gyro_y) > mag_threshold) {
+ 			magwarn = true;
+ 		}
+ 		if (Math.abs(gm_diff.mag_z - gm_diff.gyro_z) > mag_threshold) {
+ 			magwarn = true;
+ 		}
  	}
- 	
-
-
-
-
-
-
-
-
+ 
 	// if the threshold was exceeded then throw a warning
 	if (magwarn == true)
 	{

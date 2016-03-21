@@ -16,7 +16,6 @@ var regulationConfig = require('../config/regulationConfig');
 @param {function} _callback - a callback function
 */
 var startFlight = function (_readExt, _readType, _callback) {
-
 	regulationConfig.cur_flight[0].start_time = (new Date());
 	regulationConfig.cur_flight[0].simulation.file_read = _readExt;
 	sp_process.initializeMock(_readExt, _readType);
