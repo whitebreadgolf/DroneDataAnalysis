@@ -55,7 +55,7 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 		})
 		.when('/legal', {
 			templateUrl: 'templates/legal.html',
-			controller: 'LegalCtrl'
+			//controller: 'LegalCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'
