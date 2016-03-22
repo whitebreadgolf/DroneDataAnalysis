@@ -13,14 +13,13 @@ var Schema = mongoose.Schema;
 
 // describe user in schema
 var binaryMapSchema = new Schema({
-	lat_start: Number,
-	lon_start: Number,
-	lat_end: Number,
-	lon_end: Number,
+	user: { type: Schema.Types.ObjectId, ref: 'user'},
+	lat: Number,
+	lon: Number,
 	x_coord: Number,
 	y_coord: Number,
 	width: Number,
-	height: Number,
+	heigth: Number,
 	values: [Boolean],
 	created_at: Date
 });

@@ -3,6 +3,7 @@ angular.module('UavOpsInterface')
 
 	// array for our dynamic markers
 	$scope.allMarkers = [];
+	$scope.configMarkers = [];
 	$scope.alreadyConfigured = false;
 	$scope.notConfigured = true;
 	$scope.mapConfiguration = {
@@ -37,8 +38,6 @@ angular.module('UavOpsInterface')
 
 		// add check to see if full
 		if($scope.allMarkers.length === 2){ 
-
-			console.log($scope.allMarkers);
 			if($scope.allMarkers[0].lat > $scope.allMarkers[1].lat && $scope.allMarkers[0].lon < $scope.allMarkers[1].lon){
 				$scope.mapConfiguration.status = "Valid NW SE configuration"
 				$scope.mapConfiguration.isValid = true; 
@@ -72,7 +71,8 @@ angular.module('UavOpsInterface')
 		}
 
 		$http(req).then(function(data){
-			console.log(data);
+			console.log(data.data.status.data);			
+			$scope.configMarkers = data.data.status.data;
 		});
 	};
 

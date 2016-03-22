@@ -11,6 +11,10 @@ var User = require('../models/user');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+/**
+@function setupUser - to setup passport options with express app
+@param {Object} _app - the express app object
+*/
 var setupUser = function(_app){
 
 	_app.use(passport.initialize());

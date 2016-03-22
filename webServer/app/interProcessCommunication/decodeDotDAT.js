@@ -281,15 +281,16 @@ var ec_voltage = 0;
 
 /**
 @funtion importDataBlob - to decode a given data blob and hand off the data to a filter
-@alias interProcessCommunication/decodeDotDAT
+@alias interProcessCommunication/decodeDotDAT.importDataBlob
 @param {Uint8Array} _blob - stores characters in a byte array
 */
-var importDataBlob = function (_blob){
+var importDataBlob = function (_id, _blob){
 
+    // convert each char of blob to 8 bit
     var data = '';
-    
     for (i = 0; i < _blob.length; i++) { data += convert(_blob[i]); }
 
+    // segment and analyze
     var segments = data.split('558400cf01');
     if (segments.length > 10) {
         file_valid = true;
@@ -365,7 +366,7 @@ var importDataBlob = function (_blob){
 
                     // FEED INTO FILTER
 
-                    dataFilter.routeDataParameters(latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number);
+                    dataFilter.routeDataParameters(_id, latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number);
                     
                     // FEED INTO FILTER END
                 }
@@ -474,7 +475,7 @@ var importDataBlob = function (_blob){
                             
                                 // FEED INTO FILTER
 
-                                dataFilter.routeDataParameters(latitude, longitude, altitude, north_vel, east_vel, down_vel, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence);
+                                dataFilter.routeDataParameters(_id, latitude, longitude, altitude, north_vel, east_vel, down_vel, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence);
                                 
                                 // FEED INTO FILTER END
                             }

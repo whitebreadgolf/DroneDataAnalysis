@@ -12,4 +12,4 @@ If you don't see the node_modules folder don't worry! This means that no node pa
 
 ## Updating bower packages
 
-The command to reinstall all packages (while in this directory) specified in the bower.json file is "../node_modules/bower/bin/bower install". NOTE: you need to have bower installed in order to do this.
+The command to reinstall all packages (while in this directory) specified in the bower.json file is "../webServer/public bower install". NOTE: you need to have bower installed in order to do this.
