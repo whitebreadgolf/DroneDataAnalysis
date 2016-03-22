@@ -28,7 +28,7 @@ var gm_queue = [];
 @param {Number} magy - magnetic field data in the y plane
 @param {Number} magz - magnetic field data in the z plane
 */
-var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
+var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
 
 	// create datapoint of magnetic and gyro data to add to queue
 	var magData = {
@@ -61,7 +61,7 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 
 	gm_queue.push(magData);
 	// only have the most recent 10 datapoints in the queue
- 	if (gm_queue.length > 10) {
+ 	if (gm_queue.length > 2) {
  		gm_queue.shift();
  	}
 
@@ -89,7 +89,7 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 			level: 'hazard',
 			param: 'altitude',
 			text: 'Your drone is nearing sources of electromagnetic interference',
-			time: (new Date()) - regulationConfig.cur_flight[0].start_time
+			time: (new Date()) - regulationConfig.cur_flight[_id].start_time
 		};
 		wss.broadcast(JSON.stringify(warning));
 	}

@@ -21,7 +21,7 @@ var velocityAltitudeFilter = require('./velocityAltitudeFilter');
 var routeDataParameters = function (_id, latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number){
 
 	// send data to interface
-    magneticWarningFilter.magFilter(gyrox, gyroy, gyroz, magx, magy, magz);
+    magneticWarningFilter.magFilter(_id, gyrox, gyroy, gyroz, magx, magy, magz);
     sendLiveData(_id, velocity_east, velocity_north, velocity_down, baro_alt);
 };
 
@@ -75,7 +75,7 @@ var filterCsvString = function (_id, _csvString){
     };
     // broadcast with websocket and filter for warnings
     velocityAltitudeFilter.velAltFilter(_id, data_stream);
-    magneticWarningFilter.magFilter(data_stream.gyro_x, data_stream.gyro_y, data_stream.gyro_z, data_stream.mag_x, data_stream.mag_y, data_stream.mag_z );
+    magneticWarningFilter.magFilter(_id, data_stream.gyro_x, data_stream.gyro_y, data_stream.gyro_z, data_stream.mag_x, data_stream.mag_y, data_stream.mag_z );
     wss.broadcast(JSON.stringify(data_stream));
 }
 
