@@ -61,7 +61,7 @@ var magFilter = function(gyrox, gyroy, gyroz, magx, magy, magz){
 
 	gm_queue.push(magData);
 	// only have the most recent 10 datapoints in the queue
- 	if (gm_queue.length > 2) {
+ 	if (gm_queue.length > 10) {
  		gm_queue.shift();
  	}
 
