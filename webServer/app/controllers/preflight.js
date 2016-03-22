@@ -5,22 +5,23 @@
 /**
 @requires process
 @requires regulationConfig
+@requires preflight
 */
 
 var sp_process = require('./../interProcessCommunication/process');
 var regulationConfig = require('../config/regulationConfig');
+var Preflight = require('../models/preflight');
 
 /**
-@function startFlight - to configure and start a flight
-@alias controllers/preflight.startFlight
+@function startFlightSimulation - to configure and start a flight simulation
+@alias controllers/preflight.startFlightSimulation
 @param {function} _callback - a callback function
 */
-var startFlight = function (_readExt, _readType, _callback) {
+var startFlightSimulation = function (_id, _readExt, _readType, _callback) {
 
-	regulationConfig.cur_flight[0].start_time = (new Date());
-	regulationConfig.cur_flight[0].simulation.file_read = _readExt;
-	sp_process.initializeMock(_readExt, _readType);
-
+	// start flight data and data flow process
+	regulationConfig.startFlight(_id, _readExt);
+	sp_process.initializeMock(_id, _readExt, _readType);
 	_callback();
 }
 
@@ -29,14 +30,47 @@ var startFlight = function (_readExt, _readType, _callback) {
 @alias controllers/preflight.endFlight
 @param {function} _callback - a callback function
 */
-var endFlight = function (_callback){
-	sp_process.endMock();
-	regulationConfig.cur_flight[0].start_time = null;
+var endFlightWithPilotId = function (_id, _callback){
+
+	// end the mock process and clear flight data
+	sp_process.endMock(_id);
+	regulationConfig.endFlight(_id);
 	_callback();
+};
+
+var addPreflightInspection = function(_id, _flight_name, _remote_controller_charge,_intelligent_flight_battery, _propeller_0, _propeller_1, _propeller_2, _propeller_3, _micro_sd, _gimbal, _callback){
+
+	var preflightData = {
+		flight_name: _flight_name,
+		remote_controller_charge: _remote_controller_charge,
+		intelligent_flight_battery: _intelligent_flight_battery,
+		propeller_0: _propeller_0,
+		propeller_1: _propeller_1,
+		propeller_2: _propeller_2,
+		propeller_3: _propeller_3,
+		micro_sd: _micro_sd,
+		gimbal: _gimbal,
+		collected_data: false,
+		pilot: _id
+	};
+
+	var preflight = new Preflight(preflightData);
+
+	preflight.save(function (err, data){
+		if(err) _callback({message:'could not create pre-flight data', success: false});
+		else _callback({message:'created pre-flight data', success: true});
+	});
+}
+
+var getAllFlightsWithoutCollectedData = function (_callback){
+
+
 };
 
 // export all modules
 module.exports = {
-	startFlight: startFlight,
-	endFlight: endFlight
+	addPreflightInspection: addPreflightInspection,
+	getAllFlightsWithoutCollectedData: getAllFlightsWithoutCollectedData,
+	startFlightSimulation: startFlightSimulation,
+	endFlightWithPilotId: endFlightWithPilotId
 };

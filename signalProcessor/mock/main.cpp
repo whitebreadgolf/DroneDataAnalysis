@@ -10,11 +10,11 @@
 #define BLOB 500000
 
 #define SLEEP_DAT 5
-#define SLEEP_CSV 1
+#define SLEEP_CSV 2
 
 void populateMap (std::map<std::string, std::string>& map, const std::string& extn);
-void outputDAT (std::ifstream& ifile, bool sleep);
-void outputCSV (std::ifstream& ifile, bool sleep);
+void outputDAT (std::ifstream& ifile, bool sleep, std::string &id);
+void outputCSV (std::ifstream& ifile, bool sleep, std::string &id);
 
 int main(int argc, char* argv[]){
 	const std::string FAIL_STRING = "MOCK FAILED";
@@ -22,11 +22,11 @@ int main(int argc, char* argv[]){
 	const std::string FAIL_EXTN = "ERROR: Invalid file extension chosen. Choose either 'csv' or 'dat'.";
 	const std::string FAIL_RATE = "ERROR: Invalid rate of output chosen. Choose either 'real_time' or 'no_sleep'.";
 	/* command line argument parsing */
-	// expecting 3 arguments in command line
-	if (argc != 4)
+	// expecting 4 arguments in command line
+	if (argc != 5)
 	{
 		std::cerr << FAIL_STRING << std::endl;
-		std::cerr << "Needs 3 arguments. Run with './a.out [filename/filetype] ['csv'/'dat'] ['real_time'/'no_sleep']" << std::endl;
+		std::cerr << "Needs 4 arguments. Run with './a.out [filename/filetype] ['csv'/'dat'] ['real_time'/'no_sleep'] [id]" << std::endl;
 		std::cerr << "Run './a.out help' for more information on the cmdline arguments." << std::endl;
 		return 1;
 	}
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]){
 	std::string file = argv[1];
 	std::string extn = argv[2];
 	std::string rate = argv[3];
+	std::string id = argv[4];
 	std::transform(extn.begin(), extn.end(), extn.begin(), ::tolower);
 	std::transform(rate.begin(), rate.end(), rate.begin(), ::tolower);
 
@@ -93,17 +94,17 @@ int main(int argc, char* argv[]){
 	
 	if (extn == "dat")
 	{
-		outputDAT(ifile, sleep);
+		outputDAT(ifile, sleep, id);
 	}
 	else if (extn == "csv")
 	{
-		outputCSV(ifile, sleep);
+		outputCSV(ifile, sleep, id);
 	}
 	return 0;
 }
 
 /* output DAT file data */
-void outputDAT(std::ifstream &ifile, bool sleep)
+void outputDAT(std::ifstream &ifile, bool sleep, std::string &id)
 {
 	// declarations
 	size_t size = 0; 
@@ -127,7 +128,7 @@ void outputDAT(std::ifstream &ifile, bool sleep)
 	int last_blob = size - BLOB;
 	while(count < size){
 
-		std::string out_string = "";
+		std::string out_string = id + " ";
 
 		if(count > last_blob){
 			for (int i = count; i<size; i++){
@@ -151,15 +152,16 @@ void outputDAT(std::ifstream &ifile, bool sleep)
 	}
 }
 
-void outputCSV(std::ifstream& ifile, bool sleep)
+void outputCSV(std::ifstream& ifile, bool sleep, std::string &id)
 {
 	std::string output;	
 	while(ifile >> output)
 	{
-		std::cout << output << std::endl;
+		std::string mod_output = id + " " + output;
+		std::cout << mod_output << std::endl;
 		if (sleep)
 		{
-			std::this_thread::sleep_for (std::chrono::seconds(2));
+			std::this_thread::sleep_for (std::chrono::seconds(SLEEP_CSV));
 		}
 	}
 }
