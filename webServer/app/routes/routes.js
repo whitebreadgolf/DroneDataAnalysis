@@ -148,8 +148,16 @@ var initRoutes = function (_app){
 		
 		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
 
+		preflight.getAllFlightsWithoutCollectedData(function(err, flights){
 
+			if(err){
+				res.json({success: false});
+			}
+			else res.json({success: true, data: flights});
+		});
 	});	
+
+	
 
 
 	// POST preflight inspection

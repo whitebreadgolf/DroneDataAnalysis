@@ -64,7 +64,9 @@ var addPreflightInspection = function(_id, _flight_name, _remote_controller_char
 
 var getAllFlightsWithoutCollectedData = function (_callback){
 
-
+	Preflight.find({collected_data: false}, function(err, flights){
+		_callback(err, flights);
+	});
 };
 
 // export all modules

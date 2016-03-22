@@ -20,8 +20,8 @@ var regulationConfig = require('../config/regulationConfig');
 var ZOOM = 20;
 var MAP_SIZE = {
     text: '400x400', x: 400, y:400,
-    width_meters: 49.49391757363202,
-    height_meters: 49.494047211814326,
+    width_meters: 50,
+    height_meters: 50,
     transform_dim: 100
 };
 var MAP_TYPE = 'roadmap';
@@ -141,8 +141,9 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
             });
 
             // advance longitude and latitude
+            console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
             curLon = latLon.lon;
-            curLat = latLon.lat
+            curLat = latLon.lat;
         }
         i++;
     }
