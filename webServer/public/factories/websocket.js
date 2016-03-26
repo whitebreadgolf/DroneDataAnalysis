@@ -1,5 +1,5 @@
 angular.module('UavOpsInterface')
-.factory('Websocket', function (){
+.factory('Websocket', function (Notification){
 
 	var ws;
 	var speed = [
@@ -75,6 +75,10 @@ angular.module('UavOpsInterface')
 						time: jsonData.time
 					};
 					notifications.push(pushNotif);
+
+					if(jsonData.level === 'warning') Notification({message: jsonData.param}, 'warning');
+					else if(jsonData.level === 'hazard') Notification({message: jsonData.param}, 'error'); 
+					else if(jsonData.level === 'update') Notification({message: jsonData.param}, 'info');
 				}
 				else{
 					console.log('invalid websocket data');

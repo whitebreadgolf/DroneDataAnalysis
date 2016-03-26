@@ -1,5 +1,5 @@
 angular.module('UavOpsInterface')
-.controller('LoginCtrl', function($scope, $http){
+.controller('LoginCtrl', function($scope, $http, Notification){
 	
 	$scope.submit = function (){
 
@@ -10,7 +10,8 @@ angular.module('UavOpsInterface')
 		}
 
 		$http(req).then(function(data){
-			console.log(data);
+			if(data.data.success) Notification({message: 'Welcome '+data.data.user.name}, 'success'); 
+			else Notification({message: data.data.message}, 'error');
 		});
 		
 	}

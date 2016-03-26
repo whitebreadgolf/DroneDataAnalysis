@@ -7,19 +7,21 @@
 @requires get-pixels
 @requires ndarray
 @requires binaryMap
+@requires regulationConfig
 */
 
 var config = require('../config/config');
 var getPixels = require('get-pixels');
 var ndarray = require('ndarray');
-var binaryMap = require('../models/binaryMap');
+var BinaryMap = require('../models/binaryMap');
+var regulationConfig = require('../config/regulationConfig');
 
 // module constants
 var ZOOM = 20;
 var MAP_SIZE = {
     text: '400x400', x: 400, y:400,
-    width_meters: 49.49391757363202,
-    height_meters: 49.494047211814326,
+    width_meters: 50,
+    height_meters: 50,
     transform_dim: 100
 };
 var MAP_TYPE = 'roadmap';
@@ -46,17 +48,18 @@ var MercatorObject = {
 @param {object} _endObj - gives latitude and longitude for end
 @returns {array} - whole binary restriction map
 */
-var generateMapWithRange = function (_startObj, _endObj, _user, _callback){
+var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
 
     // calculate the expected map size of n subranges (sqrt(n) * sqrt(n) array)
     // assume we have NW and SE coordinates
-    var totalWidth = measure(_startObj.lat, _startObj.lon, _startObj.lat, _endObj.lon);
-    var totalHeight = measure(_startObj.lat, _startObj.lon, _endObj.lat, _startObj.lon);
+    var totalWidth = measure(_startObj.lat, _startObj.lon, _startObj.lat, _endObj.lon) + MAP_SIZE.width_meters;
+    var totalHeight = measure(_startObj.lat, _startObj.lon, _endObj.lat, _startObj.lon) + MAP_SIZE.height_meters;
 
     // numRows * numCols = total map elements
     var numCols = Math.ceil(totalWidth/MAP_SIZE.width_meters);
     var numRows = Math.ceil(totalHeight/MAP_SIZE.height_meters);
     var totalMapElems = numCols * numRows;
+    var mapCount = 0;
 
     // split whole range into n subranges
     // iterate through all and calculate the expected center lat+long value
@@ -65,18 +68,26 @@ var generateMapWithRange = function (_startObj, _endObj, _user, _callback){
     // the callback function should concat all the 2d arrays into one whole array given its position
     // when there have been n callbacks, return the final binary map
 
+    var allLatLon = [];
+    var curLon = _startObj.lon;;
     var curLat = _startObj.lat;
-    var curLon = _startObj.lon;
-    var origLon = curLon;
     var center_x = MercatorObject.pixelOrigin.x + curLon * MercatorObject.pixelsPerLonDegree;
     var siny = bound(Math.sin(degreesToRadians(curLat), -0.9999, 0.9999));
     var center_y = MercatorObject.pixelOrigin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -MercatorObject.pixelsPerLonRadian;
 
+    // iterable indicies
+    var i=0;
+    var j=0;
+
     // over all of the rows, ie latitudes
-    for(var i=0;i<numRows;i++){        
+    while(i<numRows){        
         
-        // over all of the columns, ie longitudes     
-        for(var j=0;j<numCols;j++){
+        // initialize j index and longitude
+        curLon = _startObj.lon;   
+        j=0;
+
+        // over all of the columns, ie longitudes  
+        while(j<numCols){
 
             // create object for the latitude and longitude
             var latLonObj = {
@@ -84,57 +95,43 @@ var generateMapWithRange = function (_startObj, _endObj, _user, _callback){
                 dimentions: {lat: curLat, lon: curLon}
             };
 
-            //console.log(latLonObj);
+            // generate subrange with given callback
             generateSubrange(latLonObj, {x: i, y: j}, function (_binaryMap, _pos, _map_dim){
 
-                // binaryMap data organized
-                // var data = {
-                //     lat_start: _map_dim.coordinates.NELatLon.lat,
-                //     lon_start: _map_dim.coordinates.NELatLon.lon,
-                //     lat_end: _map_dim.coordinates.SWLatLon.lat,
-                //     lon_end: _map_dim.coordinates.SWLatLon.lon,
-                //     x_coord: _pos.x,
-                //     y_coord: _pos.y,
-                //     width: _map_dim.dimentions.width,
-                //     height: _map_dim.dimentions.height,
-                //     values: _binaryMap,
-                // };
+                // iterate completed maps
+                mapCount ++;
 
-                // // create new mongoose binaryMap and save
-                // var binMap = new binaryMap(data);
-                // binMap.save(function(error, data){
-                //     if(error){ _callback('error'); }
-                //     else{
-                //         // add the map to the user map and save
-                //         _user.map.push(data.ObjectId);
-                //         _user.save(function(usererror, userdata){
-                //             if(usererror){ console.log('error adding map to user'); }
-                //         });
-                //     }
-                // });
+                // binaryMap data organized
+                var data = {
+                    user: _id,
+                    lat: _map_dim.lat, 
+                    lon: _map_dim.lon,
+                    x_coord: _pos.x,
+                    y_coord: _pos.y,
+                    height: numRows,
+                    width: numCols,
+                    values: _binaryMap
+                };
+
+                // create new mongoose binaryMap and save
+                var binMap = new BinaryMap(data);
+                binMap.save(function(error, data){
+                    if(error){ console.log('error saving map'); }
+                    else{ console.log('added map with id'); }
+                });
+
+                // push into return object
+                allLatLon.push({ lat: _map_dim.lat, lon: _map_dim.lon});
 
                 // made last map
-                if(_pos.x === (numRows-1) && _pos.y === (numCols-1)){ _callback('success'); }
-
+                if(mapCount === totalMapElems){ _callback({text: 'success', data: allLatLon}); }
                 
                 // PRINT MAP
-                var line = '';
-                for(var i = 0; i < _binaryMap.length; i++){
-
-                    // add color or not
-                    if(_binaryMap[i] === 1){ line += '\x1b[36m%s\x1b[0m'; }
-                    else{ line += '\x1b[33m%s\x1b[0m'; }
-
-                    // print and reset line 
-                    if(i % MAP_SIZE.transform_dim === 0){
-                        console.log(line);
-                        line = '';
-                    }
-                }    
-                console.log("");
+                //printMap(_binaryMap);
                 // PRINT MAP END
-                
             });
+
+            j++;
 
             // lat -> y
             // lon -> x
@@ -144,9 +141,11 @@ var generateMapWithRange = function (_startObj, _endObj, _user, _callback){
             });
 
             // advance longitude and latitude
+            console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
             curLon = latLon.lon;
-            curLat = latLon.lat
+            curLat = latLon.lat;
         }
+        i++;
     }
 };
 
@@ -165,7 +164,7 @@ var generateSubrange = function (_center, _pos, _callback){
     // map dimentions calculate
     // NOTE: do we actually need to re-compute this every time
     var map_dim = getMapDimentions(_center.dimentions ,ZOOM, MAP_SIZE.x, MAP_SIZE.y);
-    
+
     // get the 400 x 400 x 4 array of integers for PNG image
     getPixels(mapUrl, function(err, pixels) {
 
@@ -218,16 +217,16 @@ var generateSubrange = function (_center, _pos, _callback){
                     rAve === 224 && gAve === 220 && bAve === 216 ||
                     rAve === 218 && gAve === 216 && bAve === 213 ){
 
-                    retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = 1;
+                    retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = true;
                 }
                 else{
-                    retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = 0;
+                    retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = false;
                 }
             }
         }
 
         // call with our binary array
-        _callback(retArray, _pos, map_dim);
+        _callback(retArray, _pos, _center.dimentions);
     });
 };
 
@@ -339,6 +338,55 @@ var getMapDimentions = function (_center){
         }
     };
 }
+
+/**
+@function printMap - to print a binary map on the console
+@alias analytics/buildingProximity.printMap
+@param {Object} _binaryMap - 2d map with binary data
+*/
+var printMap = function(_binaryMap){
+    var line = '';
+    for(var i = 0; i < _binaryMap.length; i++){
+
+        // add color or not
+        if(_binaryMap[i] === true){ line += '\x1b[36m%s\x1b[0m'; }
+        else line += '\x1b[33m%s\x1b[0m'; 
+
+        // print and reset line 
+        if(i % MAP_SIZE.transform_dim === false){
+            console.log(line);
+            line = '';
+        }
+    }    
+    console.log("");
+}
+
+/**
+@function loadMapWithCloseLatLon - loads a map cooresponing to a lat/lon point
+@alias analytics/buildingProximity.loadMapWithCloseLatLon
+@param {String} _id - mongodb object id
+@param {Number} _lat - latitude
+@param {Number} _lon - longitude
+*/
+var loadMapWithCloseLatLon = function(_id, _lat, _lon, _callback){
+
+    // with and height of current user map
+    var width = 0;
+    var height = 0;
+
+    // load first map for refrence
+    BinaryMap.findOne({user: _id, x_coord: 0, y_coord: 0}, function (_err, _map){
+        if(_err) _callback('error');
+        else{
+
+            // set regulationConfig obejct width and height parameters
+            width = _map.width;
+            height = _map.height;
+            regulationConfig.cur_flight[_id].width = _map.width;
+            regulationConfig.cur_flight[_id].height = _map.height;
+        }
+    });
+};
 
 // export all submodules
 module.exports = {

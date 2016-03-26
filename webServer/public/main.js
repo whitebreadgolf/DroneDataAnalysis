@@ -1,5 +1,5 @@
-angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3'])
-.config(function ($routeProvider) {
+angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'])
+.config(function ($routeProvider, NotificationProvider) {
 	$routeProvider
 		.when('/', {
 			templateUrl: 'templates/home.html',
@@ -33,6 +33,14 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3'])
 			templateUrl: 'templates/flight.html',
 			controller: 'FlightCtrl'
 		})
+		.when('/preflight', {
+			templateUrl: 'templates/preflight.html',
+			controller: 'PreflightCtrl'
+		})
+		.when('/flightconsole', {
+			templateUrl: 'templates/flightconsole.html',
+			controller: 'FlightConsoleCtrl'
+		})
 		.when('/notifications', {
 			templateUrl: 'templates/notifications.html',
 			controller: 'NotificationsCtrl'
@@ -45,15 +53,23 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3'])
 			templateUrl: 'templates/configuration.html',
 			controller: 'ConfigurationCtrl'
 		})
-		.when('/pre-flight', {
-			templateUrl: 'templates/pre-flight.html',
-			controller: 'Pre-FlightCtrl'
+		.when('/legal', {
+			templateUrl: 'templates/legal.html',
+			//controller: 'LegalCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'
 		});
 
-
+	NotificationProvider.setOptions({
+        delay: 2000,
+        startTop: 20,
+        startRight: 10,
+        verticalSpacing: 20,
+        horizontalSpacing: 20,
+        positionX: 'right',
+        positionY: 'bottom'
+    });
 })
 .run(function (Websocket) {
        
