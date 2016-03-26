@@ -2,3 +2,4 @@ signalProcessor/mock/FLY000.DAT
 .DS_Store
 webServer/.DS_Store
 webServer/app/.DS_Store
+webServer/npm-debug.log
