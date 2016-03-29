@@ -1,11 +1,12 @@
 angular.module('UavOpsInterface')
-.controller('ConfigMapCtrl', function ($scope, $http) {
+.controller('ConfigMapCtrl', function ($scope, $http, Notification) {
 
 	// array for our dynamic markers
 	$scope.allMarkers = [];
 	$scope.configMarkers = [];
 	$scope.alreadyConfigured = false;
-	$scope.notConfigured = true;
+	$scope.notConfigured = false;
+	$scope.configuring = false;
 	$scope.mapConfiguration = {
 		isValid:false, 
 		isInvalid: true,
@@ -21,9 +22,13 @@ angular.module('UavOpsInterface')
 		method: 'GET', url: 'api/configuremap',
 	}
 	$http(req).then(function(data){
-		if(data && data.status === 'success'){
+		if(data && data.data.success){
 			$scope.alreadyConfigured = true;
 			$scope.notConfigured = false;
+			$scope.configMarkers = data.data.data;
+		}
+		else if(data && !data.data.success){
+			Notification({message: 'user must log in'}, 'warning');
 		}
 	});
 
@@ -64,6 +69,12 @@ angular.module('UavOpsInterface')
 
 	// calls backend service, should not be accessable until conditions are correct
 	$scope.configureMap = function (){
+
+		$scope.configuring = true;
+		$scope.alreadyConfigured = false;
+		$scope.notConfigured = false;
+		$scope.mapConfiguration.isValid = false;
+		$scope.isInvalid = false;
 		
 		var req = {
 			method: 'POST', url: 'api/configuremap',
@@ -71,8 +82,11 @@ angular.module('UavOpsInterface')
 		}
 
 		$http(req).then(function(data){
-			console.log(data.data.status.data);			
+			$scope.configuring = false;		
 			$scope.configMarkers = data.data.status.data;
+			$scope.alreadyConfigured = true;
+			$scope.notConfigured = false;
+			while($scope.allMarkers.length > 0){ $scope.allMarkers.pop(); }
 		});
 	};
 

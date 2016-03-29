@@ -1,10 +1,11 @@
 <div class="row">
 	<div class="col-sm-12">
 		<h3>Drone Operation Area Configuration: 
-			<!-- <span class="label label-success" ng-if="alreadyConfigured"> Already Configured</span>
-			<span class="label label-danger" ng-if="notConfigured"> Not Configured</span> -->
+			<span class="label label-success" ng-if="alreadyConfigured"> Already Configured</span>
+			<span class="label label-danger" ng-if="notConfigured"> Not Configured</span>
 			<span class="label label-success" ng-if="mapConfiguration.isValid">{{mapConfiguration.status}}</span>
 			<span class="label label-danger" ng-if="mapConfiguration.isInvalid">{{mapConfiguration.status}}</span>
+			<span class="label label-warning" ng-if="configuring">Map Configuring</span>
 		</h3>
 	</div>
 </div>

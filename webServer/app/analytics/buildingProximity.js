@@ -8,6 +8,7 @@
 @requires ndarray
 @requires binaryMap
 @requires regulationConfig
+@requires when
 */
 
 var config = require('../config/config');
@@ -15,6 +16,7 @@ var getPixels = require('get-pixels');
 var ndarray = require('ndarray');
 var BinaryMap = require('../models/binaryMap');
 var regulationConfig = require('../config/regulationConfig');
+var when = require('when');
 
 // module constants
 var ZOOM = 20;
@@ -69,22 +71,36 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
     // when there have been n callbacks, return the final binary map
 
     var allLatLon = [];
-    var curLon = _startObj.lon;;
+    var curLon = _startObj.lon;
     var curLat = _startObj.lat;
-    var center_x = MercatorObject.pixelOrigin.x + curLon * MercatorObject.pixelsPerLonDegree;
-    var siny = bound(Math.sin(degreesToRadians(curLat), -0.9999, 0.9999));
+    var center_x = MercatorObject.pixelOrigin.x + _startObj.lon * MercatorObject.pixelsPerLonDegree;
+    var siny = bound(Math.sin(degreesToRadians(_startObj.lat), -0.9999, 0.9999));
     var center_y = MercatorObject.pixelOrigin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -MercatorObject.pixelsPerLonRadian;
 
     // iterable indicies
     var i=0;
     var j=0;
 
+    // var latLon = fromPointToLatLng({
+    //     x: center_x, 
+    //     y: center_y,
+    // });
+    // var curLon = latLon.lon;
+    // var curLat = _startObj.lat;
+
     // over all of the rows, ie latitudes
-    while(i<numRows){        
-        
+    while(i<numRows){ 
+
         // initialize j index and longitude
-        curLon = _startObj.lon;   
         j=0;
+        curLon = _startObj.lon;
+
+        // make distance (NB: not updated until after)
+        var latLon = fromPointToLatLng({
+            x: (center_x + (MAP_SIZE.x * (j+1))/ SCALE), 
+            y: (center_y + (MAP_SIZE.y * i)/ SCALE)
+        });
+        var distance = measure(curLat, curLon, latLon.lat, latLon.lon);
 
         // over all of the columns, ie longitudes  
         while(j<numCols){
@@ -96,7 +112,7 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
             };
 
             // generate subrange with given callback
-            generateSubrange(latLonObj, {x: i, y: j}, function (_binaryMap, _pos, _map_dim){
+            generateSubrange(latLonObj, {x: j, y: i}, distance, function (_binaryMap, _pos, _map_dim){
 
                 // iterate completed maps
                 mapCount ++;
@@ -110,18 +126,23 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
                     y_coord: _pos.y,
                     height: numRows,
                     width: numCols,
+                    distance: _map_dim.distance,
+                    bound_n: (_pos.y == 0),
+                    bound_e: (_pos.x == numCols-1),
+                    bound_s: (_pos.y == numRows-1),
+                    bound_w: (_pos.x == 0),
                     values: _binaryMap
                 };
 
                 // create new mongoose binaryMap and save
                 var binMap = new BinaryMap(data);
                 binMap.save(function(error, data){
-                    if(error){ console.log('error saving map'); }
-                    else{ console.log('added map with id'); }
+                    if(error) console.log('error saving map'); 
+                    else console.log('added map with id'); 
                 });
 
                 // push into return object
-                allLatLon.push({ lat: _map_dim.lat, lon: _map_dim.lon});
+                allLatLon.push({ lat: _map_dim.lat, lon: _map_dim.lon, x: _pos.x, y: _pos.y});
 
                 // made last map
                 if(mapCount === totalMapElems){ _callback({text: 'success', data: allLatLon}); }
@@ -140,12 +161,20 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
                 y: (center_y + (MAP_SIZE.y * i)/ SCALE)
             });
 
-            // advance longitude and latitude
-            console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
+            // advance longitude
+            //console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
             curLon = latLon.lon;
-            curLat = latLon.lat;
         }
+
         i++;
+
+        // lat -> y
+        // lon -> x
+        var latLon = fromPointToLatLng({
+            x: (center_x + (MAP_SIZE.x * j)/ SCALE), 
+            y: (center_y + (MAP_SIZE.y * i)/ SCALE)
+        });
+        curLat = latLon.lat;
     }
 };
 
@@ -156,7 +185,7 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
 @param {function} _callback - a callback function where the binary map is passed to
 @params {object} _pos - expected position in the final binary map, used in the callback function
 */
-var generateSubrange = function (_center, _pos, _callback){
+var generateSubrange = function (_center, _pos, _distance, _callback){
 
     // return static map URL 
     var mapUrl = STATIC_MAPS_URL.seg1 + _center.text + STATIC_MAPS_URL.seg2;
@@ -172,16 +201,13 @@ var generateSubrange = function (_center, _pos, _callback){
         retArray = [];
 
         // if error ocured
-        if(err) { _callback(err); }
+        if(err) _callback(err); 
      
         // create a 2d binary map from this to locate buildings
         // result should be 100 x 100 abstraction
         // iterat through 2d array
         for(var i = 0;i < MAP_SIZE.x;i = i + AVE_DOT_DIM){
             for(var j = 0;j < MAP_SIZE.y;j = j + AVE_DOT_DIM){
-
-                // for 2d array version
-                //if(j === 0){ retArray.push([]); }
 
                 // get rgb totals
                 var rTot = 0;
@@ -219,13 +245,13 @@ var generateSubrange = function (_center, _pos, _callback){
 
                     retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = true;
                 }
-                else{
-                    retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = false;
-                }
+
+                else retArray[(i/AVE_DOT_DIM)*MAP_SIZE.transform_dim + (j/AVE_DOT_DIM)] = false;
             }
         }
 
         // call with our binary array
+        _center.dimentions.distance = _distance;
         _callback(retArray, _pos, _center.dimentions);
     });
 };
@@ -239,8 +265,8 @@ var generateSubrange = function (_center, _pos, _callback){
 @returns {Number} the min/max or bounded value
 */
 var bound = function (_value, _opt_min, _opt_max) {
-    if (_opt_min != null){ _value = Math.max(_value, _opt_min); }
-    if (_opt_max != null){ _value = Math.min(_value, _opt_max); }
+    if (_opt_min != null) _value = Math.max(_value, _opt_min); 
+    if (_opt_max != null) _value = Math.min(_value, _opt_max); 
     return _value;
 }
 
@@ -362,33 +388,188 @@ var printMap = function(_binaryMap){
 }
 
 /**
-@function loadMapWithCloseLatLon - loads a map cooresponing to a lat/lon point
+@function pushToMapQueue - pushes a map object to the map queue
+@alias analytics/buildingProximity.pushToMapQueue
+@param {Object} _map - mongoose mapObject
+*/
+var tempQueue = [];
+var QUEUE_SIZE = 4;
+var pushToMapQueue = function(_map){
+
+    // check if stack is too full
+    //if(tempStack.length === 4) regulationConfig.cur_flight[_id].map.cur_map.shift()
+    if(tempQueue.length === QUEUE_SIZE) dequeueMap(1);
+
+    // push to stack
+    enqueueMap(_map);
+}
+
+var enqueueMap = function(_map){
+    //regulationConfig.cur_flight[_id].map.cur_map.push(_map);
+    //tempQueue.push({x:_map.x_coord, y:_map.y_coord});
+    tempQueue.push(_map);
+}
+
+var dequeueMap = function(_num){
+    for(var i=0;i<_num;i++) tempQueue.shift();
+}
+
+var shrinkQueueTo = function(_num){
+    while(tempQueue.length > _num) tempQueue.shift();
+}
+
+/**
+@function loadMapWithCloseLatLon - loads a set of maps cooresponing to a lat/lon point
 @alias analytics/buildingProximity.loadMapWithCloseLatLon
 @param {String} _id - mongodb object id
 @param {Number} _lat - latitude
 @param {Number} _lon - longitude
+@param {function} _callback - a callback
 */
 var loadMapWithCloseLatLon = function(_id, _lat, _lon, _callback){
 
-    // with and height of current user map
-    var width = 0;
-    var height = 0;
+    // empty queue
+    tempQueue = [];
 
-    // load first map for refrence
-    BinaryMap.findOne({user: _id, x_coord: 0, y_coord: 0}, function (_err, _map){
-        if(_err) _callback('error');
+    // fire off queries
+    loadMapWithCloseLatLonHelper(_id, _lat, _lon, 0, 0, _callback);
+};
+
+/**
+@function pushCloserPointSecond - pushes the map that is closer to the target second into a queue
+@alias analytics/buildingProximity.pushCloserPointSecond
+@param {Object} _map1 - mongoose mapObject
+@param {Object} _map2 - mongoose mapObject
+@param {Number} _lat - latitude
+@param {Number} _lon - longitude
+*/
+var pushCloserPointSecond = function(_map1, _map2, _lat, _lon){
+
+    // one is closer
+    if(measure(_map1.lat, _map1.lon, _lat, _lon) < measure(_map2.lat, _map2.lon, _lat, _lon)){
+        pushToMapQueue(_map2);
+        pushToMapQueue(_map1);
+    }
+
+    // 2 is closer
+    else{
+        pushToMapQueue(_map1);
+        pushToMapQueue(_map2);
+    }
+}
+
+/**
+@function loadMapWithCloseLatLonHelper - helps to load a set of maps cooresponing to a lat/lon point
+@alias analytics/buildingProximity.loadMapWithCloseLatLonHelper
+@param {String} _id - mongodb object id
+@param {Number} _lat - latitude
+@param {Number} _lon - longitude
+@param {Number} _x - starting x coordinate
+@param {Number} -y - starting y coordinate
+@param {function} _callback - a callback
+*/
+var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
+
+    // load map for refrence
+    BinaryMap.findOne({user: _id, x_coord: _x, y_coord: _y}, function (_err, _map){
+        if(_err || !_map) _callback('error');
         else{
-
             // set regulationConfig obejct width and height parameters
-            width = _map.width;
-            height = _map.height;
-            regulationConfig.cur_flight[_id].width = _map.width;
-            regulationConfig.cur_flight[_id].height = _map.height;
+            //regulationConfig.cur_flight[_id].width = _map.width;
+            //regulationConfig.cur_flight[_id].height = _map.height;
+
+            // get bounds and other parameters
+            var isBound = { east: _map.bound_e, south: _map.bound_s, north: _map.bound_n, west: _map.bound_w };
+            var lat = _map.lat;
+            var lon = _map.lon;
+            var x = _map.x_coord;
+            var y = _map.y_coord;
+
+            // check if this is the first map
+            if(x === 0 && y === 0) pushToMapQueue(_map);
+
+            // move southeast
+            if(_lat < lat && _lon > lon && !isBound.east && !isBound.south){
+
+                // push east then south
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y+1});
+
+                // perform all querries
+                when.join(eastMap, southMap, southeastMap).then(function(values){        
+                    pushCloserPointSecond(values[0], values[1], _lat, _lon);
+                    pushToMapQueue(values[2]);
+                    loadMapWithCloseLatLonHelper(_id, _lat, _lon, values[2].x_coord, values[2].y_coord, _callback);
+                });
+            }
+
+            // move south
+            else if(_lat < lat && !isBound.south){
+
+                // see if we can also load west map
+                if(!isBound.west){
+                    var southwestMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y+1});
+                    var southMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                    when.join(southwestMap, southMap).then(function(values){
+                        pushToMapQueue(values[0]);
+                        pushToMapQueue(values[1]);
+                        loadMapWithCloseLatLonHelper(_id, _lat, _lon, values[1].x_coord, values[1].y_coord, _callback);
+                    });
+                }
+
+                // just load south
+                else{
+                    BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1}).then(function(_southMap){
+                        pushToMapQueue(_southMap);
+                        loadMapWithCloseLatLonHelper(_id, _lat, _lon, _southMap.x_coord, _southMap.y_coord, _callback);
+                    });
+                }      
+            }
+
+            // move east
+            else if(_lon > lon && !isBound.east){
+
+                // see if we can also load north
+                if(!isBound.north){
+                    var northeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y-1});
+                    var eastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                    when.join(northeastMap, eastMap).then(function(values){
+                        pushToMapQueue(values[0]);
+                        pushToMapQueue(values[1]);
+                        loadMapWithCloseLatLonHelper(_id, _lat, _lon, values[1].x_coord, values[1].y_coord, _callback);
+                    });
+                }
+
+                // just load east
+                else{
+                    BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y}).then(function(_eastMap){
+                        pushToMapQueue(_eastMap);
+                        loadMapWithCloseLatLonHelper(_id, _lat, _lon, _eastMap.x_coord, _eastMap.y_coord, _callback);
+                    });
+                }      
+            }
+
+            // done with querying
+            else{ 
+
+                // perform dequeues if neccessary
+                if(_lat < lat && _lon > lon && isBound.south && isBound.east) shrinkQueueTo(1);
+                else if(_lat < lat && isBound.south && !isBound.west) shrinkQueueTo(2);
+                else if(_lon > lon && isBound.east && !isBound.north) shrinkQueueTo(2);
+                else if(isBound.north && isBound.west) shrinkQueueTo(1);
+                else if(isBound.south && isBound.west && _lat < lat) shrinkQueueTo(1);
+                else if(isBound.north && isBound.east && _lon > lon) shrinkQueueTo(1);
+                else if(isBound.north) shrinkQueueTo(2);
+                else if(isBound.west) shrinkQueueTo(2);
+                _callback(tempQueue);
+            }
         }
     });
 };
 
 // export all submodules
 module.exports = {
-    generateMapWithRange: generateMapWithRange
+    generateMapWithRange: generateMapWithRange,
+    loadMapWithCloseLatLon: loadMapWithCloseLatLon
 };

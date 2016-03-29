@@ -1,0 +1,85 @@
+<ul class="nav nav-pills nav-justified">
+	<li role="presentation" class="active"><a href="#/flightconsole">Incompleted Flights</a></li>
+	<li role="presentation"><a href="#/postflight_console">Completed Flights</a></li>
+</ul>
+<br>
+<form>
+<div class="row">
+<div class="form-group col-sm-12">
+	<input class="form-control" type="text" placeholder="Search Flight Name" ng-model="searchTerm">
+</div>
+</div>
+</form>
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="noFlightData">
+	<div class="alert alert-warning">
+	    <strong>No flight data</strong>
+	</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="flightDataError">
+	<div class="alert alert-warning">
+	    <strong>Flight data error</strong>
+	</div>
+</div>
+</div>
+</div>
+
+<div ng-repeat="flight in flights | filter: searchFilter">
+<div class="row">
+	<div class="col-sm-12">
+	<div class="panel panel-default">
+  		<div class="panel-heading" >
+  			<h5>
+  				<span class="glyphicon glyphicon-globe"></span> {{flight.flight_name}} 
+  				<span class="pull-right"><span class="glyphicon glyphicon-time"></span> {{flight.created_at}}</span>
+  			</h5>
+  		</div>
+	  	<div class="panel-body" id="{{flight._id}}">
+			<div>
+				Remote Controller Charge: <strong>{{flight.remote_controller_charge}}</strong>
+			</div>
+			<div>
+				Flight Intelligent Battery: <strong>{{flight.intelligent_flight_battery}}</strong>
+			</div>
+			<div>Propeller 0:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_0"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_0"></span>
+			</div>
+			<div>Propeller 1:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_1"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_1"></span>
+			</div>
+			<div>Propeller 2:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_2"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_2"></span>
+			</div>
+			<div>Propeller 3:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_3"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_3"></span>
+			</div>
+			<div>Micro SD Card:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.micro_sd"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.micro_sd"></span>
+			</div>
+			<div>Gimbal:
+				<span class="glyphicon glyphicon-ok" ng-if="flight.gimbal"></span>
+				<span class="glyphicon glyphicon-remove" ng-if="!flight.gimbal"></span>
+			</div>
+	  	</div>
+	  	<div class="panel-footer">
+			<div class="btn btn-default btn-sm" ng-if="!flight.started">Start Live Flight Data Collection</div>
+			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT file for analysis</div>
+			<div class="btn btn-warning btn-sm" ng-if="flight.started" ng-click="stopDecoding(flight._id)">Stop Decoding</div>
+			<div class="pull-right">
+				<div class="btn btn-danger btn-sm" ng-if="!flight.started" ng-click="deletePreflight(flight._id)">Delete Flight</div>
+			</div>
+	  	</div>
+	</div>
+	</div>
+</div>
+</div>

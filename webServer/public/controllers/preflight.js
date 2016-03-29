@@ -16,6 +16,14 @@ angular.module('UavOpsInterface')
 			gimbal: $scope.gimbal
 		};
 
+		for(var key in preflightData){
+			console.log(preflightData[key]);
+			if(preflightData[key] === undefined || !preflightData[key] || preflightData[key] === ''){ 
+				Notification({message: 'fill out all data-fields'}, 'error');
+				return;
+			}
+		}
+
 		var req = {
 			method: 'POST',
 			url: 'api/preflight',

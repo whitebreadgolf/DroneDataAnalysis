@@ -1,0 +1,26 @@
+
+<div class="row">
+	<div class="form-group col-sm-12" id="the-basics">
+		<input class="typeahead form-control" type="text" placeholder="Enter a Flight Name" ng-model="search">
+  	</div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="noNoteData">
+	<div class="alert alert-warning">
+	    <strong>No flight data to query</strong>
+	</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="noteDataError">
+	<div class="alert alert-warning">
+	    <strong>Flight data error</strong>
+	</div>
+</div>
+</div>
+</div>

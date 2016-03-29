@@ -22,7 +22,30 @@ var BinaryMap = require('../models/binaryMap');
 var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
 	
 	// set new map set
-	buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+	BinaryMap.find({ 'user': _id }, function (err, maps) {
+		if (err || maps === null) _callback('error'); 
+		else{
+			var numMaps = maps.length;
+			var mapCount = 0;
+
+			// delete all maps
+			if(numMaps > 0){
+				for(var i=0;i<numMaps;i++){
+					maps[i].remove(function(err, data){
+						if (err) console.log(err);
+						else {
+							mapCount++;
+
+							// generate range once we delete all maps
+							if(mapCount === numMaps) buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+						}
+					});
+				} 
+			}
+			else buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+		}
+	});
+	
 }
 
 /**
@@ -31,18 +54,19 @@ var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
 @param {String} _username - a username
 @param {function} _callback - a callback function for the result of the operation
 */
-var isUserMapConfigured = function (_id, _callback){
+var getUserMapConfigured = function (_id, _callback){
 
 	// check current map configuration
-	BinaryMap.findOne({ 'user': _id }, function (err, map) {
-		if (err || map === null){ _callback('error'); }
+	BinaryMap.find({ 'user': _id }, function (err, maps) {
+		if (err || maps === null){ _callback({success: false}); }
 		else{
 
 			// return success if map is set
-			_callback('success'); 
+			_callback({success: true, data: maps}); 
 		}
 	});
 }
+
 
 
 /**
@@ -55,7 +79,9 @@ var isUserMapConfigured = function (_id, _callback){
 var loginUser = function (_username, _pass, _callback){
 
 	User.findOne({ 'username': _username, 'password': _pass }, function (err, user) {
-		if (err || user === null){ _callback('error'); }
+		if (err || user === null){
+			_callback('error'); 
+		}
 		else{ _callback('sucessful', _username); }
 	});
 }
@@ -106,5 +132,5 @@ module.exports = {
 	loginUser: loginUser,
 	createNewUser: createNewUser,
 	configureUserMap: configureUserMap,
-	isUserMapConfigured: isUserMapConfigured
+	getUserMapConfigured: getUserMapConfigured
 };

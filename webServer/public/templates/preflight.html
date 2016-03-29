@@ -10,7 +10,7 @@
  	<div class="row" style="border-bottom:1px solid #dddddd">
  	<h3>Flight Name</h3>
  	<div class="form-group col-sm-6">
- 		<input type="text" ng-model="name">
+ 		<input class="form-control" type="text" ng-model="name">
  	</div>
  	</div>
  
@@ -18,7 +18,7 @@
  	<h3>Battery Charges</h3>
  	<div class="form-group col-sm-3">
  		<label>* Controller Charge</label>
- 		<select class="form-control" ng-model="controllerCharge" required>
+ 		<select class="form-control" ng-model="controllerCharge">
  			<option>0</option>
  			<option>1</option>
  			<option>2</option>
@@ -28,7 +28,7 @@
  	</div>
  	<div class="form-group col-sm-3">
  		<label>* Drone Charge</label>
- 		<select class="form-control" ng-model="droneCharge" required>
+ 		<select class="form-control" ng-model="droneCharge">
  			<option>0</option>
  			<option>1</option>
  			<option>2</option>
@@ -42,7 +42,7 @@
  	<h3>Propellor Conditions</h3>
  	<div class="form-group col-sm-6">
  		<label>* Propellor 1</label>
- 		<select class="form-control" ng-model="propellor1">
+ 		<select class="form-control" ng-model="propeller1">
  			<option>Perfect condition</option>
  			<option>Scratched</option>
  			<option>Visably cracked or chipped</option>
@@ -51,7 +51,7 @@
  	</div>
  	<div class="form-group col-sm-6">
  		<label>* Propellor 2</label>
- 		<select class="form-control" ng-model="propellor2">
+ 		<select class="form-control" ng-model="propeller2">
  			<option>Perfect condition</option>
  			<option>Scratched</option>
  			<option>Visably cracked or chipped</option>
@@ -60,7 +60,7 @@
  	</div>
  	<div class="form-group col-sm-6">
  		<label>* Propellor 3</label>
- 		<select class="form-control" ng-model="propellor3">
+ 		<select class="form-control" ng-model="propeller3">
  			<option>Perfect condition</option>
  			<option>Scratched</option>
  			<option>Visably cracked or chipped</option>
@@ -69,7 +69,7 @@
  	</div>
  	<div class="form-group col-sm-6">
  		<label>* Propellor 4</label>
- 		<select class="form-control" ng-model="propellor4">
+ 		<select class="form-control" ng-model="propeller4">
  			<option>Perfect condition</option>
  			<option>Scratched</option>
  			<option>Visably cracked or chipped</option>
@@ -79,7 +79,7 @@
  	</div>
  
  	<div class="row" style="border-bottom:1px solid #dddddd">
- 	<h3>Miscilanious</h3>
+ 	<h3>Miscellanious</h3>
  	<div class="form-group col-sm-6">
  		<label>* Are the drone's micro SD cards loose?</label>
  		<select class="form-control" ng-model="sdCard">

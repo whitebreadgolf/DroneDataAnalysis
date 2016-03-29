@@ -16,6 +16,9 @@
 					position="{{pos.lat}},{{pos.lon}}"
 					ng-click="markerClicked(pos.id)"
 			></marker>
+			<marker ng-repeat="pos in configMarkers" 
+					position="{{pos.lat}},{{pos.lon}}"
+			></marker>
 		</ng-map>
 	</div>
 </div>
@@ -32,7 +35,7 @@
 		<div class="form-group">
 		<input type="text" class="form-control" placeholder="Radius (meters)" id="{{pos.id}}radius">
 		</div>
-		<button class="btn" ng-click="formClicked(pos.id)">Remove</button>
+		<button class="btn" ng-click="formClicked(pos.lat, pos.lon)">Remove</button>
 	</form>
 </div>
 

@@ -63,11 +63,14 @@ var startFlight = function(_id, _readExt){
 
 		// map data
 		map: {
-			cur_map: null,
+
+			// 1-4 maps around a coordinate
+			cur_map: [],
 			width: null,
 			hieght: null,
 			x: null,
-			y: null
+			y: null,
+			initialized: false
 		}
 	}
 };
