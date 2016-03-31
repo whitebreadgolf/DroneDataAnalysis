@@ -41,7 +41,7 @@ var MercatorObject = {
     },
     pixelsPerLonDegree: MERCATOR_RANGE / 360,
     pixelsPerLonRadian: MERCATOR_RANGE / (2 * Math.PI)
-}
+};
 
 /**
 @function generateMapWithRange - a function to split large range into n subranges for n static maps
@@ -567,6 +567,97 @@ var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
         }
     });
 };
+
+
+
+/**
+@function getNearestBuildingLocation - within the nearest 4 tiles, we are going to return the row and col index of the nearest building location
+@alias analytics/buildingProximity.getNearestBuildingLocation
+@param {Object} _binaryMap - 2d starting map with binary data
+@param {Object} _droneloc - {x, y}, x and y location of the drone
+ */
+}
+var getNearestBuildingLocation = function(_binaryMap, _droneloc) {
+    // queue for BFS
+    var searchArray = [];
+
+    // visited array
+    var visitedArray = [];
+    for (var i = 0; i < _binaryMap.height; i++) {
+        var visitedSubarray = [];
+        for (var j = 0; j < _binaryMap.width; j++) {
+            visitedSubarray.push(false);
+        }
+        visitedArray.push(visitedSubarray);
+    }
+
+    // closest building location
+    var building = {
+        x: -1,
+        y: -1
+    };
+
+    // add drone's starting location to the array
+    searchArray.push(_droneloc);
+
+    // while searchArray isn't empty run BFS
+    while (searchArray.length !== 0) {
+        // get front location of the array 
+        var currLocation = searchArray.shift();
+
+        // check if current location is a building 
+        if (_binaryMap.values[currLocation.x * _binaryMap.width + currLocation.y] === true) {
+            building = currLocation;
+            break;
+        }
+
+        // get all 4 locations: north, east, west, south and add to the queue
+        var northLocation = currLocation;
+        northLocation.x--;
+
+        var eastLocation = currLocation;
+        eastLocation.y--;
+
+        var westLocation = currLocation;
+        westLocation.y++;
+
+        var southLocation = currLocation;
+        southLocation.x++;
+
+        // check if locations are valid 
+        if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
+            !visitedArray[northLocation.x][northLocation.y]) {
+            searchArray.push(northLocation);
+            visitedArray[northLocation.x][northLocation.y] = true;
+        }
+        if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
+            !visitedArray[eastLocation.x][eastLocation.y]) {
+            searchArray.push(eastLocation);
+            visitedArray[eastLocation.x][eastLocation.y] = true;
+        }
+        if (westLocation.x >= 0 && westLocation.x < _binaryMap.width && 
+            !visitedArray[westLocation.x][westLocation.y]) {
+            searchArray.push(westLocation);
+            visitedArray[westLocation.x][westLocation.y] = true;
+        }
+        if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
+            !visitedArray[southLocation.x][southLocation.y]) {
+            searchArray.push(southLocation);
+            visitedArray[southLocation.x][southLocation.y] = true;
+        }
+    }
+
+    var buildingLocation = {
+        x_coord: _droneloc.x_coord,
+        y_coord: _droneloc.y_coord,
+        grid_x: building.x,
+        grid_y: building.y
+    };
+    return buildingLocation;
+}
+
+
+
 
 // export all submodules
 module.exports = {
