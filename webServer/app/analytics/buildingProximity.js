@@ -576,7 +576,6 @@ var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
 @param {Object} _binaryMap - 2d starting map with binary data
 @param {Object} _droneloc - {x, y}, x and y location of the drone
  */
-}
 var getNearestBuildingLocation = function(_binaryMap, _droneloc) {
     // queue for BFS
     var searchArray = [];
@@ -599,6 +598,7 @@ var getNearestBuildingLocation = function(_binaryMap, _droneloc) {
 
     // add drone's starting location to the array
     searchArray.push(_droneloc);
+    visitedArray[_droneloc.x][_droneloc.y] = true;
 
     // while searchArray isn't empty run BFS
     while (searchArray.length !== 0) {
