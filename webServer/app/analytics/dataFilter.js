@@ -57,6 +57,7 @@ var sendLiveData = function (_id, _velocity_east, _velocity_north, _velocity_dow
 */
 var filterCsvString = function (_id, _csvString){
 
+    console.log(_csvString);
 	// create object
 	var splitData = _csvString.split(',');
 	var data_stream = {

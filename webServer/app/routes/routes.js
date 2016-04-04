@@ -7,9 +7,8 @@
 @requires altitude
 @requires daylight
 @requires direction
-@requires initialConditions
 @requires location
-@requires preflight
+@requires flight
 @requires safetyStatus
 @requires speed
 @requires passport
@@ -17,20 +16,24 @@
 @requires regulationConfig
 */
 
+// controllers
 var account = require('./../controllers/account');
 var altitude = require('./../controllers/altitude');
 var daylight = require('./../controllers/daylight');
 var direction = require('./../controllers/direction');
-var initialConditions = require('./../controllers/initialConditions');
 var location = require('./../controllers/location');
-var preflight = require('./../controllers/preflight');
+var flight = require('./../controllers/flight');
 var safetyStatus = require('./../controllers/safetyStatus');
-var speed = require('./../controllers/speed');
+var velocity = require('./../controllers/velocity');
+var simulation = require('./../controllers/simulation');
 
+// user
 var passport = require('passport');
 var User = require('../models/user');
 
+// analytics
 var regulationConfig = require('../config/regulationConfig');
+var buildingProximity = require('../analytics/buildingProximity');
 
 /**
 @function initRoutes - to initialize all 
@@ -39,16 +42,27 @@ var regulationConfig = require('../config/regulationConfig');
 */
 var initRoutes = function (_app){
 
+	// POST addobsitcle
+	_app.post('/api/addobstacle', function (req, res){
+
+		if(!(req.user)) res.json({success: false, status: 'user'}); 
+		else{
+			buildingProximity.loadMapWithCloseLatLon(req.user._id, req.body.lat, req.body.lon, function(val){
+				res.json(val);
+			});
+		}
+	});
+
 	// GET configuremap
 	_app.get('/api/configuremap', function (req, res){
 
 		// req - {}
 		// res - {status: ("error"|"success")}
 
-		if(!(req.user)){ res.json({status: 'error'}); }
+		if(!(req.user)) res.json({success: false, status: 'user'}); 
 		else{
-			account.isUserMapConfigured(req.user._id, function(_status){		
-				res.json({status: _status});
+			account.getUserMapConfigured(req.user._id, function(_statusObj){		
+				res.json(_statusObj);
 			});
 		}
 	});
@@ -70,7 +84,7 @@ var initRoutes = function (_app){
 	_app.post('/api/login', function (req, res){
 
 		// req - {username: <string>, pass: <string>}
-		// res - {status: ("error"|"success")}
+		// res - {success: <boolean>, message: <string>}
 
 		User.authenticate()(req.body.username, req.body.pass, function (err, user, options) {
 	        if (user === false) {
@@ -89,11 +103,19 @@ var initRoutes = function (_app){
 	    });
 	});
 
+	// POST login
+	_app.post('/api/logout', function (req, res){
+
+		// res - {success: <boolean>, message: <string>}
+
+		req.logout();
+		res.json({success: true, message: 'user logged out'});
+	});
+
 	// GET login
 	_app.get('/api/login', function (req, res){
 
 		// res - {user: <Object>}
-
 		res.json(req.user);
 	});
 
@@ -110,109 +132,48 @@ var initRoutes = function (_app){
 			admin: false
 		}), req.body.pass, function(err) {
 			if (err) {
-				console.log('error while user register!', err);
-				res.json('user not registered');
+				res.json({success: false, message:'user not registered'});
 			}
 			else{
-				console.log('user registered!');
-				res.json('user registered');
+				res.json({success: true, message:'user registered'});
 			}
 		});
 	});
 
-	// GET speed
-	_app.get('/api/speed', function (req, res){
+	//////////////////////////////////////////////////////////////////////
+	/////////// GET endpoints for basic flight data paramters ////////////
+	//////////////////////////////////////////////////////////////////////
 
-		// req - {time_interval:{start_time:<integer>,end_time:<integer>}}
+	// GET velocity
+	_app.get('/api/velocity', function (req, res){
+
+		// req - time_interval:{flight_id:<string>}
 		// res - {data_points: [<double>, ….]}
 		
+		// get all velocities for flightId
+		if(req.user && req.body.flight_id){
+			velocity.getAllVelocitiesForFlightId(req.body.flight_id, function(velocities){
+				res.json(velocities);
+			});
+		}
+		else res.json({success: false, data: 'user must log in'});
 	});
 
 	// GET altitude
 	_app.get('/api/altitude', function (req, res){
 		
-		// req - time_interval:{start_time:<integer>,end_time:<integer>}
+		// req - time_interval:{flight_id:<string>}
 		// res - {data_points: [<double>, ….]}
 
-	});
-
-	// GET daylight
-	_app.get('/api/daylight', function (req, res){
-		
-		// res - {is_daylight: <boolean>}
-
-	});	
-
-	// GET preflight inspections
-	_app.get('/api/preflight', function (req, res){
-		
-		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
-
-
-	});	
-
-
-	// POST preflight inspection
-	_app.post('/api/preflight', function (req, res){
-
-		// req - {remote_controller_charge:<double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}
-		// res - {status: <boolean>}
-
-		if(req.user){
-			 preflight.addPreflightInspection(req.body._id, req.body.flight_name, req.body.remote_controller_charge, req.body.intelligent_flight_battery, req.body.propeller_0, req.body.propeller_1, req.body.propeller_2, req.body.propeller_3, req.body.micro_sd, req.body.gimbal, function (_status){
-			 	res.json(_status);
-			 });
-		}
-		else res.json({message: "pre-flight inspection not recorded, user must be logged in", success: false}); 	
-	});
-
-	// POST flight simulator
-	_app.post('/api/flightsim', function (req, res){
-
-		// req - {ext: <string>, type: <string>}
-		// res - {status: <string>}
-
-		// init the mock sp input
-		if(req.user){
-
-			if(!regulationConfig.cur_flight[req.user._id]){
-				preflight.startFlightSimulation(req.user._id, req.body.ext, req.body.type, function(){
-					res.json({success: true, message: 'simulation started'});
-				});
-			}
-			else res.json({message: "a flight has already been started", success: false}); 
-		}
-		else res.json({message: "simulation not started, user must be logged in", success: false}); 	
-	});
-
-	// POST end flight
-	// this used to mark the end of a flight
-	_app.post('/api/endflight', function (req, res){
-
-		// res - {status: <boolean>}
-
-		// end the simulation
-		if(req.user){
-			preflight.endFlightWithPilotId(req.user._id, function(){
-				res.json({message: 'simulation ended', success: true});
+		// get all altitudes for flightId
+		if(req.user && req.body.flight_id){
+			altitude.getAllAltitudesForFlightId(req.body.flight_id, function(altitudes){
+				res.json(altitudes);
 			});
 		}
-		else res.json({message: "simulation not ended, user must be logged in", success: false}); 
+		else res.json({success: false, data: 'user must log in'});
 	});
 
-	// GET inital conditions
-	_app.get('/api/initialCondition', function (req, res){
-		
-		// res - {altitude:<double>, speed:<double>, location:{latitude:<double>, longitude:<double>}}
-
-	});	
-
-	// GET Magnetometer direction
-	_app.get('/api/direction', function (req, res){
-		
-		// res - {mag_x:<double>, mag_y:<double>, mag_z:<double>}
-
-	});	
 
 	// GET location
 	_app.get('/api/location', function (req, res){
@@ -228,13 +189,107 @@ var initRoutes = function (_app){
 
 	});	
 
-	// POST safety analysis
-	_app.post('/api/safetyStatus', function (req, res){
+	//////////////////////////////////////////////////////////////////////////
+	/////////// END GET endpoints for basic flight data paramters ////////////
+	//////////////////////////////////////////////////////////////////////////
 
-		// req - {is_unsafe:<boolean>, type: <string>, degree:<double>}
+	// GET preflight inspections
+	_app.get('/api/flight', function (req, res){
+		
+		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
+
+		if(req.user){
+			flight.getAllFlightsWithCollectedData(req.user._id, function(err, flights){
+
+				if(err) res.json({success: false});
+				else res.json({success: true, data: flights});
+			});
+		}
+		else{
+			res.json({message: "flight data not available, user must be logged in", success: false});
+		}
+	});	
+
+	// GET preflight inspections
+	_app.get('/api/preflight', function (req, res){
+		
+		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
+		if(req.user){
+			flight.getAllFlightsWithoutCollectedData(req.user._id, function(err, flights){
+
+				if(err) res.json({success: false});
+				else res.json({success: true, data: flights});
+			});
+		}
+		else{
+			res.json({message: "pre-flight data not available, user must be logged in", success: false});
+		}
+	});	
+
+	// POST preflight inspection
+	_app.post('/api/preflight', function (req, res){
+
+		// req - {remote_controller_charge:<double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}
 		// res - {status: <boolean>}
 
+		if(req.user){
+			 flight.addPreflightInspection(req.user._id, req.body.flight_name, req.body.remote_controller_charge, req.body.intelligent_flight_battery, req.body.propeller_0, req.body.propeller_1, req.body.propeller_2, req.body.propeller_3, req.body.micro_sd, req.body.gimbal, function (_status){
+			 	res.json(_status);
+			 });
+		}
+		else res.json({message: "pre-flight inspection not recorded, user must be logged in", success: false}); 	
 	});
+
+	// DELETE preflight inspection
+	_app.delete('/api/preflight/:id', function (req, res){
+		if(req.user){
+			 flight.removePreflightInspection(req.params.id, function (_status){
+			 	res.json(_status);
+			 });
+		}
+		else res.json({message: "pre-flight inspection not removed, user must be logged in", success: false});
+	});
+
+
+	//////////////////////////////////////////////////////////////////////
+	//////////////////// Flight Simulator endpoints //////////////////////
+	//////////////////////////////////////////////////////////////////////
+
+	// POST flight simulator
+	_app.post('/api/simulation/start', function (req, res){
+
+		// req - {ext: <string>, type: <string>}
+		// res - {status: <string>}
+
+		if(req.user){
+			if(!regulationConfig.cur_flight[req.user._id]){
+				simulation.startFlightSim(req.user._id, req.body.ext, req.body.type, function(){
+					res.json({success: true, message: 'simulation started'});
+				});
+			}
+			else res.json({message: "a flight has already been started", success: false}); 
+		}
+		else res.json({message: "simulation not started, user must be logged in", success: false}); 	
+	});
+
+	// POST end flight
+	// this used to mark the end of a flight
+	_app.post('/api/simulation/end', function (req, res){
+
+		// res - {status: <boolean>}
+
+		// end the simulation
+		if(req.user){
+			simulation.endSimFlightWithPilotId(req.user._id, function(){
+				res.json({message: 'simulation ended', success: true});
+			});
+		}
+		else res.json({message: "simulation not ended, user must be logged in", success: false}); 
+	});	
+
+	//////////////////////////////////////////////////////////////////////
+	////////////////// END Flight Simulator endpoints ////////////////////
+	//////////////////////////////////////////////////////////////////////
 };
 
 // export the module as a function

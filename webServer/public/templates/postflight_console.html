@@ -1,0 +1,48 @@
+<ul class="nav nav-pills nav-justified">
+	<li role="presentation"><a href="#/flight_console">Incompleted Flights</a></li>
+	<li role="presentation" class="active"><a href="#/postflight_console">Completed Flights</a></li>
+</ul>
+<br>
+
+<form>
+<div class="row">
+<div class="form-group col-sm-12">
+	<input class="form-control" type="text" placeholder="Search Flight Name" ng-model="searchTerm">
+</div>
+</div>
+</form>
+
+
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="noFlightData">
+	<div class="alert alert-warning">
+	    <strong>No flight data</strong>
+	</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="flightDataError">
+	<div class="alert alert-warning">
+	    <strong>Flight data error</strong>
+	</div>
+</div>
+</div>
+</div>
+
+<div ng-repeat="flight in flights | filter: searchFilter">
+<div class="row">
+<div class="col-sm-12">
+	<div class="panel panel-default">
+  		<div class="panel-heading">Name: {{flight.flight_name}} {{flight.created_at}}</div>
+	  	<div class="panel-body">
+			<button class="btn btn-default btn-sm">Start Live Flight Data Collection</button>
+			<button class="btn btn-default btn-sm">Upload DAT file for analysis</button>
+			<div class="pull-right"><button class="btn btn-danger btn-sm" ng-click="deletePreflight(flight._id)">Delete Flight</button></div>
+	  	</div>
+	</div>
+</div>
+</div>
+</div>

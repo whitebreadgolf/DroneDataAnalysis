@@ -1,5 +1,6 @@
-<h1> Notifications </h1>
-<h4> The following notifications have been prompted in reference to the configured constraints. </h4>
+<div ng-if="noNotifications" class="alert alert-warning">
+    <strong>There are no live notifications at this time</strong>
+</div>
 <div ng-repeat="note in notifications">
     <div ng-if="note.type == 'hazard'" class="alert alert-danger">
         <button type="button" class="close" ng-click="notificationClicked($index)">×</button>
@@ -16,7 +17,6 @@
 
 </div>
 
-<h4>  To edit your constraints, go to Account > Configurations to manage your configuration settings. </h4>
 
 
 

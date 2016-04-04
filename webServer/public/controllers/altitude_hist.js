@@ -1,10 +1,6 @@
 angular.module('UavOpsInterface')
-.controller('AltitudeCtrl', function ($scope, Websocket, $interval){	
+.controller('AltitudeHistCtrl', function ($scope){	
 	
-	$interval(function (){
-  		$scope.altitudes = Websocket.getAltitude();
-	}, 1000); 
-
 	$scope.options = {
         chart: {
             type: 'lineChart',
@@ -50,5 +46,4 @@ angular.module('UavOpsInterface')
             }
         }
     };
-
 });

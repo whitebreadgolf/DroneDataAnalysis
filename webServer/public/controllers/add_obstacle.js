@@ -1,12 +1,29 @@
 angular.module('UavOpsInterface')
-.controller('AddObstacleCtrl', function ($scope, $http) {
+.controller('AddObstacleCtrl', function ($scope, $http, Notification) {
 
 	// array for our dynamic markers
+	$scope.configMarkers = [];
 	$scope.allMarkers = [];
 	$scope.mapConfiguration = {
 		isValid:false, 
 		isInvalid: true,	
 	};
+
+	var req = {
+		method: 'GET', url: 'api/configuremap',
+	}
+	$http(req).then(function(data){
+		if(data && data.data.success){
+			for(var i=0;i<data.data.data.length;i++){
+				if(data.data.data[i].bound_s || data.data.data[i].bound_n || data.data.data[i].bound_e || data.data.data[i].bound_w){
+					$scope.configMarkers.push(data.data.data[i]);
+				}
+			}
+		}
+		else if(data && !data.data.success){
+			Notification({message: 'user must log in'}, 'warning');
+		}
+	});
 
 	var genId = function(){
 		var text = "";
@@ -43,12 +60,16 @@ angular.module('UavOpsInterface')
 		console.log(id);
 	}
 
-	$scope.formClicked = function(id){
-		for(var i in $scope.allMarkers){
-			if($scope.allMarkers[i].id == id){
-				$scope.allMarkers.splice(i, 1);
-			}
+	$scope.formClicked = function(lat, lon){
+
+		var req = {
+			method: 'POST', url: 'api/addobstacle',
+			data: {lat: lat, lon: lon}
 		}
+
+		$http(req).then(function(data){
+			console.log(data);
+		});
 	}
 
 	// empties markers array

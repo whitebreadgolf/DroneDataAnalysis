@@ -39,7 +39,7 @@ var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
 		mag_y: Number.parseFloat(magy),
 		mag_z: Number.parseFloat(magz)
  	};
- 	console.log("gyro: " + magData.gyro_x);
+ 	//console.log("gyro: " + gyro_x);
  	if (Math.abs(magData.gyro_x) < zero_threshold || magData.gyro_x == null) {
  		magData.gyro_x = 0;
  	}
@@ -87,11 +87,13 @@ var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
 		var warning = {
 			type: 'notification',
 			level: 'hazard',
-			param: 'altitude',
+			param: 'magnetic field sensor',
 			text: 'Your drone is nearing sources of electromagnetic interference',
 			time: (new Date()) - regulationConfig.cur_flight[_id].start_time
 		};
 		wss.broadcast(JSON.stringify(warning));
+
+		gm_queue = [];
 	}
 	
 }

@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // describe user in schema
-var preflightSchema = new Schema({
+var flightSchema = new Schema({
 	collected_data: Boolean,
 	pilot: { type: Schema.Types.ObjectId, ref: 'User' },
 	flight_name: String,
@@ -25,11 +25,12 @@ var preflightSchema = new Schema({
 	micro_sd: Boolean, 
 	gimbal: Boolean,
 	created_at: Date,
-	updated_at: Date
+	flight_started: Date,
+	flight_ended: Date
 });
 
 // declare exported module
-var Preflight = mongoose.model('Preflight', preflightSchema);
+var Flight = mongoose.model('Flight', flightSchema);
 
 // export module 
-module.exports = Preflight;
+module.exports = Flight;

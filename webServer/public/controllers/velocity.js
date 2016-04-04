@@ -1,41 +1,43 @@
 angular.module('UavOpsInterface')
-.controller('AltitudeCtrl', function ($scope, Websocket, $interval){	
-	
-	$interval(function (){
-  		$scope.altitudes = Websocket.getAltitude();
-	}, 1000); 
+.controller('VelocityCtrl', function ($scope, Websocket, $interval){
 
-	$scope.options = {
-        chart: {
-            type: 'lineChart',
-            height: 450,
-            margin : {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: 55
-            },
-            x: function(d){ return d.label; },
-            y: function(d){ return d.value; },
-            useInteractiveGuideline: true,
-            xAxis: {
-                axisLabel: 'Time (s)'
-            },
-            yAxis: {
-                axisLabel: 'Altitude (m)',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
-                },
-                axisLabelDistance: -10
-            }
-        },
-        title: {
+	$interval(function (){
+  		$scope.speeds = Websocket.getSpeed();
+	}, 100);
+
+  	$scope.options = {
+  		chart: {
+	        type: 'lineChart',
+	        height: 450,
+	        margin : {
+	            top: 20,
+	            right: 20,
+	            bottom: 40,
+	            left: 55
+	        },
+	        useInteractiveGuideline: false,
+	        x: function(d){ return d.label; },
+	        y: function(d){ return d.value; },
+	        showValues: true,
+	        valueFormat: function(d){
+	            return d3.format(',.4f')(d);
+	        },
+	        deepWatchData: true,
+	        xAxis: {
+	            axisLabel: 'Time elapsed (s)'
+	        },
+	        yAxis: {
+	            axisLabel: 'Velocity (m/s)',
+	            axisLabelDistance: 30
+	        }
+    	}, 
+    	title: {
             enable: true,
-            text: 'Drone Altitude Over Time'
+            text: 'Drone Velocities Over Time'
         },
         subtitle: {
             enable: true,
-            text: 'This displays the drone altitude in meters over seconds.',
+            text: 'This displays the drone velocities in meters per second over seconds.',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
@@ -49,6 +51,5 @@ angular.module('UavOpsInterface')
                 'margin': '10px 13px 0px 7px'
             }
         }
-    };
-
+	};
 });

@@ -5,7 +5,7 @@ angular.module('UavOpsInterface')
 
 		var req = {
 			method: 'POST',
-			url: 'api/flightsim',
+			url: 'api/simulation/start',
 			data: {ext: fileExt, type: fileType}
 		}
 
@@ -18,7 +18,7 @@ angular.module('UavOpsInterface')
 
 		var req = {
 			method: 'POST',
-			url: 'api/endflight',
+			url: 'api/simulation/end',
 		}
 
 		$http(req).then(function(data){

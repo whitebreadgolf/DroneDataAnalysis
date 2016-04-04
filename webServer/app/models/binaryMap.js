@@ -20,6 +20,16 @@ var binaryMapSchema = new Schema({
 	y_coord: Number,
 	width: Number,
 	heigth: Number,
+
+	// bounds
+	bound_n: Boolean,
+	bound_s: Boolean,
+	bound_w: Boolean,
+	bound_e: Boolean,
+
+	// computed
+	distance: Number,
+
 	values: [Boolean],
 	created_at: Date
 });

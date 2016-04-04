@@ -1,10 +1,8 @@
-angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'])
+angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification', 'ngFileUpload', 'ngProgress'])
 .config(function ($routeProvider, NotificationProvider) {
 	$routeProvider
-		.when('/', {
-			templateUrl: 'templates/home.html',
-			controller: 'HomeCtrl'
-		})
+
+		// user settings
 		.when('/login', {
 			templateUrl: 'templates/login.html',
 			controller: 'LoginCtrl'
@@ -17,18 +15,32 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			templateUrl: 'templates/configmap.html',
 			controller: 'ConfigMapCtrl'
 		})
-		.when('/addobstacle', {
-			templateUrl: 'templates/addobstacle.html',
+		.when('/add_obstacle', {
+			templateUrl: 'templates/add_obstacle.html',
 			controller: 'AddObstacleCtrl'
 		})
-		.when('/speed', {
-			templateUrl: 'templates/speed.html',
-			controller: 'SpeedCtrl'
+
+		// velocity
+		.when('/velocity', {
+			templateUrl: 'templates/velocity.html',
+			controller: 'VelocityCtrl'
 		})
+		.when('/velocity_hist', {
+			templateUrl: 'templates/velocity_hist.html',
+			controller: 'VelocityHistCtrl'
+		})
+
+		// altitude
 		.when('/altitude', {
 			templateUrl: 'templates/altitude.html',
 			controller: 'AltitudeCtrl'
 		})
+		.when('/altitude_hist', {
+			templateUrl: 'templates/altitude_hist.html',
+			controller: 'AltitudeHistCtrl'
+		})
+
+		// flight
 		.when('/flight', {
 			templateUrl: 'templates/flight.html',
 			controller: 'FlightCtrl'
@@ -37,28 +49,31 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			templateUrl: 'templates/preflight.html',
 			controller: 'PreflightCtrl'
 		})
-		.when('/flightconsole', {
-			templateUrl: 'templates/flightconsole.html',
+		.when('/flight_console', {
+			templateUrl: 'templates/flight_console.html',
 			controller: 'FlightConsoleCtrl'
 		})
+		.when('/postflight_console', {
+			templateUrl: 'templates/postflight_console.html',
+			controller: 'PostFlightConsoleCtrl'
+		})
+
+		// notifications
 		.when('/notifications', {
 			templateUrl: 'templates/notifications.html',
 			controller: 'NotificationsCtrl'
 		})
-		.when('/history', {
-			templateUrl: 'templates/history.html',
-			controller: 'HistoryCtrl'
+		.when('/notifications_hist', {
+			templateUrl: 'templates/notifications_hist.html',
+			controller: 'NotificationsHistCtrl'
 		})
-		.when('/configuration', {
-			templateUrl: 'templates/configuration.html',
-			controller: 'ConfigurationCtrl'
-		})
+		
+		// home page and legal
 		.when('/legal', {
 			templateUrl: 'templates/legal.html',
-			//controller: 'LegalCtrl'
 		})
 		.otherwise({
-			redirectTo: '/'
+			redirectTo: '/legal'
 		});
 
 	NotificationProvider.setOptions({
@@ -68,7 +83,7 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
         verticalSpacing: 20,
         horizontalSpacing: 20,
         positionX: 'right',
-        positionY: 'bottom'
+        positionY: 'top'
     });
 })
 .run(function (Websocket) {
