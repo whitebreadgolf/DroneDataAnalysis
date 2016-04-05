@@ -22,21 +22,36 @@ var faa_reg = {
 var cur_flight = {};
 
 /**
+@public {Object} app_constants - to store application constants
+*/
+var app_constants = {
+	dji_dat_collect_rate: 10,
+	app_collection_rate: 20000 // milliseconds
+};
+
+/**
 @function startFlight - to insert current flight data for a given user
 @param {String} _id - mongoose user id
 */
-var startFlight = function(_id, _readExt){
+var startFlight = function(_id, _startObj){
 
 	// add the flight data
 	cur_flight[_id] = {
 
-		// start of flight
+		// start of flight and last collected
 		start_time: new Date(), 
+		last_collect: null,
 
 		// simulation status
 		simulation: {
-			status: true,
-			file_read: _readExt
+			status: null,
+			file_read: null
+		},
+
+		// other type of flight
+		flight_type: {
+			real_time: null,
+			decoding: null
 		},
 
 		// ongoing warning data
@@ -72,6 +87,18 @@ var startFlight = function(_id, _readExt){
 			y: null,
 			initialized: false
 		}
+	};
+
+	// check start object
+	if(_startObj.simulation){
+		cur_flight[_id].simulation.status = true;
+		cur_flight[_id].simulation.file_read = _startObj.simulation;
+	}
+	else if(_startObj.real_time){
+		cur_flight[_id].flight_type.real_time = _startObj.real_time;
+	}
+	else if(_startObj.decoding){
+		cur_flight[_id].flight_type.decoding = _startObj.decoding;
 	}
 };
 
@@ -81,8 +108,6 @@ var startFlight = function(_id, _readExt){
 */
 var endFlight = function(_id){
 
-	// first save all flight data
-
 	// remove data from object
 	cur_flight[_id] = null;
 };
@@ -90,6 +115,7 @@ var endFlight = function(_id){
 // export public data and functions
 module.exports = {
 	faa_reg: faa_reg,
+	app_constants: app_constants,
 	cur_flight: cur_flight,
 	startFlight: startFlight,
 	endFlight: endFlight

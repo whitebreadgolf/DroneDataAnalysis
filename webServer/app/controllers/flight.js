@@ -94,10 +94,105 @@ var getAllFlightsWithCollectedData = function (_id, _callback){
 	});
 };
 
+/**
+@function startRTFlight - to start a flight for realtime analysis
+@alias controllers/flight.startRTFlight
+@param {String} _id - mongoose user id
+@param {String} _flightId - mongoose flight id
+@param {function} _callback - the functions callback
+*/
+var startRTFlight = function(_id, _flightId, _callback){
+	Flight.findOne({_id: _flightId}, function(err, flight){
+		if(err || !flight) _callback({message:'could not start realtime flight', success: false});
+		else{ 
+			
+			// set data collected and end time
+			flight.flight_started = new Date();
+			flight.save().then(function (err, data){
+				regulationConfig.startFlight(_id, {real_time: _flightId});
+				_callback({success: true, message: 'flight started for realtime data'});
+			});
+		}
+	});
+}
+
+/**
+@function startDFlight - to start a flight for decoded data 
+@alias controllers/flight.startDFlight
+@param {String} _id - mongoose user id
+@param {String} _flightId - mongoose flight id
+@param {function} _callback - the functions callback
+*/
+var startDFlight = function(_id, _flightId, _callback){
+	Flight.findOne({_id: _flightId}, function(err, flight){
+		if(err || !flight) _callback({message:'could not start decoding flight', success: false});
+		else{ 
+			
+			// set data collected and end time
+			flight.flight_started = new Date();
+			flight.save().then(function (err, data){
+				regulationConfig.startFlight(_id, {decoding: _flightId});
+				_callback({success: true, message: 'flight started for decoding data'});
+			});
+		}
+	});
+}
+
+/**
+@function endRTFlight - to end a flight for realtime analysis
+@alias controllers/flight.endRTFlight
+@param {String} _id - mongoose user id
+@param {String} _flightId - mongoose flight id
+@param {function} _callback - the functions callback
+*/
+var endRTFlight = function(_id, _flightId, _callback){
+
+	Flight.findOne({_id: _flightId}, function(err, flight){
+		if(err || !flight) _callback({message:'could not end realtime flight', success: false});
+		else{ 
+			
+			// set data collected and end time
+			flight.collected_data = true;
+			flight.flight_ended = new Date();
+			flight.save().then(function (err, data){
+				regulationConfig.endFlight(_id);
+				_callback({message:'ended realtime flight', success: true});
+			});
+		}
+	});
+}
+
+/**
+@function startDFlight - to end a flight for decoded data 
+@alias controllers/flight.endDFlight
+@param {String} _id - mongoose user id
+@param {String} _flightId - mongoose flight id
+@param {function} _callback - the functions callback
+*/
+var endDFlight = function(_id, _flightId, _callback){
+	Flight.findOne({_id: _flightId}, function(err, flight){
+		if(err || !flight) _callback({message:'could not end decoding flight', success: false});
+		else{ 
+			
+			// set data collected and end time
+			flight.collected_data = true;
+			flight.flight_ended = new Date();
+			flight.save().then(function (err, data){
+				regulationConfig.endFlight(_id);
+				_callback({message:'ended decoding flight', success: true});
+			});
+		}
+	});
+}
+
 // export all modules
 module.exports = {
 	addPreflightInspection: addPreflightInspection,
 	removePreflightInspection: removePreflightInspection,
 	getAllFlightsWithoutCollectedData: getAllFlightsWithoutCollectedData,
-	getAllFlightsWithCollectedData: getAllFlightsWithCollectedData
+	getAllFlightsWithCollectedData: getAllFlightsWithCollectedData,
+	startRTFlight: startRTFlight,
+	startDFlight: startDFlight,
+	endDFlight: endDFlight,
+	endRTFlight: endRTFlight
 };

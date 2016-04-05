@@ -46,24 +46,24 @@ angular.module('UavOpsInterface')
 					}
 
 					// build velocity x data
-					if(jsonData.speed_x < 0.01) jsonData.speed_x = 0;
-					var pushX = {"label":jsonData.time/1000, "value":jsonData.speed_x};
+					if(jsonData.velocity_x < 0.01) jsonData.velocity_x = 0;
+					var pushX = {"label":jsonData.time/1000, "value":jsonData.velocity_x};
 					speed[0].values.push(pushX);
 					if (speed[0].values.length > 15){
 						speed[0].values.shift();
 					}
 
 					// build velocity y data
-					if(jsonData.speed_y < 0.01) jsonData.speed_y = 0;
-					var pushY = {"label":jsonData.time/1000, "value":jsonData.speed_y};
+					if(jsonData.velocity_y < 0.01) jsonData.velocity_y = 0;
+					var pushY = {"label":jsonData.time/1000, "value":jsonData.velocity_y};
 					speed[1].values.push(pushY);
 					if (speed[1].values.length > 15){
 						speed[1].values.shift();
 					}
 
 					// build velocity z data
-					if(jsonData.speed_z < 0.01) jsonData.speed_z = 0;
-					var pushZ = {"label":jsonData.time/1000, "value":jsonData.speed_z};
+					if(jsonData.velocity_z < 0.01) jsonData.velocity_z = 0;
+					var pushZ = {"label":jsonData.time/1000, "value":jsonData.velocity_z};
 					speed[2].values.push(pushZ);
 					if (speed[2].values.length > 15){
 						speed[2].values.shift();

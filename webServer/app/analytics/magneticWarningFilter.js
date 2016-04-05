@@ -21,25 +21,20 @@ var gm_queue = [];
 
 /**
 @function magFilter - to generate notifications based on differences in magnetic field readings and gyroscope reading
-@param {Number} gyrox - gyroscope data in the x plane
-@param {Number} gyroy - gyroscope data in the y plane
-@param {Number} gyroz - gyroscope data in the z plane
-@param {Number} magx - magnetic field data in the x plane
-@param {Number} magy - magnetic field data in the y plane
-@param {Number} magz - magnetic field data in the z plane
+@param {Number} _data_stream - gyroscopic and magnometer data in the x, y and z planes
 */
-var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
+var magFilter = function(_id, _data_stream){
 
 	// create datapoint of magnetic and gyro data to add to queue
 	var magData = {
-		gyro_x: Number.parseFloat(gyrox),
-		gyro_y: Number.parseFloat(gyroy),
-		gyro_z: Number.parseFloat(gyroz),
-		mag_x: Number.parseFloat(magx),
-		mag_y: Number.parseFloat(magy),
-		mag_z: Number.parseFloat(magz)
+		gyro_x: Number.parseFloat(_data_stream.gyro_x),
+		gyro_y: Number.parseFloat(_data_stream.gyro_y),
+		gyro_z: Number.parseFloat(_data_stream.gyro_z),
+		mag_x: Number.parseFloat(_data_stream.mag_x),
+		mag_y: Number.parseFloat(_data_stream.mag_y),
+		mag_z: Number.parseFloat(_data_stream.mag_z)
  	};
- 	//console.log("gyro: " + gyro_x);
+
  	if (Math.abs(magData.gyro_x) < zero_threshold || magData.gyro_x == null) {
  		magData.gyro_x = 0;
  	}

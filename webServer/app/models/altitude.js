@@ -14,8 +14,8 @@ var Schema = mongoose.Schema;
 // describe user in schema
 var altitudeSchema = new Schema({
 	flight_id: { type: Schema.Types.ObjectId, ref: 'Flight' },
-	val: { type: Number, required: true},
-	time: Date
+	alt: { type: Number, required: true},
+	created_at: Date
 });
 
 // declare exported module

@@ -18,17 +18,17 @@ var regulationConfig = require('../config/regulationConfig');
 var startFlightSim = function (_id, _readExt, _readType, _callback) {
 
 	// start flight data and data flow process
-	regulationConfig.startFlight(_id, _readExt);
+	regulationConfig.startFlight(_id, {simulation: _readExt});
 	sp_process.initializeMock(_id, _readExt, _readType);
 	_callback();
 }
 
 /**
-@function endFlightSimWithPilotId - to end flow of flight data and reconfigure
-@alias controllers/simulation.endFlightSimWithPilotId
+@function endSimFlightWithPilotId - to end flow of flight data and reconfigure
+@alias controllers/simulation.endSimFlightWithPilotId
 @param {function} _callback - a callback function
 */
-var endFlightSimWithPilotId = function (_id, _callback){
+var endSimFlightWithPilotId = function (_id, _callback){
 
 	// end the mock process and clear flight data
 	sp_process.endMock(_id);
@@ -39,5 +39,5 @@ var endFlightSimWithPilotId = function (_id, _callback){
 // export all functions
 module.exports = {
 	startFlightSim: startFlightSim,
-	endFlightSimWithPilotId: endFlightSimWithPilotId
+	endSimFlightWithPilotId: endSimFlightWithPilotId
 };

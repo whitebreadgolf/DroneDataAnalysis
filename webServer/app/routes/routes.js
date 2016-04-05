@@ -34,6 +34,7 @@ var User = require('../models/user');
 // analytics
 var regulationConfig = require('../config/regulationConfig');
 var buildingProximity = require('../analytics/buildingProximity');
+var dataFilter = require('../analytics/dataFilter');
 
 /**
 @function initRoutes - to initialize all 
@@ -56,7 +57,6 @@ var initRoutes = function (_app){
 	// GET configuremap
 	_app.get('/api/configuremap', function (req, res){
 
-		// req - {}
 		// res - {status: ("error"|"success")}
 
 		if(!(req.user)) res.json({success: false, status: 'user'}); 
@@ -145,14 +145,13 @@ var initRoutes = function (_app){
 	//////////////////////////////////////////////////////////////////////
 
 	// GET velocity
-	_app.get('/api/velocity', function (req, res){
+	_app.get('/api/velocity/:id', function (req, res){
 
-		// req - time_interval:{flight_id:<string>}
+		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 		
-		// get all velocities for flightId
-		if(req.user && req.body.flight_id){
-			velocity.getAllVelocitiesForFlightId(req.body.flight_id, function(velocities){
+		if(req.user && req.params.id){
+			velocity.getAllVelocitiesForFlightId(req.params.id, function(velocities){
 				res.json(velocities);
 			});
 		}
@@ -160,14 +159,13 @@ var initRoutes = function (_app){
 	});
 
 	// GET altitude
-	_app.get('/api/altitude', function (req, res){
+	_app.get('/api/altitude/:id', function (req, res){
 		
-		// req - time_interval:{flight_id:<string>}
+		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 
-		// get all altitudes for flightId
-		if(req.user && req.body.flight_id){
-			altitude.getAllAltitudesForFlightId(req.body.flight_id, function(altitudes){
+		if(req.user && req.params.id){
+			altitude.getAllAltitudesForFlightId(req.params.id, function(altitudes){
 				res.json(altitudes);
 			});
 		}
@@ -176,24 +174,37 @@ var initRoutes = function (_app){
 
 
 	// GET location
-	_app.get('/api/location', function (req, res){
+	_app.get('/api/location/:id', function (req, res){
 		
-		// res - {latitude:<double>, longitude:<double>}
+		// req - {flight_id: <string>}
+		// res - {data_points: [<double>, ….]}
 
+		if(req.user && req.params.id){
+			location.getAllLocationsForFlightId(req.params.id, function(locations){
+				res.json(locations);
+			});
+		}
 	});
 
 	// GET safety analysis
-	_app.get('/api/safetyStatus', function (req, res){
+	_app.get('/api/safetyStatus/:id', function (req, res){
 	
-		// res - {operation: {is_unsafe:<boolean>, type: <string>, degree:<double>}, location: {is_unsafe:<boolean>, type: <string>, degree:<double>}}
+		// req - {flight_id: <string>}
+		// res - {data_points: [<double>, ….]}
 
+		if(req.user && req.params.id){
+			safetyStatus.getSafetyStatus(req.params.id, function(statuses){
+				res.json(statuses);
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
 	});	
 
 	//////////////////////////////////////////////////////////////////////////
 	/////////// END GET endpoints for basic flight data paramters ////////////
 	//////////////////////////////////////////////////////////////////////////
 
-	// GET preflight inspections
+	// GET flight inspections
 	_app.get('/api/flight', function (req, res){
 		
 		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
@@ -208,12 +219,51 @@ var initRoutes = function (_app){
 		else{
 			res.json({message: "flight data not available, user must be logged in", success: false});
 		}
+	});
+
+	// POST flight inspections - starts/ends a flight
+	_app.post('/api/flight', function (req, res){
+		
+		// req - {action: (start|end), type: (real_time|decoding), flight_id: <String>}
+		// res - {success: <boolean>, message: <string>}
+
+		if(req.user){
+			if(req.body.action === 'start'){
+				if(req.body.type === 'real_time'){
+					flight.startRTFlight(req.user._id, req.body.flight_id, function(status){
+						res.json(status);
+					});
+				}
+				else if(req.body.type === 'decoding'){
+					flight.startDFlight(req.user._id, req.body.flight_id, function(status){
+						res.json(status);
+					});
+				}
+				else res.json({message: "cannot start flight, type not recognized", success: false});
+			}
+			else if(req.body.action === 'end'){
+				if(req.body.type === 'real_time'){
+					flight.endRTFlight(req.user._id, req.body.flight_id, function(status){
+						res.json(status);
+					});
+				}
+				else if(req.body.type === 'decoding'){
+					flight.endDFlight(req.user._id, req.body.flight_id, function(status){
+						res.json(status);
+					});
+				}
+				else res.json({message: "cannot end flight, type not recognized", success: false});
+			}
+			else res.json({message: "cannot modify flight, action not recognized", success: false});
+		}
+		else res.json({message: "cannot modify flight, user must be logged in", success: false});
 	});	
 
 	// GET preflight inspections
 	_app.get('/api/preflight', function (req, res){
 		
 		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
+		
 		if(req.user){
 			flight.getAllFlightsWithoutCollectedData(req.user._id, function(err, flights){
 
@@ -249,7 +299,6 @@ var initRoutes = function (_app){
 		}
 		else res.json({message: "pre-flight inspection not removed, user must be logged in", success: false});
 	});
-
 
 	//////////////////////////////////////////////////////////////////////
 	//////////////////// Flight Simulator endpoints //////////////////////
@@ -289,6 +338,43 @@ var initRoutes = function (_app){
 
 	//////////////////////////////////////////////////////////////////////
 	////////////////// END Flight Simulator endpoints ////////////////////
+	//////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////
+	///////////////////// Data Submission Endpoints //////////////////////
+	//////////////////////////////////////////////////////////////////////
+
+	_app.post('/api/data', function (req, res){
+
+		// req - {type: ('single'|'multi'), csv_string: <string>, user_id: <string>, flight_id: <string>}
+		// res - {success: <boolean>, data: <string>}
+
+		// user must be logged in or a key provided
+		if(req.user || req.body.user_id){
+
+			// set correct user id from req body or session 
+			var user_id;
+			if(req.user) user_id = req.user._id;
+			else user_id = req.body.user_id;
+
+			// forward to data filter based on type
+			if(req.body.type === 'single'){
+				dataFilter.routeSingleCsvString(user_id, req.body.flight_id, req.body.csv_string, function(status){
+					res.json(status);
+				}); 
+			}
+			else if(req.body.type === 'multi'){
+				dataFilter.routeMultiCsvString(user_id, req.body.flight_id, req.body.csv_string, function(status){
+					res.json(status);
+				});				
+			}
+			else res.json({message: "data not collected, data type not recognized", success: false});
+		}
+		else res.json({message: "data not collected, user must be logged in", success: false}); 
+	});
+
+	//////////////////////////////////////////////////////////////////////
+	/////////////////// END Data Submission Endpoints ////////////////////
 	//////////////////////////////////////////////////////////////////////
 };
 

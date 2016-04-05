@@ -365,9 +365,7 @@ var importDataBlob = function (_id, _blob){
                     var dataline = latitude + ', ' + longitude + ', ' + altitude + ', ' + velocity_north + ', ' + velocity_east + ', ' + velocity_down + ', ' + velocity + ', ' + ground_speed + ', ' + accx + ', ' + accy + ', ' + accz + ', ' + gyrox + ', ' + gyroy + ', ' + gyroz + ', ' + baro_alt + ', ' + quatx + ', ' + quaty + ', ' + quatz + ', ' + quatw + ', ' + roll + ', ' + pitch + ', ' + yaw + ', ' + magx + ', ' + magy + ', ' + magz + ', ' + sats + ', ' + sequence_number + ', ' + '\n';
 
                     // FEED INTO FILTER
-
-                    dataFilter.routeDataParameters(_id, latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence_number);
-                    
+                    dataFilter.routeDataParameters(_id, null, latitude, longitude, altitude, velocity_north, velocity_east, velocity_down, accx, accy, accz, gyrox, gyroy, gyroz, roll, pitch, yaw, magx, magy, magz);
                     // FEED INTO FILTER END
                 }
             }
@@ -474,9 +472,7 @@ var importDataBlob = function (_id, _blob){
                                 var dataline = latitude + ', ' + longitude + ', ' + altitude + ', ' + north_vel + ', ' + east_vel + ', ' + down_vel + ', ' + velocity + ', ' + ground_speed + ', ' + accx + ', ' + accy + ', ' + accz + ', ' + gyrox + ', ' + gyroy + ', ' + gyroz + ', ' + baro_alt + ', ' + quatx + ', ' + quaty + ', ' + quatz + ', ' + quatw + ', ' + roll + ', ' + pitch + ', ' + yaw + ', ' + magx + ', ' + magy + ', ' + magz + ', ' + sats + ', ' + main_voltage + ', ' + can_voltage + ', ' + ec_voltage + ', ' + sequence + '\n';
                             
                                 // FEED INTO FILTER
-
-                                dataFilter.routeDataParameters(_id, latitude, longitude, altitude, north_vel, east_vel, down_vel, velocity, ground_speed, accx, accy, accz, gyrox, gyroy, gyroz, baro_alt, quatx, quaty, quatz, quatw, roll, pitch, yaw, magx, magy, magz, sats, sequence);
-                                
+                                dataFilter.routeDataParameters(_id, null, latitude, longitude, altitude, north_vel, east_vel, down_vel, accx, accy, accz, gyrox, gyroy, gyroz, roll, pitch, yaw, magx, magy, magz);
                                 // FEED INTO FILTER END
                             }
                         }

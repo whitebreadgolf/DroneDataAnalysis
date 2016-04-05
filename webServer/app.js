@@ -19,8 +19,10 @@ var session = require('express-session');
 // setup app listening and settings
 var app = express();
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());       
-app.use(bodyParser.urlencoded({ extended: true })); 
+//app.use(bodyParser.json());       
+//app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
 app.use(session({
 	secret: 'keyboard cat',
  	resave: false,

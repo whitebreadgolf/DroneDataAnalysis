@@ -21,6 +21,16 @@ var getAllAltitudesForFlightId = function(_flightId, _callback){
 	});
 }
 
+var saveAltitude = function(_data, _callback){
+	var alt = new Altitude(_data);
+	alt.save(function(err, data){
+		if(err) console.log(err);
+		else console.log('collected altitude');
+		_callback();
+	});
+}
+
 module.exports = {
-	getAllAltitudesForFlightId: getAllAltitudesForFlightId
+	getAllAltitudesForFlightId: getAllAltitudesForFlightId,
+	saveAltitude: saveAltitude
 };

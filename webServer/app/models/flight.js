@@ -24,7 +24,6 @@ var flightSchema = new Schema({
 	propeller_3: Boolean, 
 	micro_sd: Boolean, 
 	gimbal: Boolean,
-	created_at: Date,
 	flight_started: Date,
 	flight_ended: Date
 });

@@ -19,8 +19,19 @@ var getAllVelocitiesForFlightId = function(_flightId, _callback){
 		if(err) _callback({success: false, data: 'error querying velocity'});
 		else _callback({success: true, data: velocities});
 	});
-}
+};
 
+var saveVelocity = function(_data, _callback){
+	var vel = new Velocity(_data);
+	vel.save(function(err, data){
+		if(err) console.log(err);
+		else console.log('collected velocity');
+		_callback();
+	});
+};
+
+// export public functions
 module.exports = {
-	getAllVelocitiesForFlightId: getAllVelocitiesForFlightId
+	getAllVelocitiesForFlightId: getAllVelocitiesForFlightId,
+	saveVelocity: saveVelocity
 };

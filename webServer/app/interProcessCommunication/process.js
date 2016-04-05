@@ -47,11 +47,11 @@ var initializeMock = function(_id, _readExt, _readType){
 		map['high'] = "flight_data_height_error.csv";
 		map['mag'] = "flight_data_mag_error.csv";
 	}
-	else if (_readExt == 'DAT'){
-		map['dummy'] = "FLY000.DAT";
-		map["normal"] = "FLY000.DAT";
-		map["high"] = "FLY000.DAT";
-	}
+	// else if (_readExt == 'DAT'){
+	// 	map['dummy'] = "FLY000.DAT";
+	// 	map["normal"] = "FLY000.DAT";
+	// 	map["high"] = "FLY000.DAT";
+	// }
 
 	// any initalizations pre-function call
 	sp[_id] = spawn(MOCK_SP_FP, [MOCK_SP_DIR + map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time', _id]);
@@ -71,18 +71,18 @@ var initializeMock = function(_id, _readExt, _readType){
 	    space_index++;
 
 	    // check read type and filter accordingly
-		if(regulationConfig.cur_flight[id].simulation.file_read === 'DAT'){
+		// if(regulationConfig.cur_flight[id].simulation.file_read === 'DAT'){
 
-			// convert to uint8 array 
-	    	var view = new Uint8Array(new ArrayBuffer(data.length));
-	    	for (var i = space_index; i < data.length; ++i) {
-	        	view[i] = data[i];
-	    	}
+		// 	// convert to uint8 array 
+	 //    	var view = new Uint8Array(new ArrayBuffer(data.length));
+	 //    	for (var i = space_index; i < data.length; ++i) {
+	 //        	view[i] = data[i];
+	 //    	}
 
-			// decode sequence
-			decode.importDataBlob(id, view);
-		}
-		else if(regulationConfig.cur_flight[id].simulation.file_read === 'CSV'){
+		// 	// decode sequence
+		// 	decode.importDataBlob(id, view);
+		// }
+		if(regulationConfig.cur_flight[id].simulation.file_read === 'CSV'){
 
 			// feed in csv data			
 			dataFilter.filterCsvString(id, dataString.substr(space_index, data.length));
