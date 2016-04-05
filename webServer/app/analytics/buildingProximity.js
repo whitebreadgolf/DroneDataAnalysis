@@ -809,7 +809,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
         // console.log(visitedArray);
         // get front location of the array 
         var currLocation = searchArray.shift();
-        
+        console.log(currLocation.i + "," + currLocation.j + "," + currLocation.x + "," + currLocation.y);
         // check if current location is a building 
         if (mapArray[currLocation.i][currLocation.j] !== null) {
             var currentTile = mapArray[currLocation.i][currLocation.j];
@@ -872,7 +872,6 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
         if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
             visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] == false) {
             searchArray.push(northLocation);
-            console.log('test');
             visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] = true;
         }
         if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
@@ -890,6 +889,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
             searchArray.push(southLocation);
             visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] = true;
         }
+        console.log('test');
     }
 
     console.log(building.i + "," + building.j + "," + building.x + "," + building.y);
@@ -918,14 +918,6 @@ var binaryMap = {
 }
 
 // 10x10 map, building at (3,4) drone at (6,7)
-for (var i = 0; i < 100; i++) {
-    if (i === 45) {
-        binaryMap.values.push(true);
-    } else {
-        binaryMap.values.push(false);
-    }
-}
-mapArray[0][0] = binaryMap;
 for (var k = 0; k < 3; k++) {
     for (var l = 0; l < 3; l++) {
         var map = { 
@@ -934,16 +926,25 @@ for (var k = 0; k < 3; k++) {
             values: []
         };
         for (var i = 0; i < 100; i++) {
-            binaryMap.values.push(false);
+            map.values.push(false);
         }
+        mapArray[k][l] = map;
     }
 }
+for (var i = 0; i < 100; i++) {
+    if (i === 45) {
+        binaryMap.values.push(true);
+    } else {
+        binaryMap.values.push(false);
+    }
+}
+mapArray[0][0] = binaryMap;
 
 var droneLoc = {
     x: 7,
     y: 6
 };
-getNearestBuildingLocation(1, binaryMap, droneLoc);
+getNearestBuildingLocation(1, mapArray[0][0], droneLoc);
 /* end test for getNearestBuildingLocation */
 
 // export all submodules
