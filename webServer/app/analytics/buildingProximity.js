@@ -588,6 +588,20 @@ var resetMapArray = function() {
 }
 
 /**
+@function mapArrayIsEmpty - check if map array is empty
+@alias analytics/buildingProximity.mapArrayIsEmpty
+@return Boolean
+ */
+var mapArrayIsEmpty = function() {
+    for (var i in mapArray) {
+        if (i != null) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
 @function loadSurroundingMaps - load the surrounding maps into a combined binary map
 @alias analytics/buildingProximity.loadSurroundingMaps
 @param {String} _id - mongodb object user id
@@ -598,8 +612,8 @@ var loadSurroundingMaps = function(_id, _lat, _lon, _x, _y) {
     resetMapArray();
 
     BinaryMap.findOne({user: _id, x_coord: _x, y_coord: _y}, function (_err, _map){
-        if(_err || !_map) {
-            _callback('error');
+        if(!_map) {
+           return; 
         } else {
             // check whether the binaryMap is an edge or corner map
             var isBound = { 
@@ -758,11 +772,14 @@ var loadSurroundingMaps = function(_id, _lat, _lon, _x, _y) {
 @param {String} _id - mongodb object user id
 @param {Object} _binaryMap - 2d starting map with binary data
 @param {Object} _droneloc - {x, y}, x and y location of the drone
-@return {Object} buildingLocation - object containing the building's x and y location and its longitude and latitude
  */
-var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
+var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback) {
     // loadSurroundingMaps(_id, _binaryMap.lat, _binaryMap.lon, _binaryMap.x_coord, _binaryMap.y_coord);
-
+    if (mapArrayIsEmpty()) {
+        _callback('error');
+        return;
+    }
+    
     // queue for BFS
     var searchArray = [];
 
@@ -904,68 +921,89 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
 
     console.log(building.i + "," + building.j + "," + building.x + "," + building.y);
 
-    if (building.i != -1 && building.j != -1) {
-        var buildingLocation = {
-            x_coord: mapArray[building.i][building.j].x_coord,
-            y_coord: mapArray[building.i][building.j].y_coord,
-            grid_x: building.x,
-            grid_y: building.y
-        };
-        return buildingLocation;
+    if (building.i != -1 && building.j != -1 && building.x != -1 && building.y != -1) {
+        var dist = getDistanceFromDrone (_droneloc, building, _binaryMap.width, _binaryMap.height);
+        _callback(dist);
+        console.log(dist);
+    } else {
+        // no building found
+        _callback(-1);
     }
-    else {
-        return null;
-    }
-    
-    
+}
+
+/**
+@function getDistanceFromDrone - get the distance a point is from the drone's location
+@alias analytics/buildingProximity.getDistanceFromDrone
+@param {Object} _droneloc - {x, y}, x and y location of the drone
+@param {Object} _point - location of the point
+@param {Integer} _tilewidth - width of a map tile
+@param {Integer} _tileheight - height of a map tile
+@return {Double} - distance from the drone (in units of cells in map tile)
+ */
+
+var getDistanceFromDrone = function (_droneloc, _point, _tilewidth, _tileheight) {
+    var pointx = _point.i * _tileheight + _point.x;
+    var pointy = _point.j * _tilewidth + _point.y;
+
+    var dronex = _tilewidth + _droneloc.x;
+    var droney = _tileheight + _droneloc.y;
+
+    var diffx = Math.abs(pointx - dronex);
+    var diffy = Math.abs(pointy - droney);
+
+    return Math.sqrt(Math.pow(diffx,2) + Math.pow(diffy,2));
 }
 
 /* test for getNearestBuildingLocation */
-var binaryMap = {
-    height: 10,
-    width: 10,
-    values: []
-}
+// var binaryMap = {
+//     height: 10,
+//     width: 10,
+//     values: []
+// }
 
-// 10x10 map, building at (3,4) drone at (6,7)
-for (var k = 0; k < 3; k++) {
-    for (var l = 0; l < 3; l++) {
-        var map = { 
-            height: 10,
-            width: 10,
-            values: []
-        };
-        for (var i = 0; i < 100; i++) {
-            if (k == 0 && l == 0 && i == 0) {
-                map.values.push(true);
-            }
-            else {
-                map.values.push(false);
-            }
-        }
-        mapArray[k][l] = map;
-    }
-}
+// // 10x10 map, building at (3,4) drone at (6,7)
+// for (var k = 0; k < 3; k++) {
+//     for (var l = 0; l < 3; l++) {
+//         var map = { 
+//             x_coord: k+3,
+//             y_coord: l+3,
+//             height: 10,
+//             width: 10,
+//             values: []
+//         };
+//         for (var i = 0; i < 100; i++) {
+//             if (k == 0 && l == 0 && i == 79) {
+//                 map.values.push(true);
+//             }
+//             else {
+//                 map.values.push(false);
+//             }
+//         }
+//         mapArray[k][l] = map;
+//     }
+// }
 
-for (var i = 0; i < mapArray.length; i++) {
-    for (var j = 0; j < mapArray[i].length; j++) {
-        console.log("tile: (" + i + ", " + j + ")");
-        for (var k = 0; k < mapArray[i][j].values.length; k++) {
-            if (k%10 == 0) {
-                console.log();
-            } else {
-                console.log(mapArray[i][j].values[k]);
-            }
-        }
-    }
-}
+// for (var i = 0; i < mapArray.length; i++) {
+//     for (var j = 0; j < mapArray[i].length; j++) {
+//         console.log("tile: (" + i + ", " + j + ")");
+//         for (var k = 0; k < mapArray[i][j].values.length; k++) {
+//             if (k%10 == 0) {
+//                 console.log();
+//             } else {
+//                 console.log(mapArray[i][j].values[k]);
+//             }
+//         }
+//     }
+// }
 
-var droneLoc = {
-    x: 7,
-    y: 6
-};
-getNearestBuildingLocation(1, mapArray[0][0], droneLoc);
+// var droneLoc = {
+//     x: 7,
+//     y: 6
+// };
+// getNearestBuildingLocation(1, mapArray[0][0], droneLoc);
 /* end test for getNearestBuildingLocation */
+
+// loadSurroundingMaps(1, 38.199911, -85.765912, 2, 2);
 
 // export all submodules
 module.exports = {
