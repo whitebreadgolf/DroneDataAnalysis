@@ -809,7 +809,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
         // console.log(visitedArray);
         // get front location of the array 
         var currLocation = searchArray.shift();
-        console.log(currLocation.i + "," + currLocation.j + "," + currLocation.x + "," + currLocation.y);
+        // console.log(currLocation.i + "," + currLocation.j + "," + currLocation.x + "," + currLocation.y);
         // check if current location is a building 
         if (mapArray[currLocation.i][currLocation.j] !== null) {
             var currentTile = mapArray[currLocation.i][currLocation.j];
@@ -828,7 +828,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
         }
         northLocation.x = northLocation.x - 1;
         if (northLocation.x < 0 && northLocation.i > 0) {
-            northLocation.i = northLocation.i-1;
+            northLocation.j = northLocation.j-1;
             northLocation.x = _binaryMap.height-1;
         }
 
@@ -839,9 +839,9 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
             y: currLocation.y
         }
         eastLocation.y = eastLocation.y + 1;
-        if (eastLocation.y < 0 && eastLocation.i < 2) {
-            eastLocation.i = eastLocation.i-1;
-            eastLocation.y = _binaryMap.width-1;
+        if (eastLocation.y > _binaryMap.width-1 && eastLocation.i < 2) {
+            eastLocation.i = eastLocation.i+1;
+            eastLocation.y = 0;
         }
 
         var westLocation = {
@@ -853,7 +853,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
         westLocation.y = westLocation.y - 1;
         if (westLocation.x < 0 && westLocation.i > 0) {
             westLocation.i = westLocation.i-1;
-            westLocation.y = 0;
+            westLocation.y = _binaryMap.width-1;
         }
 
         var southLocation = {
@@ -863,33 +863,43 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
             y: currLocation.y
         }
         southLocation.x = southLocation.x + 1;
-        if (southLocation.x < 0 && southLocation.i < 2) {
-            southLocation.i = southLocation.i-1;
+        if (southLocation.x > _binaryMap.height-1 && southLocation.i < 2) {
+            southLocation.j = southLocation.j+1;
             southLocation.x = 0;
         }
 
-        // check if locations are valid 
-        if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
-            visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] == false) {
-            searchArray.push(northLocation);
-            visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] = true;
+        // check spots in the mapArray and add to queue if its a valid new location in the array
+        if (visitedArray[northLocation.i][northLocation.j] != null ) {
+            if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
+                visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] == false) {
+                searchArray.push(northLocation);
+                visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] = true;
+            }
         }
-        if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
-            visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] == false) {
-            searchArray.push(eastLocation);
-            visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] = true;
+
+        if (visitedArray[eastLocation.i][eastLocation.j] != null) {
+            if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
+                visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] == false) {
+                searchArray.push(eastLocation);
+                visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] = true;
+            }    
         }
-        if (westLocation.y >= 0 && westLocation.y < _binaryMap.width && 
-            visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] == false) {
-            searchArray.push(westLocation);
-            visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] = true;
+
+        if (visitedArray[westLocation.i][westLocation.j] != null) {
+            if (westLocation.y >= 0 && westLocation.y < _binaryMap.width && 
+                visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] == false) {
+                searchArray.push(westLocation);
+                visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] = true;
+            }    
         }
-        if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
-            visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] == false) {
-            searchArray.push(southLocation);
-            visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] = true;
+
+        if (visitedArray[southLocation.i][southLocation.j] != null) {
+            if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
+                visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] == false) {
+                searchArray.push(southLocation);
+                visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] = true;
+            }    
         }
-        console.log('test');
     }
 
     console.log(building.i + "," + building.j + "," + building.x + "," + building.y);
@@ -926,19 +936,29 @@ for (var k = 0; k < 3; k++) {
             values: []
         };
         for (var i = 0; i < 100; i++) {
-            map.values.push(false);
+            if (k == 0 && l == 1 && i == 45) {
+                map.values.push(true);
+            }
+            else {
+                map.values.push(false);
+            }
         }
         mapArray[k][l] = map;
     }
 }
-for (var i = 0; i < 100; i++) {
-    if (i === 45) {
-        binaryMap.values.push(true);
-    } else {
-        binaryMap.values.push(false);
+
+for (var i = 0; i < mapArray.length; i++) {
+    for (var j = 0; j < mapArray[i].length; j++) {
+        console.log("tile: (" + i + ", " + j + ")");
+        for (var k = 0; k < mapArray[i][j].values.length; k++) {
+            if (k%10 == 0) {
+                console.log();
+            } else {
+                console.log(mapArray[i][j].values[k]);
+            }
+        }
     }
 }
-mapArray[0][0] = binaryMap;
 
 var droneLoc = {
     x: 7,
