@@ -851,7 +851,7 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc) {
             y: currLocation.y
         }
         westLocation.y = westLocation.y - 1;
-        if (westLocation.x < 0 && westLocation.i > 0) {
+        if (westLocation.y < 0 && westLocation.i > 0) {
             westLocation.i = westLocation.i-1;
             westLocation.y = _binaryMap.width-1;
         }
@@ -936,7 +936,7 @@ for (var k = 0; k < 3; k++) {
             values: []
         };
         for (var i = 0; i < 100; i++) {
-            if (k == 0 && l == 1 && i == 45) {
+            if (k == 0 && l == 0 && i == 0) {
                 map.values.push(true);
             }
             else {
