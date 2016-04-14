@@ -38,6 +38,7 @@
     "passport-local-mongoose": "^4.0.0",
     "password-hash": "^1.2.2",
     "png-js": "^0.1.1",
+    "request": "^2.70.0",
     "sleep": "^3.0.1",
     "when": "^3.7.7",
     "ws": "^1.0.1"

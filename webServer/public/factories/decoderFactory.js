@@ -223,9 +223,10 @@ angular.module('UavOpsInterface')
 									data: {type: 'decoding', flight_id: _flightId, action: 'end'}
 								};
 								$http(req).then(function(data){
-									console.log(data);
 									if(data.data.success) Notification({message: data.data.message}, 'success'); 
 									else Notification({message: data.data.message}, 'error');
+
+									// controller needs to know that we are done
 								}); 
 							}
 							else Notification({message: data.data.message}, 'error');
@@ -283,10 +284,10 @@ angular.module('UavOpsInterface')
 			}
 		}
 	}
-	var startDecoder = function(_flightId, _file){
+	var startDecoder = function(_flightId, _file, _callback){
 
 		// start decoder now
-		if(!currentDecoding) startDecoderHelper(_flightId, _file);
+		if(!currentDecoding) startDecoderHelper(_flightId, _file, _callback);
 
 		// wait till finished
 		else{
@@ -294,7 +295,7 @@ angular.module('UavOpsInterface')
 			Notification({message: 'flight '+_flightId+ ' decoding queued'}, 'warning');
 		}
 	}
-	var	startDecoderHelper = function(_flightId, _file){
+	var	startDecoderHelper = function(_flightId, _file, _callback){
 
 		// create object
 		currentDecoding = {
@@ -680,9 +681,10 @@ angular.module('UavOpsInterface')
 	                }
 	            }
 	        }
-	        //if (file_length == last_byte) {
-	        if(blob_count === 5){
+	        if (file_length == last_byte) {
+	        //if(blob_count === 5){
 	            // DONE WITH DECODING
+	            _callback();
 	            currentDecoding.finished = true;
 	    		stopDecoding(_flightId);
 	        }

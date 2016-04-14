@@ -14,9 +14,11 @@ var Schema = mongoose.Schema;
 // describe user in schema
 var safetyReportSchema = new Schema({
 	pilot: { type: Schema.Types.ObjectId, ref: 'User' },
-	flight_id: { type: Schema.Types.ObjectId, ref: 'Preflight' },
-	type: { type: String, required: true},
-	value: { type: Number, required: true},
+	flight_id: { type: Schema.Types.ObjectId, ref: 'Flight' },
+	type: {type: String, required: true},
+	report: String,
+	value: Number,
+	icon: String,
 	created_at: Date
 });
 

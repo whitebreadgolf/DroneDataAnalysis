@@ -14,7 +14,7 @@ var regulationConfig = require('../config/regulationConfig');
 const zero_threshold = 0.000001;
 
 // constant threshold used to determine whether the magnetic field is being altered by more than the earth's magnetic field
-const mag_threshold = 0.1;
+const mag_threshold = 1;
 
 // global mag and gyro queue
 var gm_queue = [];
@@ -65,13 +65,13 @@ var magFilter = function(_id, _data_stream){
 
  	for (var i = 1; i < gm_queue.length; i++) {
  		var gm_diff = gyromagDiff(i);
- 		if (Math.abs(gm_diff.mag_x - gm_diff.gyro_x) > mag_threshold) {
+ 		if (Math.abs(gm_diff.mag_x / gm_diff.gyro_x) > mag_threshold) {
 			magwarn = true;
 		}
- 		if (Math.abs(gm_diff.mag_y - gm_diff.gyro_y) > mag_threshold) {
+ 		if (Math.abs(gm_diff.mag_y / gm_diff.gyro_y) > mag_threshold) {
  			magwarn = true;
  		}
- 		if (Math.abs(gm_diff.mag_z - gm_diff.gyro_z) > mag_threshold) {
+ 		if (Math.abs(gm_diff.mag_z / gm_diff.gyro_z) > mag_threshold) {
  			magwarn = true;
  		}
  	}

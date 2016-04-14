@@ -72,9 +72,10 @@
 			</div>
 	  	</div>
 	  	<div class="panel-footer">
-			<div class="btn btn-default btn-sm" ng-if="!flight.started">Start Live Flight Data Collection</div>
+			<div class="btn btn-default btn-sm" ng-if="!flight.started" ng-click="startLiveFlight(flight._id)">Start Live Flight Data Collection</div>
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT file for analysis</div>
-			<div class="btn btn-warning btn-sm" ng-if="flight.started" ng-click="stopDecoding(flight._id)">Stop Decoding</div>
+			<div class="btn btn-warning btn-sm" ng-if="flight.started && flight.decoding" ng-click="stopDecoding(flight._id)">Stop Decoding</div>
+			<div class="btn btn-warning btn-sm" ng-if="flight.started && !flight.decoding" ng-click="stopLiveFlight(flight._id)">Stop Live Flight</div>
 			<div class="pull-right">
 				<div class="btn btn-danger btn-sm" ng-if="!flight.started" ng-click="deletePreflight(flight._id)">Delete Flight</div>
 			</div>

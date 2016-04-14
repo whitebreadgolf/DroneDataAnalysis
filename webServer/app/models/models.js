@@ -4,6 +4,7 @@
 
 /**
 @requires mongoose
+@requires airport
 @requires alititude
 @requires binaryMap
 @requires location
@@ -14,7 +15,9 @@
 */
 
 var mongoose = require('mongoose');
+var airport = require('./airport');
 var altitude = require('./altitude');
+var obstical = require('./obstical');
 var binaryMap = require('./binaryMap');
 var location = require('./location');
 var flight = require('./flight');
@@ -29,7 +32,7 @@ var user = require('./user');
 var connectDb = function (_app){
 
 	// connect db
-	mongoose.connect('mongodb://localhost/uav_db');
+	mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/uav_db');
 };
 
 // export empty module

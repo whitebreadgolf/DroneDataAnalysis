@@ -18,12 +18,12 @@ var flightSchema = new Schema({
 	flight_name: String,
 	remote_controller_charge: Number, 
 	intelligent_flight_battery: Number, 
-	propeller_0: Boolean, 
-	propeller_1: Boolean, 
-	propeller_2: Boolean, 
-	propeller_3: Boolean, 
-	micro_sd: Boolean, 
-	gimbal: Boolean,
+	propeller_0: String, 
+	propeller_1: String, 
+	propeller_2: String, 
+	propeller_3: String, 
+	micro_sd: String, 
+	gimbal: String,
 	flight_started: Date,
 	flight_ended: Date
 });

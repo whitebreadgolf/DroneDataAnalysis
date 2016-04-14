@@ -17,7 +17,7 @@ var Loc = require('../models/location');
 var getAllLocationsForFlightId = function(_flightId, _callback){
 	Loc.find({flight_id: _flightId}, function(err, locations){
 		if(err) _callback({success: false, data: 'error querying locations'});
-		else _callback({success: true, data: location});
+		else _callback({success: true, data: locations});
 	});
 }
 

@@ -8,6 +8,7 @@
 @requires magneticWarningFilter
 @requires velocityAltitudeFilter
 @requires dataSaveFilter
+@requires buildingProximity
 */
 
 var wss = require('../interProcessCommunication/websocket');
@@ -15,6 +16,7 @@ var regulationConfig = require('../config/regulationConfig');
 var magneticWarningFilter = require('./magneticWarningFilter');
 var velocityAltitudeFilter = require('./velocityAltitudeFilter');
 var dataSaveFilter = require('./dataSaveFilter');
+var buildingProximity = require('../analytics/buildingProximity');
 
 /**
 @function routeParameters - routes all data parameters to certain functions
@@ -44,10 +46,9 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
 	// apply filters and send
     //magneticWarningFilter.magFilter(_id, mag_data_stream);
     velocityAltitudeFilter.velAltFilter(_collect, _isLive, _id, _flightId, data_stream, function(){
-
         // send data to interface if live
         // collect data if collection is on
-        if(_isLive) sendLiveData(_id, data_stream);
+        if(_isLive.status) sendLiveData(_id, data_stream);
         if(_collect){ 
             dataSaveFilter.routeDataParameters(_id, _flightId, _isLive, data_stream, function(){
                 _callback();
@@ -61,10 +62,10 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
 @function routeSingleCsvString - splits a csv string into expected data parameters
 @alias analytics/dataFilter.routeSingleCsvString
 */
-var routeSingleCsvString = function(_id, _flightId, _csvString, _index, _callback){
+var routeSingleCsvString = function(_id, _flightId, _csvString, _callback){
 
     // split actual csv data
-    var splitData = csvStrings[i].split(',');
+    var splitData = _csvString.split(',');
     routeDataParameters(true, {status: true, value: null}, _id, _flightId, splitData, function(){
         _callback({success: true, message: 'single data point collected'});
     });
@@ -118,20 +119,20 @@ var sendLiveData = function (_id, _data_stream){
 @alias analytics/dataFilter.filterCsvString
 @param {String} _csvString - a csv file line
 */
-var filterCsvString = function (_id, _csvString){
-	var splitData = _csvString.split(',');
-    routeDataParameters(false, {status: true, value: null}, _id, null, splitData[0], splitData[1], splitData[2], splitData[3], 
-    splitData[4], splitData[5], splitData[8], splitData[9], splitData[10], splitData[11], splitData[12], splitData[13], 
-    splitData[19], splitData[20], splitData[21], splitData[22], splitData[23], splitData[24], function(){
+// var filterCsvString = function (_id, _csvString){
+// 	var splitData = _csvString.split(',');
+//     routeDataParameters(false, {status: true, value: null}, _id, null, splitData[0], splitData[1], splitData[2], splitData[3], 
+//     splitData[4], splitData[5], splitData[8], splitData[9], splitData[10], splitData[11], splitData[12], splitData[13], 
+//     splitData[19], splitData[20], splitData[21], splitData[22], splitData[23], splitData[24], function(){
 
 
-    });
-}
+//     });
+// }
 
 // export
 module.exports = {
 	routeDataParameters: routeDataParameters,
-	filterCsvString: filterCsvString,
+	//filterCsvString: filterCsvString,
     routeSingleCsvString: routeSingleCsvString,
     routeMultiCsvString: routeMultiCsvString
 };

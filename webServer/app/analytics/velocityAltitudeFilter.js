@@ -10,7 +10,7 @@
 
 var regulationConfig = require('../config/regulationConfig');
 var wss = require('../interProcessCommunication/websocket');
-var SafetyReport = require('../models/safetyReport');
+var safetyStatus = require('../controllers/safetyStatus');
 
 /**
 @function velAltFilter - splits data into velocities and altitude
@@ -242,21 +242,23 @@ var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _c
 };
 
 var routeLiveAndSave = function(_collect, _isLive, _id, _flightId, _data_stream, _callback){
-	if(_isLive) wss.broadcast(JSON.stringify(_data_stream));
+	if(_isLive.status) wss.broadcast(JSON.stringify(_data_stream));
 	if(_collect){
 
 		// organize and save data
 		var collectData = {
-			pilot: _id, flight_id: _flightId, type: _data_stream.level,
-			value: _data_stream.text, created_at: new Date()
+			pilot: _id, 
+			flight_id: _flightId, 
+			type: _data_stream.level,
+			report: _data_stream.text, 
+			value: 0,
+			icon: null,
+			created_at: new Date()
 		};	
-		var safetyReport = new SafetyReport(collectData);
-		safetyReport.save(function(error, data){
-            if(error) console.log('error saving safety report'); 
-            else console.log('added safety report'); 
 
-            _callback();
-        });
+		safetyStatus.saveSafetyStatus(collectData, function(){
+			_callback();
+		});
 	}
 	else _callback();
 };

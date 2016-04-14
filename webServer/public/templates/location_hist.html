@@ -1,16 +1,9 @@
-
-<!-- <div class="row">
-	<div class="form-group col-sm-12" id="the-basics">
-		<input class="typeahead form-control" type="text" placeholder="Enter a Flight Name" ng-model="search">
-  	</div>
-</div> -->
-
 <div class="row">
 	<div class="form-group col-sm-12">
-		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter">
+		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
   	</div>
 </div>
-<div ng-repeat="flight in flights | filter: searchFilter" class="row">
+<div ng-if="!showChart" ng-repeat="flight in flights | filter: searchFilter" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
 	  	<div class="panel-body">
@@ -39,4 +32,14 @@
 	</div>
 </div>
 </div>
+</div>
+
+<div ng-if="showChart" class="row">
+	<div class="col-sm-12">
+		<ng-map style="height:500px;"
+			zoom="15"
+			center="current-location"> 
+			<marker ng-repeat="pos in allMarkers" position="{{pos.lat}},{{pos.lon}}"></marker>
+		</ng-map>
+	</div>
 </div>

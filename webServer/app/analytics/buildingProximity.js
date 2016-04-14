@@ -7,6 +7,7 @@
 @requires get-pixels
 @requires ndarray
 @requires binaryMap
+@requires airport
 @requires regulationConfig
 @requires when
 */
@@ -15,8 +16,10 @@ var config = require('../config/config');
 var getPixels = require('get-pixels');
 var ndarray = require('ndarray');
 var BinaryMap = require('../models/binaryMap');
+var Airport = require('../models/airport');
 var regulationConfig = require('../config/regulationConfig');
 var when = require('when');
+var request = require('request');
 
 // module constants
 var ZOOM = 20;
@@ -28,7 +31,8 @@ var MAP_SIZE = {
 };
 var MAP_TYPE = 'roadmap';
 var AVE_DOT_DIM = 4;
-var STATIC_MAPS_URL = {seg1:'https://maps.googleapis.com/maps/api/staticmap?center=', seg2:'&zoom=20&size=400x400&key=' + config.google_static_map_key};
+var STATIC_MAPS_URL = {seg1:'https://maps.googleapis.com/maps/api/staticmap?center=', seg2:'&zoom=20&size=400x400&key='+ config.google_static_map_key};
+var AIRPORT_SEARCH = {seg1:'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=', seg2:'&rankby=distance&name=airport&key='+ config.google_static_map_key};
 
 // values for the map calculations
 var MERCATOR_RANGE = 256;
@@ -41,7 +45,7 @@ var MercatorObject = {
     },
     pixelsPerLonDegree: MERCATOR_RANGE / 360,
     pixelsPerLonRadian: MERCATOR_RANGE / (2 * Math.PI)
-}
+};
 
 /**
 @function generateMapWithRange - a function to split large range into n subranges for n static maps
@@ -52,107 +56,116 @@ var MercatorObject = {
 */
 var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
 
-    // calculate the expected map size of n subranges (sqrt(n) * sqrt(n) array)
-    // assume we have NW and SE coordinates
-    var totalWidth = measure(_startObj.lat, _startObj.lon, _startObj.lat, _endObj.lon) + MAP_SIZE.width_meters;
-    var totalHeight = measure(_startObj.lat, _startObj.lon, _endObj.lat, _startObj.lon) + MAP_SIZE.height_meters;
+    findAirportsInRange(_startObj, _endObj, _id, function(){ 
 
-    // numRows * numCols = total map elements
-    var numCols = Math.ceil(totalWidth/MAP_SIZE.width_meters);
-    var numRows = Math.ceil(totalHeight/MAP_SIZE.height_meters);
-    var totalMapElems = numCols * numRows;
-    var mapCount = 0;
+        // calculate the expected map size of n subranges (sqrt(n) * sqrt(n) array)
+        // assume we have NW and SE coordinates
+        var totalWidth = measure(_startObj.lat, _startObj.lon, _startObj.lat, _endObj.lon) + MAP_SIZE.width_meters;
+        var totalHeight = measure(_startObj.lat, _startObj.lon, _endObj.lat, _startObj.lon) + MAP_SIZE.height_meters;
 
-    // split whole range into n subranges
-    // iterate through all and calculate the expected center lat+long value
-    // call generateSubrange on each of these values with a callback
+        // numRows * numCols = total map elements
+        var numCols = Math.ceil(totalWidth/MAP_SIZE.width_meters);
+        var numRows = Math.ceil(totalHeight/MAP_SIZE.height_meters);
+        var totalMapElems = numCols * numRows;
+        var mapCount = 0;
 
-    // the callback function should concat all the 2d arrays into one whole array given its position
-    // when there have been n callbacks, return the final binary map
+        // split whole range into n subranges
+        // iterate through all and calculate the expected center lat+long value
+        // call generateSubrange on each of these values with a callback
 
-    var allLatLon = [];
-    var curLon = _startObj.lon;
-    var curLat = _startObj.lat;
-    var center_x = MercatorObject.pixelOrigin.x + _startObj.lon * MercatorObject.pixelsPerLonDegree;
-    var siny = bound(Math.sin(degreesToRadians(_startObj.lat), -0.9999, 0.9999));
-    var center_y = MercatorObject.pixelOrigin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -MercatorObject.pixelsPerLonRadian;
+        // the callback function should concat all the 2d arrays into one whole array given its position
+        // when there have been n callbacks, return the final binary map
 
-    // iterable indicies
-    var i=0;
-    var j=0;
+        var allLatLon = [];
+        var curLon = _startObj.lon;
+        var curLat = _startObj.lat;
+        var center_x = MercatorObject.pixelOrigin.x + _startObj.lon * MercatorObject.pixelsPerLonDegree;
+        var siny = bound(Math.sin(degreesToRadians(_startObj.lat), -0.9999, 0.9999));
+        var center_y = MercatorObject.pixelOrigin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -MercatorObject.pixelsPerLonRadian;
 
-    // var latLon = fromPointToLatLng({
-    //     x: center_x, 
-    //     y: center_y,
-    // });
-    // var curLon = latLon.lon;
-    // var curLat = _startObj.lat;
+        // iterable indicies
+        var i=0;
+        var j=0;
 
-    // over all of the rows, ie latitudes
-    while(i<numRows){ 
+        // over all of the rows, ie latitudes
+        while(i<numRows){ 
 
-        // initialize j index and longitude
-        j=0;
-        curLon = _startObj.lon;
+            // initialize j index and longitude
+            j=0;
+            curLon = _startObj.lon;
 
-        // make distance (NB: not updated until after)
-        var latLon = fromPointToLatLng({
-            x: (center_x + (MAP_SIZE.x * (j+1))/ SCALE), 
-            y: (center_y + (MAP_SIZE.y * i)/ SCALE)
-        });
-        var distance = measure(curLat, curLon, latLon.lat, latLon.lon);
+            // make distance (NB: not updated until after)
+            var latLon = fromPointToLatLng({
+                x: (center_x + (MAP_SIZE.x * (j+1))/ SCALE), 
+                y: (center_y + (MAP_SIZE.y * i)/ SCALE)
+            });
+            var distance = measure(curLat, curLon, latLon.lat, latLon.lon);
 
-        // over all of the columns, ie longitudes  
-        while(j<numCols){
+            // over all of the columns, ie longitudes  
+            while(j<numCols){
 
-            // create object for the latitude and longitude
-            var latLonObj = {
-                text: curLat + ',' + curLon,
-                dimentions: {lat: curLat, lon: curLon}
-            };
-
-            // generate subrange with given callback
-            generateSubrange(latLonObj, {x: j, y: i}, distance, function (_binaryMap, _pos, _map_dim){
-
-                // iterate completed maps
-                mapCount ++;
-
-                // binaryMap data organized
-                var data = {
-                    user: _id,
-                    lat: _map_dim.lat, 
-                    lon: _map_dim.lon,
-                    x_coord: _pos.x,
-                    y_coord: _pos.y,
-                    height: numRows,
-                    width: numCols,
-                    distance: _map_dim.distance,
-                    bound_n: (_pos.y == 0),
-                    bound_e: (_pos.x == numCols-1),
-                    bound_s: (_pos.y == numRows-1),
-                    bound_w: (_pos.x == 0),
-                    values: _binaryMap
+                // create object for the latitude and longitude
+                var latLonObj = {
+                    text: curLat + ',' + curLon,
+                    dimentions: {lat: curLat, lon: curLon}
                 };
 
-                // create new mongoose binaryMap and save
-                var binMap = new BinaryMap(data);
-                binMap.save(function(error, data){
-                    if(error) console.log('error saving map'); 
-                    else console.log('added map with id'); 
+                // generate subrange with given callback
+                generateSubrange(latLonObj, {x: j, y: i}, distance, function (_binaryMap, _pos, _map_dim){
+
+                    // iterate completed maps
+                    mapCount ++;
+
+                    // binaryMap data organized
+                    var data = {
+                        user: _id,
+                        lat: _map_dim.lat, 
+                        lon: _map_dim.lon,
+                        x_coord: _pos.x,
+                        y_coord: _pos.y,
+                        height: numRows,
+                        width: numCols,
+                        distance: _map_dim.distance,
+                        bound_n: (_pos.y == 0),
+                        bound_e: (_pos.x == numCols-1),
+                        bound_s: (_pos.y == numRows-1),
+                        bound_w: (_pos.x == 0),
+                        values: _binaryMap
+                    };
+
+                    // create new mongoose binaryMap and save
+                    var binMap = new BinaryMap(data);
+                    binMap.save(function(error, data){
+                        if(error) console.log('error saving map'); 
+                        else console.log('added map with id'); 
+                    });
+
+                    // push into return object
+                    allLatLon.push({ lat: _map_dim.lat, lon: _map_dim.lon, x: _pos.x, y: _pos.y});
+
+                    // made last map
+                    if(mapCount === totalMapElems){ _callback({text: 'success', data: allLatLon}); }
+                    
+                    // PRINT MAP
+                    //printMap(_binaryMap);
+                    // PRINT MAP END
                 });
 
-                // push into return object
-                allLatLon.push({ lat: _map_dim.lat, lon: _map_dim.lon, x: _pos.x, y: _pos.y});
+                j++;
 
-                // made last map
-                if(mapCount === totalMapElems){ _callback({text: 'success', data: allLatLon}); }
-                
-                // PRINT MAP
-                //printMap(_binaryMap);
-                // PRINT MAP END
-            });
+                // lat -> y
+                // lon -> x
+                var latLon = fromPointToLatLng({
+                    x: (center_x + (MAP_SIZE.x * j)/ SCALE), 
+                    y: (center_y + (MAP_SIZE.y * i)/ SCALE)
+                });
 
-            j++;
+                // advance longitude
+                //console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
+                curLon = latLon.lon;
+            }
+
+            i++;
 
             // lat -> y
             // lon -> x
@@ -160,22 +173,9 @@ var generateMapWithRange = function (_startObj, _endObj, _id, _callback){
                 x: (center_x + (MAP_SIZE.x * j)/ SCALE), 
                 y: (center_y + (MAP_SIZE.y * i)/ SCALE)
             });
-
-            // advance longitude
-            //console.log(measure(curLat, curLon, latLon.lat, latLon.lon));
-            curLon = latLon.lon;
+            curLat = latLon.lat;
         }
-
-        i++;
-
-        // lat -> y
-        // lon -> x
-        var latLon = fromPointToLatLng({
-            x: (center_x + (MAP_SIZE.x * j)/ SCALE), 
-            y: (center_y + (MAP_SIZE.y * i)/ SCALE)
-        });
-        curLat = latLon.lat;
-    }
+    });
 };
 
 /**
@@ -253,6 +253,85 @@ var generateSubrange = function (_center, _pos, _distance, _callback){
         // call with our binary array
         _center.dimentions.distance = _distance;
         _callback(retArray, _pos, _center.dimentions);
+    });
+};
+
+/**
+@function addObsticleWithWidth - adds obsticle object to database while also drawing it on the configuration map
+@alias analytics/buildingProximity.addObsticleWithWidth
+@param 
+*/
+
+/**
+@function findAirportsInRange - finds the closest airport to the lat/lon range given by the user
+@alias analytics/buildingProximity.findAirportsInRange
+@param _startObj - the starting lat/lon
+@param _endObj - the ending lat/lon
+@param _id - mongo user id
+@param _callback - callback that returns all the airport objects generated
+*/
+var findAirportsInRange = function(_startObj, _endObj, _id, _callback){
+
+    // find all corners
+    var northWest = _startObj.lat + ',' + _startObj.lon;
+    var northEast = _startObj.lat + ',' + _endObj.lon;
+    var southWest = _endObj.lat + ',' + _startObj.lon;
+    var southEast = _endObj.lat + ',' + _endObj.lon;
+    var allCoords = [northWest, northEast, southWest, southEast];
+
+    // find all of the airports and return a unique set
+    findAirport(allCoords, {}, function(_airportMap){
+        var length = Object.keys(_airportMap).length;
+        var count = 0;
+        for(var airport in _airportMap){
+            var data = {
+                name: airport,
+                user: _id,
+                lat: _airportMap[airport].lat,
+                lon: _airportMap[airport].lon,
+                icon: _airportMap[airport].icon,
+                map_link: _airportMap[airport].map_link,
+                place_id: _airportMap[airport].place_id
+            };
+            var air = new Airport(data);
+            air.save().then(function(_err, _data){
+                count++;
+                if(count === length){
+                    _callback();
+                }
+            });
+        }
+    });
+};
+
+var findAirport = function(_allCoords, _airportMap, _callback){
+    request(AIRPORT_SEARCH.seg1+_allCoords[0]+AIRPORT_SEARCH.seg2, function (error, response, body) {
+        if (!error && response.statusCode == 200){
+            // extract airport info
+            body = JSON.parse(body);
+            for(var airport in body.results){
+                if(!_airportMap[body.results[airport].name]){
+                    _airportMap[body.results[airport].name] = {
+                        lat: body.results[airport].geometry.location.lat,
+                        lon: body.results[airport].geometry.location.lng,
+                        icon: body.results[airport].icon,
+                        map_link: body.results[airport].photos && body.results[airport].photos[0].html_attributions,
+                        place_id: body.results[airport].place_id
+                    };
+                }
+            }
+
+            // mark the coordinate as already querried
+            _allCoords.shift();
+
+            // check if we need to query again
+            if(_allCoords.length > 0){
+                findAirport(_allCoords, _airportMap, _callback);
+            }
+            else{
+                _callback(_airportMap);
+            }
+        }
     });
 };
 
@@ -419,6 +498,23 @@ var shrinkQueueTo = function(_num){
 }
 
 /**
+@function loadBuildingProximity
+@param
+*/
+var loadBuildingProximity = function(_id, _lat, _lon, _callback){
+    loadMapWithCloseLatLon(_id, _lat, _lon, function (_maps){
+        if(_maps === -1) _callback(-1);
+        else{
+            translateLatLonToGridPoint(_lat, _lon, _maps, function (_map, _droneloc){
+                getNearestBuildingLocation(_id, _map, _droneloc, function (_dist){
+                    _callback(_dist);
+                });
+            });
+        }
+    });
+};
+
+/**
 @function loadMapWithCloseLatLon - loads a set of maps cooresponing to a lat/lon point
 @alias analytics/buildingProximity.loadMapWithCloseLatLon
 @param {String} _id - mongodb object id
@@ -431,9 +527,32 @@ var loadMapWithCloseLatLon = function(_id, _lat, _lon, _callback){
     // empty queue
     tempQueue = [];
 
-    // fire off queries
-    loadMapWithCloseLatLonHelper(_id, _lat, _lon, 0, 0, _callback);
+    // fire off queries if corrdinate is in range
+    checkIfPointIsInRange(_id, _lat, _lon, function(status){
+        if(status === 'err'){
+            _callback(-1);
+        }
+        else loadMapWithCloseLatLonHelper(_id, _lat, _lon, 0, 0, _callback);
+    });
+    
 };
+
+var checkIfPointIsInRange = function(_id, _lat, _lon, _callback){
+    BinaryMap.findOne({user: _id, x_coord: 0, y_coord: 0}, function(_err, _map){
+        var height = _map.height-1;
+        var width = _map.width-1;
+
+        if(_lat > _map.lat && _lon > _map.lon){
+            BinaryMap.findOne({user: _id, x_coord: width, y_coord: height}, function(_err, _maxMap){
+                if(_lat < _maxMap.lat && _lon < _maxMap.lon){
+                    _callback('success');
+                }
+                else _callback('err');
+            });
+        }   
+        else _callback('err');
+    });
+}
 
 /**
 @function pushCloserPointSecond - pushes the map that is closer to the target second into a queue
@@ -465,7 +584,7 @@ var pushCloserPointSecond = function(_map1, _map2, _lat, _lon){
 @param {Number} _lat - latitude
 @param {Number} _lon - longitude
 @param {Number} _x - starting x coordinate
-@param {Number} -y - starting y coordinate
+@param {Number} _y - starting y coordinate
 @param {function} _callback - a callback
 */
 var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
@@ -568,8 +687,188 @@ var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
     });
 };
 
+/**
+@function translateLatLonToGridPoint - takes in the drones location and potential location maps and gives back the exact map index
+@param {Number} _lat - a latitude
+@param {Number} _lon - a longitude
+@param [Object] _maps - all of the surrounding maps
+@param {function} _callback - returns the exact map index and surrounding map
+*/
+var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
+
+    // compute measures, index cooresponds to index in _maps
+    var measures = [];
+    for(var map in _maps){
+        measures[map] = measure(_lat, _lon, _maps[map].lat, _maps[map].lon);
+    }
+
+    // assume first is smallest
+    // find the smallest measure and hand its map off to the helper function
+    var min = 0;
+    for(var measure in measures){
+        if(measures[measure] < measures[min]) min = measure;
+    }
+
+    // locate quadrant and calculate index
+    var CENTER = 25;
+    var closeMap = _maps[min];
+    var closeLat = closeMap.lat;
+    var closeLon = closeMap.lon;
+    var distance = closeMap.distance;
+    var dx = Math.floor((measure(closeLat, _lon, closeLat, closeLon)/distance)*100);
+    var dy = Math.floor((measure(_lat, closeLon, closeLat, closeLon)/distance)*100);
+    var pos = {};
+    if (closeLat < _lat && closeLon < _lon){
+        pos.x = CENTER - dx;
+        pos.y = CENTER - dy;
+    }
+    else if (closeLat < _lat && closeLon > _lon){
+        pos.x = CENTER + dx;
+        pos.y = CENTER - dy;
+    }
+    else if (closeLat > _lat && closeLon < _lon){
+        pos.x = CENTER - dx;
+        pos.y = CENTER + dy;
+    }
+    else if (closeLat > _lat && closeLon > _lon){
+        pos.x = CENTER + dx;
+        pos.y = CENTER + dy;
+    }
+
+    console.log(dx, dy);
+
+    _callback(closeMap, pos);
+};
+
+/**
+@function getNearestBuildingLocation - within the nearest 4 tiles, we are going to return the row and col index of the nearest building location
+@alias analytics/buildingProximity.getNearestBuildingLocation
+@param {String} _id - mongoose user id
+@param {Object} _binaryMap - 2d starting map with binary data
+@param {Object} _droneloc - {x, y}, x and y location of the drone
+@param {function} _callback - passes the distance in meters
+ */
+var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback) {
+    // queue for BFS
+    var searchArray = [];
+
+    // visited array
+    var visitedArray = [];
+    for (var i = 0; i < _binaryMap.height; i++) {
+        var visitedSubarray = [];
+        for (var j = 0; j < _binaryMap.width; j++) {
+            visitedSubarray.push(false);
+        }
+        visitedArray.push(visitedSubarray);
+    }
+
+    // closest building location
+    var building = {
+        x: -1,
+        y: -1
+    };
+
+    // add drone's starting location to the array
+    searchArray.push(_droneloc);
+    visitedArray[_droneloc.x][_droneloc.y] = true;
+
+    // while searchArray isn't empty run BFS
+    while (searchArray.length !== 0) {
+        //console.log(visitedArray);
+        // get front location of the array 
+        var currLocation = searchArray.shift();
+        
+        // check if current location is a building 
+        if (_binaryMap.values[currLocation.x * _binaryMap.width + currLocation.y] === true) {
+            building = currLocation;
+            break;
+        }
+
+        // get all 4 locations: north, east, west, south and add to the queue
+        var northLocation = {
+            x: currLocation.x,
+            y: currLocation.y
+        }
+        northLocation.x = northLocation.x - 1;
+
+        var eastLocation = {
+            x: currLocation.x,
+            y: currLocation.y
+        }
+        eastLocation.y = eastLocation.y - 1;
+
+        var westLocation = {
+            x: currLocation.x,
+            y: currLocation.y
+        }
+        westLocation.y = westLocation.y + 1;
+
+        var southLocation = {
+            x: currLocation.x,
+            y: currLocation.y
+        }
+        southLocation.x = southLocation.x + 1;
+
+        // check if locations are valid 
+        if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
+            visitedArray[northLocation.x][northLocation.y] == false) {
+            searchArray.push(northLocation);
+            visitedArray[northLocation.x][northLocation.y] = true;
+        }
+        if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
+            visitedArray[eastLocation.x][eastLocation.y] == false) {
+            searchArray.push(eastLocation);
+            visitedArray[eastLocation.x][eastLocation.y] = true;
+        }
+        if (westLocation.y >= 0 && westLocation.y < _binaryMap.width && 
+            visitedArray[westLocation.x][westLocation.y] == false) {
+            searchArray.push(westLocation);
+            visitedArray[westLocation.x][westLocation.y] = true;
+        }
+        if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
+            visitedArray[southLocation.x][southLocation.y] == false) {
+            searchArray.push(southLocation);
+            visitedArray[southLocation.x][southLocation.y] = true;
+        }
+    }
+
+    // var buildingLocation = {
+    //     x_coord: _binaryMap.x_coord,
+    //     y_coord: _binaryMap.y_coord,
+    //     grid_x: building.x,
+    //     grid_y: building.y
+    // };
+    // return buildingLocation;
+    console.log("Building: " + building.x + ", " + building.y);
+    _callback(0);
+}
+
+// test for getNearestBuildingLocation
+// var binaryMap = {
+//     height: 10,
+//     width: 10,
+//     values: []
+// }
+
+// // 10x10 map, building at (3,4) drone at (6,7)
+// for (var i = 0; i < 100; i++) {
+//     if (i === 45) {
+//         binaryMap.values.push(true);
+//     } else {
+//         binaryMap.values.push(false);
+//     }
+// }
+
+// var droneLoc = {
+//     x: 6,
+//     y: 7
+// };
+// getNearestBuildingLocation(binaryMap, droneLoc);
+
+
 // export all submodules
 module.exports = {
     generateMapWithRange: generateMapWithRange,
-    loadMapWithCloseLatLon: loadMapWithCloseLatLon
+    loadMapWithCloseLatLon: loadMapWithCloseLatLon,
+    loadBuildingProximity: loadBuildingProximity
 };

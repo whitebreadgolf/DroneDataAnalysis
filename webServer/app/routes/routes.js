@@ -14,6 +14,7 @@
 @requires passport
 @requires user
 @requires regulationConfig
+@requires airport
 */
 
 // controllers
@@ -30,6 +31,7 @@ var simulation = require('./../controllers/simulation');
 // user
 var passport = require('passport');
 var User = require('../models/user');
+var Airport = require('../models/airport');
 
 // analytics
 var regulationConfig = require('../config/regulationConfig');
@@ -48,9 +50,9 @@ var initRoutes = function (_app){
 
 		if(!(req.user)) res.json({success: false, status: 'user'}); 
 		else{
-			buildingProximity.loadMapWithCloseLatLon(req.user._id, req.body.lat, req.body.lon, function(val){
-				res.json(val);
-			});
+			// buildingProximity.loadMapWithCloseLatLon(req.user._id, req.body.lat, req.body.lon, function(val){
+			// 	res.json(val);
+			// });
 		}
 	});
 
@@ -78,6 +80,31 @@ var initRoutes = function (_app){
 				res.json({status: _status});	
 			});
 		}
+	});
+
+	// POST login
+	_app.post('/api/authenticate', function (req, res){
+
+		// req - {username: <string>, pass: <string>}
+		// res - {success: <boolean>, message: <string>}
+		var keys = [];
+		for(var k in req.body) keys.push(k);
+		var key = keys[0];
+		var data = JSON.parse(key);
+		User.authenticate()(data.username, data.pass, function (err, user, options) {
+	        if (user === false) {
+	            res.json({
+	                message: options.message,
+	                success: false
+	            });
+	        } 
+	        else {       
+	            res.json({
+	                success: true,
+	                user: user
+	            });
+	        }
+	    });
 	});
 
 	// POST login
@@ -147,7 +174,6 @@ var initRoutes = function (_app){
 	// GET velocity
 	_app.get('/api/velocity/:id', function (req, res){
 
-		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 		
 		if(req.user && req.params.id){
@@ -161,7 +187,6 @@ var initRoutes = function (_app){
 	// GET altitude
 	_app.get('/api/altitude/:id', function (req, res){
 		
-		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 
 		if(req.user && req.params.id){
@@ -176,7 +201,6 @@ var initRoutes = function (_app){
 	// GET location
 	_app.get('/api/location/:id', function (req, res){
 		
-		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 
 		if(req.user && req.params.id){
@@ -189,7 +213,6 @@ var initRoutes = function (_app){
 	// GET safety analysis
 	_app.get('/api/safetyStatus/:id', function (req, res){
 	
-		// req - {flight_id: <string>}
 		// res - {data_points: [<double>, ….]}
 
 		if(req.user && req.params.id){
@@ -203,6 +226,36 @@ var initRoutes = function (_app){
 	//////////////////////////////////////////////////////////////////////////
 	/////////// END GET endpoints for basic flight data paramters ////////////
 	//////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	///////////////// GET endpoints for airport interaction //////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	_app.get('/api/airports/:id', function (req, res){
+	
+		// res - {data_points: [<double>, ….]}
+
+		if(req.user && req.params.id){
+			Airport.find({'user':req.params.id}, function(_err, _airports){
+				res.json({success: true, data: _airports});
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
+	});
+
+	//////////////////////////////////////////////////////////////////////////
+	/////////////// END GET endpoints for airport interaction ////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	// GET flight id for user id
+	_app.get('/api/curentFlight/:id', function (req, res){	
+		if(regulationConfig.cur_flight[req.params.id] && regulationConfig.cur_flight[req.params.id].flight_type.real_time){
+			res.json({success: true, data: regulationConfig.cur_flight[req.params.id].flight_type.real_time});
+		}
+		else{
+			res.json({message: "flight not started, user must manually start flight", success: false});
+		}
+	});
 
 	// GET flight inspections
 	_app.get('/api/flight', function (req, res){
@@ -231,6 +284,7 @@ var initRoutes = function (_app){
 			if(req.body.action === 'start'){
 				if(req.body.type === 'real_time'){
 					flight.startRTFlight(req.user._id, req.body.flight_id, function(status){
+						console.log(status);
 						res.json(status);
 					});
 				}
@@ -305,36 +359,36 @@ var initRoutes = function (_app){
 	//////////////////////////////////////////////////////////////////////
 
 	// POST flight simulator
-	_app.post('/api/simulation/start', function (req, res){
+	// _app.post('/api/simulation/start', function (req, res){
 
-		// req - {ext: <string>, type: <string>}
-		// res - {status: <string>}
+	// 	// req - {ext: <string>, type: <string>}
+	// 	// res - {status: <string>}
 
-		if(req.user){
-			if(!regulationConfig.cur_flight[req.user._id]){
-				simulation.startFlightSim(req.user._id, req.body.ext, req.body.type, function(){
-					res.json({success: true, message: 'simulation started'});
-				});
-			}
-			else res.json({message: "a flight has already been started", success: false}); 
-		}
-		else res.json({message: "simulation not started, user must be logged in", success: false}); 	
-	});
+	// 	if(req.user){
+	// 		if(!regulationConfig.cur_flight[req.user._id]){
+	// 			simulation.startFlightSim(req.user._id, req.body.ext, req.body.type, function(){
+	// 				res.json({success: true, message: 'simulation started'});
+	// 			});
+	// 		}
+	// 		else res.json({message: "a flight has already been started", success: false}); 
+	// 	}
+	// 	else res.json({message: "simulation not started, user must be logged in", success: false}); 	
+	// });
 
 	// POST end flight
 	// this used to mark the end of a flight
-	_app.post('/api/simulation/end', function (req, res){
+	// _app.post('/api/simulation/end', function (req, res){
 
-		// res - {status: <boolean>}
+	// 	// res - {status: <boolean>}
 
-		// end the simulation
-		if(req.user){
-			simulation.endSimFlightWithPilotId(req.user._id, function(){
-				res.json({message: 'simulation ended', success: true});
-			});
-		}
-		else res.json({message: "simulation not ended, user must be logged in", success: false}); 
-	});	
+	// 	// end the simulation
+	// 	if(req.user){
+	// 		simulation.endSimFlightWithPilotId(req.user._id, function(){
+	// 			res.json({message: 'simulation ended', success: true});
+	// 		});
+	// 	}
+	// 	else res.json({message: "simulation not ended, user must be logged in", success: false}); 
+	// });	
 
 	//////////////////////////////////////////////////////////////////////
 	////////////////// END Flight Simulator endpoints ////////////////////
@@ -348,23 +402,49 @@ var initRoutes = function (_app){
 
 		// req - {type: ('single'|'multi'), csv_string: <string>, user_id: <string>, flight_id: <string>}
 		// res - {success: <boolean>, data: <string>}
+		var data;
+		try{
+			var keys = [];
+			for(var k in req.body) keys.push(k);
+			var key = keys[0];
+			data = JSON.parse(key);
+		}catch(err){}
 
 		// user must be logged in or a key provided
-		if(req.user || req.body.user_id){
+		if(req.user || req.body.user_id || data.user_id){
 
 			// set correct user id from req body or session 
 			var user_id;
-			if(req.user) user_id = req.user._id;
-			else user_id = req.body.user_id;
+			var flight_id;
+			var csv_string;
+			var type;
+			if(req.user){ 
+				user_id = req.user._id;
+				flight_id = req.body.flight_id;
+				csv_string = req.body.csv_string;
+				type = req.body.type;
+			}
+			else if(req.body.user_id){
+				user_id = req.body.user_id;
+				flight_id = req.body.flight_id;
+				csv_string = req.body.csv_string;
+				type = req.body.type;
+			}
+			else{
+				user_id = data.user_id;
+				flight_id = data.flight_id;
+				csv_string = data.csv_string;
+				type = data.type;
+			}
 
 			// forward to data filter based on type
-			if(req.body.type === 'single'){
-				dataFilter.routeSingleCsvString(user_id, req.body.flight_id, req.body.csv_string, function(status){
+			if(type === 'single'){
+				dataFilter.routeSingleCsvString(user_id, flight_id, csv_string, function(status){
 					res.json(status);
 				}); 
 			}
-			else if(req.body.type === 'multi'){
-				dataFilter.routeMultiCsvString(user_id, req.body.flight_id, req.body.csv_string, function(status){
+			else if(type === 'multi'){
+				dataFilter.routeMultiCsvString(user_id, flight_id, csv_string, function(status){
 					res.json(status);
 				});				
 			}

@@ -1,0 +1,15 @@
+{
+  "name": "sim",
+  "version": "1.0.0",
+  "description": "flight simluator",
+  "main": "heightFlightSim.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.70.0",
+    "sleep": "^3.0.1"
+  }
+}

@@ -41,10 +41,6 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 		})
 
 		// flight
-		.when('/flight', {
-			templateUrl: 'templates/flight.html',
-			controller: 'FlightCtrl'
-		})
 		.when('/preflight', {
 			templateUrl: 'templates/preflight.html',
 			controller: 'PreflightCtrl'
@@ -63,9 +59,23 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			templateUrl: 'templates/notifications.html',
 			controller: 'NotificationsCtrl'
 		})
-		.when('/notifications_hist', {
-			templateUrl: 'templates/notifications_hist.html',
-			controller: 'NotificationsHistCtrl'
+		.when('/airport_notifications', {
+			templateUrl: 'templates/airport_notifications.html',
+			controller: 'AirportNotificationsCtrl'
+		})
+		.when('/altvel_notifications', {
+			templateUrl: 'templates/altvel_notifications.html',
+			controller: 'AltVelNotificationsCtrl'
+		})
+		.when('/obstical_notifications', {
+			templateUrl: 'templates/obstical_notifications.html',
+			controller: 'ObsticalNotificationsCtrl'
+		})
+
+		// location
+		.when('/location_hist', {
+			templateUrl: 'templates/location_hist.html',
+			controller: 'LocationHistCtrl'
 		})
 		
 		// home page and legal

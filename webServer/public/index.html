@@ -28,30 +28,26 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Flight <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#/flight">Flight Simulations</a></li>
             <li><a href="#/preflight">Pre-Flight</a></li>
             <li><a href="#/flight_console">Flight Console</a></li>
           </ul>
         </li>
+
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notifications<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Real-Time<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#/notifications">Real-Time Notifications</a></li>
-            <li><a href="#/notifications_hist">Historical Notifications</a></li>
+            <li><a href="#/notifications">Notifications</a></li>
+            <li><a href="#/velocity">Velocity</a></li>
+            <li><a href="#/altitude">Altitude</a></li>
           </ul>
         </li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Velocity<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Historical<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#/velocity">Real-Time Velocity</a></li>
-            <li><a href="#/velocity_hist">Historical Velocity</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Altitude<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#/altitude">Real-Time Altitude</a></li>
-            <li><a href="#/altitude_hist">Historical Altitude</a></li>
+            <li><a href="#/airport_notifications">Notifications</a></li>
+            <li><a href="#/velocity_hist">Velocity</a></li>
+            <li><a href="#/altitude_hist">Altitude</a></li>
+            <li><a href="#/location_hist">Location</a></li>
           </ul>
         </li>
       </ul>
@@ -98,12 +94,14 @@
 <script src="controllers/velocity_hist.js"></script>
 <script src="controllers/altitude.js"></script>
 <script src="controllers/altitude_hist.js"></script>
-<script src="controllers/flight.js"></script>
 <script src="controllers/flight_console.js"></script>
 <script src="controllers/postflight_console.js"></script>
 <script src="controllers/preflight.js"></script>
 <script src="controllers/notifications.js"></script>
-<script src="controllers/notifications_hist.js"></script>
+<script src="controllers/altvel_notifications.js"></script>
+<script src="controllers/airport_notifications.js"></script>
+<script src="controllers/obstical_notifications.js"></script>
 <script src="controllers/add_obstacle.js"></script>
+<script src="controllers/location_hist.js"></script>
 
 </html>

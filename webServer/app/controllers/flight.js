@@ -105,7 +105,6 @@ var startRTFlight = function(_id, _flightId, _callback){
 	Flight.findOne({_id: _flightId}, function(err, flight){
 		if(err || !flight) _callback({message:'could not start realtime flight', success: false});
 		else{ 
-			
 			// set data collected and end time
 			flight.flight_started = new Date();
 			flight.save().then(function (err, data){

@@ -1,10 +1,15 @@
+<ul class="nav nav-pills nav-justified">
+	<li role="presentation" class="active"><a href="#/airport_notifications">Airport</a></li>
+	<li role="presentation"><a href="#/altvel_notifications">Altitude and Velocity</a></li>
+	<li role="presentation"><a href="#/obstical_notifications">Building and Obsticals</a></li>
+</ul>
+<br>
 <div class="row">
 	<div class="form-group col-sm-12">
 		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
   	</div>
 </div>
-<div ng-if="!showChart">
-<div ng-repeat="flight in flights | filter: searchFilter" class="row">
+<div ng-if="!showNotifications" ng-repeat="flight in flights | filter: searchFilter" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
 	  	<div class="panel-body">
@@ -16,9 +21,18 @@
 	</div>	
 	</div>
 </div>
-</div>
-<div ng-if="showChart">
-	<nvd3 options="options" data="velocities"></nvd3>
+<div class="row" ng-if="showNotifications">
+	<div class="col-sm-12">
+	<div ng-repeat="note in notifications">
+		<div class="panel panel-default">
+		  	<div class="panel-body">
+				<div>{{note.report}}</div>
+				<div>{{note.value}}</div>
+				<div>{{note.created_at}}</div>
+		  	</div>
+		</div>	
+	</div>
+	</div>
 </div>
 <div class="row">
 <div class="col-sm-12">

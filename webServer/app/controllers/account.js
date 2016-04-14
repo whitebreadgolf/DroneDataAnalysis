@@ -5,11 +5,13 @@
 /**
 @requires buildingProximity
 @requires user
+@requires airport
 */
 
 var buildingProximity = require('../analytics/buildingProximity');
 var User = require('../models/user');
 var BinaryMap = require('../models/binaryMap');
+var Airport = require('../models/airport');
 
 /**
 @function configureUserMap - function to generate a bitmap of the given range of longitudes and latitudes
@@ -37,16 +39,51 @@ var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
 							mapCount++;
 
 							// generate range once we delete all maps
-							if(mapCount === numMaps) buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+							if(mapCount === numMaps){
+								deleteAllAirportsForUser(_id, function(){
+									console.log('done deleting airports');
+									buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+								});
+							}
 						}
 					});
 				} 
 			}
-			else buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+			else{ 
+				deleteAllAirportsForUser(_id, function(){
+					console.log('done deleting airports');
+					buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+				});
+			}
 		}
 	});
-	
 }
+
+var deleteAllAirportsForUser = function(_id, _callback){
+	Airport.find({ 'user': _id }, function (err, airports) {
+		if (err || airports === null) _callback('error'); 
+		else{
+			var numAirports = airports.length;
+			var airportCount = 0;
+
+			// delete all maps
+			if(numAirports > 0){
+				for(var i=0;i<numAirports;i++){
+					airports[i].remove(function(err, data){
+						if (err) console.log(err);
+						else {
+							airportCount++;
+
+							// generate range once we delete all maps
+							if(airportCount === numAirports) _callback();
+						}
+					});
+				} 
+			}
+			else _callback();
+		}
+	});
+};
 
 /**
 @function isUserMapConfigured - function to check if a given user already generated a map

@@ -7,12 +7,15 @@
 @requires velocity
 @requires location
 @requires regulationConfig
+@requires buildingProximity
 */
 
 var altitude = require('../controllers/altitude');
 var velocity = require('../controllers/velocity');
 var location = require('../controllers/location');
 var regulationConfig = require('../config/regulationConfig');
+var buildingProximity = require('../analytics/buildingProximity');
+var airportProximity = require('../analytics/airportProximity');
 
 /**
 @function routeDataParameters - routes data parameters to check and save if necessary
@@ -26,15 +29,18 @@ var routeDataParameters = function(_id, _flightId, _isLive, _data_stream, _callb
 	var curTime;
 	if(_isLive.status) curTime = (new Date());
 	else curTime = _isLive.value * regulationConfig.app_constants.dji_dat_collect_rate + (new Date(regulationConfig.cur_flight[_id].start_time)).getTime();
-
 	if(!regulationConfig.cur_flight[_id].last_collect || (curTime - regulationConfig.cur_flight[_id].last_collect) >= regulationConfig.app_constants.app_collection_rate){
 		regulationConfig.cur_flight[_id].last_collect = curTime;
-		saveAltitudeIfCollecting(_flightId, curTime, _data_stream.altitude, function(){
-			saveVelocityIfCollecting(_flightId, curTime, _data_stream.velocity_x, _data_stream.velocity_y, _data_stream.velocity_z, function(){
-				saveLocationIfCollecting(_flightId, curTime, _data_stream.latitude, _data_stream.longitude, function(){
-					_callback();
+		buildingProximity.loadBuildingProximity(_id, _data_stream.latitude, _data_stream.longitude, function(_dist){
+			airportProximity.getProximitiesForEachAirport(_id, _flightId, _data_stream.latitude, _data_stream.longitude, function(){
+				saveAltitudeIfCollecting(_flightId, curTime, _data_stream.altitude, function(){
+					saveVelocityIfCollecting(_flightId, curTime, _data_stream.velocity_x, _data_stream.velocity_y, _data_stream.velocity_z, function(){
+						saveLocationIfCollecting(_flightId, curTime, _data_stream.latitude, _data_stream.longitude, function(){
+							_callback();
+						});
+					});
 				});
-			});
+			});	
 		});
 	}
 	else _callback();
