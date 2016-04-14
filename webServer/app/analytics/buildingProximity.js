@@ -484,8 +484,6 @@ var pushToMapQueue = function(_map){
 }
 
 var enqueueMap = function(_map){
-    //regulationConfig.cur_flight[_id].map.cur_map.push(_map);
-    //tempQueue.push({x:_map.x_coord, y:_map.y_coord});
     tempQueue.push(_map);
 }
 
@@ -687,6 +685,204 @@ var loadMapWithCloseLatLonHelper = function(_id, _lat, _lon, _x, _y, _callback){
     });
 };
 
+
+var mapArray = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null]
+];
+
+/**
+@function resetMapArray - reset the mapArray data structure to empty state
+@alias analytics/buildingProximity.resetMapArray
+ */
+var resetMapArray = function() {
+    var mapArray = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+    ];
+}
+
+/**
+@function mapArrayIsEmpty - check if map array is empty
+@alias analytics/buildingProximity.mapArrayIsEmpty
+@return Boolean
+ */
+var mapArrayIsEmpty = function() {
+    for (var i in mapArray) {
+        if (i != null) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+@function loadSurroundingMaps - load the surrounding maps into a combined binary map
+@alias analytics/buildingProximity.loadSurroundingMaps
+@param {String} _id - mongodb object user id
+@param {Object} _binaryMap - 2d starting map with binary data
+ */
+var loadSurroundingMaps = function(_id, _lat, _lon, _x, _y) {
+    // reset the global variables
+    resetMapArray();
+
+    BinaryMap.findOne({user: _id, x_coord: _x, y_coord: _y}, function (_err, _map){
+        if(!_map) {
+           return; 
+        } else {
+            // check whether the binaryMap is an edge or corner map
+            var isBound = { 
+                east: _map.bound_e, 
+                south: _map.bound_s, 
+                north: _map.bound_n,
+                west: _map.bound_w 
+            };
+            var x = _map.x_coord;
+            var y = _map.y_coord;
+            
+            // set binary map in the middle section of the mapArray
+            mapArray[1][1] = _map;
+
+            // northwest most tile - push 3 maps
+            if (isBound.west && isBound.north) {
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y+1});
+
+                when.join(eastMap, southMap, southeastMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[2][1] = maps[1];
+                    mapArray[2][2] = maps[2];
+                });
+            }
+            // northeast most tile
+            else if (isBound.east && isBound.north) {
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southwestMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y-1});
+
+                when.join(westMap, southMap, southwestMap).then(function(maps){
+                    mapArray[1][0] = maps[0];
+                    mapArray[2][1] = maps[1];
+                    mapArray[2][0] = maps[2];
+                });
+            }
+            // southwest most tile
+            else if (isBound.west && isBound.south) {
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northeastMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y+1});
+
+                when.join(eastMap, northMap, northeastMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][2] = maps[2];
+                });
+            }
+            // southeast most tile
+            else if (isBound.east && isBound.south) {
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northwestMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y-1});
+
+                when.join(westMap, northMap, northwestMap).then(function(maps){
+                    mapArray[1][0] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][0] = maps[2];
+                });
+            }
+            else if (isBound.east) {
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northwestMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y-1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southwestMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y-1});
+
+                when.join(westMap, northMap, northwestMap, southMap, southwestMap).then(function(maps){
+                    mapArray[1][0] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][0] = maps[2];
+                    mapArray[2][1] = maps[3];
+                    mapArray[2][0] = maps[4];
+                });
+            }
+            else if (isBound.south) {
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northeastMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y+1});
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var northwestMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y-1});
+
+                when.join(eastMap, northMap, northeastMap, westMap, northwestMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][2] = maps[2];
+                    mapArray[1][0] = maps[3];
+                    mapArray[0][0] = maps[4];
+                });
+
+            }
+            else if (isBound.north) {
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y+1});
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var southwestMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y-1});
+
+                when.join(eastMap, southMap, southeastMap, westMap, southwestMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[2][1] = maps[1];
+                    mapArray[2][2] = maps[2];
+                    mapArray[1][0] = maps[3];
+                    mapArray[2][0] = maps[4];
+                });
+            }
+            else if (isBound.west) {
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northeastMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y+1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y+1});
+
+                when.join(eastMap, northMap, northeastMap, southMap, southeastMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][2] = maps[2];
+                    mapArray[2][1] = maps[3];
+                    mapArray[2][2] = maps[4];
+                });
+            }
+            else {
+                // include all maps around the current spot
+                var eastMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y+1});
+                var northMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y});
+                var northeastMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y+1});
+                var southMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y});
+                var southeastMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y+1});
+                var westMap = BinaryMap.findOne({user: _id, x_coord: x, y_coord: y-1});
+                var northwestMap = BinaryMap.findOne({user: _id, x_coord: x-1, y_coord: y-1});
+                var southwestMap = BinaryMap.findOne({user: _id, x_coord: x+1, y_coord: y-1});
+
+                when.join(eastMap, northMap, northeastMap, southMap, 
+                    southeastMap, westMap, northwestMap, southwestMap).then(function(maps){
+                    mapArray[1][2] = maps[0];
+                    mapArray[0][1] = maps[1];
+                    mapArray[0][2] = maps[2];
+                    mapArray[2][1] = maps[3];
+                    mapArray[2][2] = maps[4];
+                    mapArray[1][0] = maps[5];
+                    mapArray[0][0] = maps[6];
+                    mapArray[2][0] = maps[7];
+                });
+            }
+        }
+
+    });
+
+}
+
 /**
 @function translateLatLonToGridPoint - takes in the drones location and potential location maps and gives back the exact map index
 @param {Number} _lat - a latitude
@@ -741,109 +937,197 @@ var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
 };
 
 /**
-@function getNearestBuildingLocation - within the nearest 4 tiles, we are going to return the row and col index of the nearest building location
+@function getNearestBuildingLocation - within a 3x3 set of tiles, we are going to return the row and col index of the nearest building location
 @alias analytics/buildingProximity.getNearestBuildingLocation
-@param {String} _id - mongoose user id
+@param {String} _id - mongodb object user id
 @param {Object} _binaryMap - 2d starting map with binary data
 @param {Object} _droneloc - {x, y}, x and y location of the drone
 @param {function} _callback - passes the distance in meters
  */
 var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback) {
+
+    // loadSurroundingMaps(_id, _binaryMap.lat, _binaryMap.lon, _binaryMap.x_coord, _binaryMap.y_coord);
+    if (mapArrayIsEmpty()) {
+        _callback(-1);
+        return;
+    }
+    
     // queue for BFS
     var searchArray = [];
 
     // visited array
     var visitedArray = [];
-    for (var i = 0; i < _binaryMap.height; i++) {
-        var visitedSubarray = [];
-        for (var j = 0; j < _binaryMap.width; j++) {
-            visitedSubarray.push(false);
-        }
-        visitedArray.push(visitedSubarray);
+    for (var k = 0; k < mapArray.length; k++) {
+        var arrayk = [];
+        for (var l = 0; l < mapArray[k].length; l++) {
+            var arrayl = [];
+            for (var i = 0; i < _binaryMap.height; i++) {
+                var visitedSubarray = [];
+                for (var j = 0; j < _binaryMap.width; j++) {
+                    visitedSubarray.push(false);
+                }
+                arrayl.push(visitedSubarray);
+            }
+            arrayk.push(arrayl);
+        }   
+        visitedArray.push(arrayk);
     }
+    
 
     // closest building location
     var building = {
+        i: -1,
+        j: -1,
         x: -1,
         y: -1
     };
 
     // add drone's starting location to the array
-    searchArray.push(_droneloc);
-    visitedArray[_droneloc.x][_droneloc.y] = true;
+    var droneloc = {
+        i: 1,
+        j: 1,
+        x: _droneloc.x,
+        y: _droneloc.y
+    };
+    searchArray.push(droneloc);
+    visitedArray[droneloc.i][droneloc.j][_droneloc.x][_droneloc.y] = true;
+    console.log("searchArray: " + searchArray.length);
 
     // while searchArray isn't empty run BFS
     while (searchArray.length !== 0) {
-        //console.log(visitedArray);
+        // console.log(visitedArray);
         // get front location of the array 
         var currLocation = searchArray.shift();
-        
+        // console.log(currLocation.i + "," + currLocation.j + "," + currLocation.x + "," + currLocation.y);
         // check if current location is a building 
-        if (_binaryMap.values[currLocation.x * _binaryMap.width + currLocation.y] === true) {
-            building = currLocation;
-            break;
+        if (mapArray[currLocation.i][currLocation.j] !== null) {
+            var currentTile = mapArray[currLocation.i][currLocation.j];
+            if (currentTile.values[currLocation.x * _binaryMap.width + currLocation.y] === true) {
+                building = currLocation;
+                break;
+            }
         }
 
         // get all 4 locations: north, east, west, south and add to the queue
         var northLocation = {
+            i: currLocation.i,
+            j: currLocation.j,
             x: currLocation.x,
             y: currLocation.y
         }
         northLocation.x = northLocation.x - 1;
+        if (northLocation.x < 0 && northLocation.i > 0) {
+            northLocation.j = northLocation.j-1;
+            northLocation.x = _binaryMap.height-1;
+        }
 
         var eastLocation = {
+            i: currLocation.i,
+            j: currLocation.j,
             x: currLocation.x,
             y: currLocation.y
         }
-        eastLocation.y = eastLocation.y - 1;
+        eastLocation.y = eastLocation.y + 1;
+        if (eastLocation.y > _binaryMap.width-1 && eastLocation.i < 2) {
+            eastLocation.i = eastLocation.i+1;
+            eastLocation.y = 0;
+        }
 
         var westLocation = {
+            i: currLocation.i,
+            j: currLocation.j,
             x: currLocation.x,
             y: currLocation.y
         }
-        westLocation.y = westLocation.y + 1;
+        westLocation.y = westLocation.y - 1;
+        if (westLocation.y < 0 && westLocation.i > 0) {
+            westLocation.i = westLocation.i-1;
+            westLocation.y = _binaryMap.width-1;
+        }
 
         var southLocation = {
+            i: currLocation.i,
+            j: currLocation.j,
             x: currLocation.x,
             y: currLocation.y
         }
         southLocation.x = southLocation.x + 1;
+        if (southLocation.x > _binaryMap.height-1 && southLocation.i < 2) {
+            southLocation.j = southLocation.j+1;
+            southLocation.x = 0;
+        }
 
-        // check if locations are valid 
-        if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
-            visitedArray[northLocation.x][northLocation.y] == false) {
-            searchArray.push(northLocation);
-            visitedArray[northLocation.x][northLocation.y] = true;
+        // check spots in the mapArray and add to queue if its a valid new location in the array
+        if (visitedArray[northLocation.i][northLocation.j] != null ) {
+            if (northLocation.x >= 0 && northLocation.x < _binaryMap.height && 
+                visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] == false) {
+                searchArray.push(northLocation);
+                visitedArray[northLocation.i][northLocation.j][northLocation.x][northLocation.y] = true;
+            }
         }
-        if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
-            visitedArray[eastLocation.x][eastLocation.y] == false) {
-            searchArray.push(eastLocation);
-            visitedArray[eastLocation.x][eastLocation.y] = true;
+
+        if (visitedArray[eastLocation.i][eastLocation.j] != null) {
+            if (eastLocation.y >= 0 && eastLocation.y < _binaryMap.width && 
+                visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] == false) {
+                searchArray.push(eastLocation);
+                visitedArray[eastLocation.i][eastLocation.j][eastLocation.x][eastLocation.y] = true;
+            }    
         }
-        if (westLocation.y >= 0 && westLocation.y < _binaryMap.width && 
-            visitedArray[westLocation.x][westLocation.y] == false) {
-            searchArray.push(westLocation);
-            visitedArray[westLocation.x][westLocation.y] = true;
+
+        if (visitedArray[westLocation.i][westLocation.j] != null) {
+            if (westLocation.y >= 0 && westLocation.y < _binaryMap.width && 
+                visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] == false) {
+                searchArray.push(westLocation);
+                visitedArray[westLocation.i][westLocation.j][westLocation.x][westLocation.y] = true;
+            }    
         }
-        if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
-            visitedArray[southLocation.x][southLocation.y] == false) {
-            searchArray.push(southLocation);
-            visitedArray[southLocation.x][southLocation.y] = true;
+
+        if (visitedArray[southLocation.i][southLocation.j] != null) {
+            if (southLocation.x >= 0 && southLocation.x < _binaryMap.height && 
+                visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] == false) {
+                searchArray.push(southLocation);
+                visitedArray[southLocation.i][southLocation.j][southLocation.x][southLocation.y] = true;
+            }    
         }
     }
 
-    // var buildingLocation = {
-    //     x_coord: _binaryMap.x_coord,
-    //     y_coord: _binaryMap.y_coord,
-    //     grid_x: building.x,
-    //     grid_y: building.y
-    // };
-    // return buildingLocation;
-    console.log("Building: " + building.x + ", " + building.y);
-    _callback(0);
+
+    console.log(building.i + "," + building.j + "," + building.x + "," + building.y);
+
+    if (building.i != -1 && building.j != -1 && building.x != -1 && building.y != -1) {
+        var dist = getDistanceFromDrone (_droneloc, building, _binaryMap.width, _binaryMap.height);
+        _callback(dist);
+        console.log(dist);
+    } else {
+        // no building found
+        _callback(-1);
+    }
 }
 
-// test for getNearestBuildingLocation
+/**
+@function getDistanceFromDrone - get the distance a point is from the drone's location
+@alias analytics/buildingProximity.getDistanceFromDrone
+@param {Object} _droneloc - {x, y}, x and y location of the drone
+@param {Object} _point - location of the point
+@param {Integer} _tilewidth - width of a map tile
+@param {Integer} _tileheight - height of a map tile
+@return {Double} - distance from the drone (in units of cells in map tile)
+ */
+
+var getDistanceFromDrone = function (_droneloc, _point, _tilewidth, _tileheight) {
+    var pointx = _point.i * _tileheight + _point.x;
+    var pointy = _point.j * _tilewidth + _point.y;
+
+    var dronex = _tilewidth + _droneloc.x;
+    var droney = _tileheight + _droneloc.y;
+
+    var diffx = Math.abs(pointx - dronex);
+    var diffy = Math.abs(pointy - droney);
+
+    return Math.sqrt(Math.pow(diffx,2) + Math.pow(diffy,2));
+}
+
+/* test for getNearestBuildingLocation */
 // var binaryMap = {
 //     height: 10,
 //     width: 10,
@@ -851,20 +1135,48 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback)
 // }
 
 // // 10x10 map, building at (3,4) drone at (6,7)
-// for (var i = 0; i < 100; i++) {
-//     if (i === 45) {
-//         binaryMap.values.push(true);
-//     } else {
-//         binaryMap.values.push(false);
+// for (var k = 0; k < 3; k++) {
+//     for (var l = 0; l < 3; l++) {
+//         var map = { 
+//             x_coord: k+3,
+//             y_coord: l+3,
+//             height: 10,
+//             width: 10,
+//             values: []
+//         };
+//         for (var i = 0; i < 100; i++) {
+//             if (k == 0 && l == 0 && i == 79) {
+//                 map.values.push(true);
+//             }
+//             else {
+//                 map.values.push(false);
+//             }
+//         }
+//         mapArray[k][l] = map;
+//     }
+// }
+
+// for (var i = 0; i < mapArray.length; i++) {
+//     for (var j = 0; j < mapArray[i].length; j++) {
+//         console.log("tile: (" + i + ", " + j + ")");
+//         for (var k = 0; k < mapArray[i][j].values.length; k++) {
+//             if (k%10 == 0) {
+//                 console.log();
+//             } else {
+//                 console.log(mapArray[i][j].values[k]);
+//             }
+//         }
 //     }
 // }
 
 // var droneLoc = {
-//     x: 6,
-//     y: 7
+//     x: 7,
+//     y: 6
 // };
-// getNearestBuildingLocation(binaryMap, droneLoc);
+// getNearestBuildingLocation(1, mapArray[0][0], droneLoc);
+/* end test for getNearestBuildingLocation */
 
+// loadSurroundingMaps(1, 38.199911, -85.765912, 2, 2);
 
 // export all submodules
 module.exports = {
