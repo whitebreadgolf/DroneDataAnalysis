@@ -1,3 +1,7 @@
+/**
+@class angular_controller.AddObstacle
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('AltitudeHistCtrl', function ($scope, $http, FlightName){	
 	
