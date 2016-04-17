@@ -1,3 +1,7 @@
+/**
+@class angular_controller.ObsticalNotifications
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('ObsticalNotificationsCtrl', function ($scope, $http, FlightName){
 		
@@ -12,7 +16,13 @@ angular.module('UavOpsInterface')
         $scope.showNotifications = false;
     };
 
-	// load data for id
+	/**
+    @function flightSearch
+    @memberOf angular_controller.ObsticalNotifications
+    @param {String} _flightId - Represents a single stored or running flight.
+    @description This function takes in a flight id and will update the notifications
+    queue with notifications of obstacles based on the inputted flight id.
+    */
 	$scope.flightSearch = function(_flightId){
 		var req = {
 			method: 'GET', 

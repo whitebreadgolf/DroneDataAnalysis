@@ -1,3 +1,7 @@
+/**
+@class angular_controller.ConfigMap
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('ConfigMapCtrl', function ($scope, $http, Notification) {
 
@@ -32,7 +36,13 @@ angular.module('UavOpsInterface')
 		}
 	});
 
-	// when the map is clicked
+	/**
+	@function mapClicked
+	@memberOf angular_controller.ConfigMap
+	@description The function is used to demarcate the map region that the user wishes to configure. 
+	It marks the region using one marker for the top left of the region and another for the bottom 
+	right.
+	*/
 	$scope.mapClicked = function (event){
 
 		// already max length, so we need to take one out
@@ -67,7 +77,12 @@ angular.module('UavOpsInterface')
 		}
 	};
 
-	// calls backend service, should not be accessable until conditions are correct
+	/**
+	@function configureMap
+	@memberOf angular_controller.ConfigMap
+	@description The function checks whether the user has logged in and if yes, then 
+	sets flags and configuration markers in the map for display.
+	*/
 	$scope.configureMap = function (){
 
 		$scope.configuring = true;
@@ -90,7 +105,12 @@ angular.module('UavOpsInterface')
 		});
 	};
 
-	// empties markers array
+	/** 
+	@function clearMarkers
+	@memberOf angular_controller.ConfigMap
+	@description The function clears the status and arrays of the map configuration data
+	structures.
+	*/
 	$scope.clearMarkers = function (){
 		
 		// empty array

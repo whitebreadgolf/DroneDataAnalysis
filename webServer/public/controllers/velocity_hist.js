@@ -1,3 +1,7 @@
+/**
+@class angular_controller.VelocityHistory
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('VelocityHistCtrl', function ($scope, $http, FlightName){	
 	$scope.showChart = false;
@@ -12,12 +16,24 @@ angular.module('UavOpsInterface')
         $scope.showChart = false;
     };
 
-    // load data for id
+    /**
+    @function getVelocityHistory
+    @memberOf angular_controller.VelocityHistory
+    @param {String} - flightId
+    @description The function takes in a flightId and uses it to load the velocity
+    history for that user.
+    */
     $scope.flightSearch = function(_flightId){
         var req = {
             method: 'GET', 
             url: 'api/velocity/'+_flightId, 
         };
+
+        /**
+        @member VelocityChartOptions
+        @memberOf angular_controller.Velocity
+        @description This options object governs the appearance of the velocity chart.
+        */
         $http(req).then(function(data){
             $scope.showChart = true;
 

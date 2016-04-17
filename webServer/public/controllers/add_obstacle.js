@@ -36,6 +36,11 @@ angular.module('UavOpsInterface')
 		}
 	});
 
+	/**
+	@function generateId
+	@memberOf angular_controller.AddObstacle
+	@description The function generates a randomized id of alphanumeric characters.
+	*/
 	var genId = function(){
 		var text = "";
 	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -48,6 +53,8 @@ angular.module('UavOpsInterface')
 	/**
 	@function AddMapMarker
 	@memberOf angular_controller.AddObstacle
+	@param {Object} event - Event object that contains the data about the location of 
+	where the obstacle marker is being placed on the map.
 	@description When the map is clicked, adds a marker as a placeholder where 
 	the obstacle is on the map. When configureObstacle is called, the obstacles
 	will be added into the map.

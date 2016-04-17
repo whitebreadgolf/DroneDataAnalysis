@@ -1,3 +1,7 @@
+/**
+@class angular_controller.FlightConsole
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('FlightConsoleCtrl', function($scope, $http, Notification, Decoder){
 	
@@ -6,6 +10,14 @@ angular.module('UavOpsInterface')
 	$scope.searchTerm = '';
 	$scope.flights = [];
 
+	/**
+	@function searchFilter
+	@memberOf angular_controller.FlightConsole
+	@param {Object} flight - Flight object containing flight_name string
+	and other relevant data.
+	@description This function searches through the flight object to find 
+	the included search term.
+	*/
 	$scope.searchFilter = function(flight) { 
 		if($scope.searchTerm === '') return true;
 		else{
@@ -14,6 +26,13 @@ angular.module('UavOpsInterface')
 		}
 	};
 
+	/**
+	@function deletePreFlight
+	@memberOf angular_controller.FlightConsole
+	@param {Object} _id - A user id.
+	@description This function takes in a user id and then deletes the corresponding 
+	pre-flight associated with the user.
+	*/
 	$scope.deletePreflight = function(_id){
 		var req = {
 			method: 'DELETE',
@@ -33,6 +52,13 @@ angular.module('UavOpsInterface')
 		});
 	};
 
+	/**
+	@function stopDecoding
+	@memberOf angular_controller.FlightConsole
+	@param {String} _flightId - Represents a single stored or running flight.
+	@description This function takes in a flight id and stops the corresponding 
+	decoding process of that flight's data.
+	*/
 	$scope.stopDecoding = function(_flightId){
 
 		// stop decoder for id
@@ -46,6 +72,14 @@ angular.module('UavOpsInterface')
 		}   
 	}
 
+	/** 
+	@function startLiveFlight
+	@memberOf angular_controller.FlightConsole
+	@param {String} _flightId - Represents a single stored or running flight.
+	@description This function takes in a flight id and starts a flight that 
+	is associated with the flightId. It also notifies the user as to the status
+	of the start action.
+	*/
 	$scope.startLiveFlight = function(_flightId){
 		for(var i=0;i<$scope.flights.length;i++){
 			if($scope.flights[i]._id === _flightId){
@@ -66,6 +100,15 @@ angular.module('UavOpsInterface')
 		}); 
 	}
 
+
+	/**
+	@function stopLiveFlight
+	@memberOf angular_controller.FlightConsole
+	@param {String} _flightId - Represents a single stored or running flight.
+	@description This function takes in a flight id and stops its associated
+	flight process. It also notifies the user as to the status of the stop 
+	action.
+	*/
 	$scope.stopLiveFlight = function(_flightId){
 		for(var i=0;i<$scope.flights.length;i++){
 			if($scope.flights[i]._id === _flightId){
@@ -85,6 +128,15 @@ angular.module('UavOpsInterface')
 		}); 
 	}
 
+	/**
+	@function uploadFile
+	@memberOf angular_controller.FlightConsole
+	@param {String} _file - Represents the uploaded file's file name.
+	@param {String} _flightId - Represents a single stored or running flight.
+	@description Starts a decoder process for the uploaded file, which will
+	convert the uploaded DAT file into a format that we can use to access
+	contained data.
+	*/
 	$scope.uploadFile = function(_file, _flightId){
 
 		// start decoder
