@@ -1,3 +1,9 @@
+/**
+@class angular_controller.Configuration
+@memberOf angular_controller
+@description This module serves to set the configuration values for the websocket 
+on the front end.
+*/
 angular.module('UavOpsInterface')
 .controller('ConfigurationCtrl', function ($scope, Websocket, $interval){	
 	

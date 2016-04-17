@@ -1,10 +1,24 @@
+/**
+@class angular_controller.Velocity
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('VelocityCtrl', function ($scope, Websocket, $interval){
-
+    /**
+    @function getSpeed
+    @memberOf angular_controller.Speed
+    @description The function will attempt to get the most recent speed information
+    from the websocket at a regular interval.
+    */
 	$interval(function (){
   		$scope.speeds = Websocket.getSpeed();
 	}, 100);
 
+    /**
+    @member VelocityChartOptions
+    @memberOf angular_controller.Velocity
+    @description This options object governs the appearance of the velocity chart.
+    */
   	$scope.options = {
   		chart: {
 	        type: 'lineChart',

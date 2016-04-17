@@ -1,3 +1,11 @@
+/**
+@class angular_controller.PreflightConsole
+@memberOf angular_controller
+@description This module helps to display the data needed for 
+preflight checks. It also takes in data from the scoped textboxes, 
+saves them as part of a preflight data object, and notifies the user
+whether the save was successful or not.
+*/
 angular.module('UavOpsInterface')
 .controller('PreflightCtrl', function($scope, $http, Notification){
 	
