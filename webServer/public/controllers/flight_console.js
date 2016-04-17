@@ -36,6 +36,7 @@ angular.module('UavOpsInterface')
 	$scope.stopDecoding = function(_flightId){
 
 		// stop decoder for id
+		// do not need analysis callbacks
 		Decoder.stopDecoding(_flightId);
 
 		// removes button
@@ -97,6 +98,21 @@ angular.module('UavOpsInterface')
 					$scope.flights[i].started = false;
 				}
 			}   
+        }, function(){ // start analysis
+
+        	// set animation
+        	for(var i=0;i<$scope.flights.length;i++){
+				if($scope.flights[i]._id === _flightId)
+					$scope.flights[i].analyzing = true;
+			}
+		
+        }, function(){ // end analysis
+
+        	// end animation
+        	for(var i=0;i<$scope.flights.length;i++){
+				if($scope.flights[i]._id === _flightId)
+					$scope.flights[i].analyzing = false;
+			}
         });
 
         // set started to true
@@ -126,7 +142,7 @@ angular.module('UavOpsInterface')
 					}
 					else if(Decoder.isRunningOrInQueue($scope.flights[i]._id)) $scope.flights[i].started = true;
 					else $scope.flights[i].started = false;
-					
+					$scope.flights[i].analyzing = false;
 					$scope.flights[i].created_at = $scope.flights[i].created_at;
 				}
 			}

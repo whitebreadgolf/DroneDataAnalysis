@@ -1,9 +1,10 @@
 /**
-@module regulationConfig
+@module config/regulationConfig 
+@description stores and interacts with temporary app configuration data 
 */
 
 /**
-@public {Object} faa_reg - object to store faa reguation constants for flight data
+Object to store faa reguation constants for flight data
 */
 var faa_reg = {
 	max_velocity:{
@@ -17,12 +18,12 @@ var faa_reg = {
 };
 
 /**
-@public {Object} cur_flight - to store current flight data, supports multiple user flights
+Stores current flight data, supports multiple user flights
 */
 var cur_flight = {};
 
 /**
-@public {Object} app_constants - to store application constants
+Stores application constants
 */
 var app_constants = {
 	dji_dat_collect_rate: 10,
@@ -30,8 +31,10 @@ var app_constants = {
 };
 
 /**
-@function startFlight - to insert current flight data for a given user
-@param {String} _id - mongoose user id
+@function startFlight 
+@description inserts current flight data for a given user
+@param {string} _id - mongo user id
+@param {Object} _startObj - to describe what type of flight should be started
 */
 var startFlight = function(_id, _startObj){
 
@@ -103,8 +106,9 @@ var startFlight = function(_id, _startObj){
 };
 
 /**
-@function endFlight - to clear current flight data for a given user
-@param {String} _id - mongoose user id
+@function endFlight 
+@description clears current flight data for a given user
+@param {string} _id - mongo user id
 */
 var endFlight = function(_id){
 

@@ -31,6 +31,7 @@
     "file-api": "^0.10.4",
     "filereader": "^0.10.3",
     "get-pixels": "^3.2.3",
+    "jsdoc": "^3.4.0",
     "mongoose": "^4.4.1",
     "ndarray": "^1.0.18",
     "passport": "^0.3.2",

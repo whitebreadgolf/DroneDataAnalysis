@@ -1,17 +1,15 @@
 /**
-@module models
-*/
-
-/**
-@requires mongoose
-@requires airport
-@requires alititude
-@requires binaryMap
-@requires location
-@requires preflight
-@requires safetyReport
-@requires speed
-@requires user
+@module models/models
+@description initializes all of the mongoose models and connects to the db
+@requires models/mongoose
+@requires models/airport
+@requires models/altitude
+@requires models/binaryMap
+@requires models/location
+@requires models/flight
+@requires models/safetyReport
+@requires models/velocity
+@requires models/user
 */
 
 var mongoose = require('mongoose');
@@ -26,7 +24,8 @@ var velocity = require('./velocity');
 var user = require('./user');
 
 /**
-@function connectDb - a function to connect to the mongodb and session db
+@function connectDb 
+@description connects to mongodb 
 @param {object} _app - the express app object
 */
 var connectDb = function (_app){

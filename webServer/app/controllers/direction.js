@@ -1,5 +1,6 @@
 /**
-@module direction - a module to interact with the directional data 
+@module controllers/direction 
+@description a module to interact with the directional data 
 */
 
 module.exports = {};

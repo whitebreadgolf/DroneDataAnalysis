@@ -1,8 +1,5 @@
 /**
-@module obstical
-*/
-
-/**
+@module models/obstical
 @requires mongoose
 */
 

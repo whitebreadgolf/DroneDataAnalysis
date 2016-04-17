@@ -23,7 +23,7 @@ angular.module('UavOpsInterface')
 			$scope.showNotifications = true;
 			$scope.notifications = [];
 			for(var i in notifications){
-				if(notifications[i].type === 'obstical'){
+				if(notifications[i].type === 'proximity'){
 					$scope.notifications.push({
 						report: notifications[i].report,
 						value: notifications[i].value,

@@ -1,4 +1,4 @@
-angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification', 'ngFileUpload', 'ngProgress'])
+angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification', 'ngFileUpload', 'ngProgress', 'ngtweet', 'TrackHeight'])
 .config(function ($routeProvider, NotificationProvider) {
 	$routeProvider
 
@@ -81,6 +81,7 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 		// home page and legal
 		.when('/legal', {
 			templateUrl: 'templates/legal.html',
+			controller: 'LegalCtrl'
 		})
 		.otherwise({
 			redirectTo: '/legal'

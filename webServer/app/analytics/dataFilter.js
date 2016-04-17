@@ -1,14 +1,12 @@
 /**
-@module dataFilter
-*/
-
-/**
-@requires wss
-@requires regulationConfig
-@requires magneticWarningFilter
-@requires velocityAltitudeFilter
-@requires dataSaveFilter
-@requires buildingProximity
+@module analytics/dataFilter
+@description distributes to analysis filters and organizes data
+@requires interProcessCommunication/websocket
+@requires config/regulationConfig
+@requires analytics/magneticWarningFilter
+@requires analytics/velocityAltitudeFilter
+@requires analytics/dataSaveFilter
+@requires analytics/buildingProximity
 */
 
 var wss = require('../interProcessCommunication/websocket');
@@ -19,8 +17,15 @@ var dataSaveFilter = require('./dataSaveFilter');
 var buildingProximity = require('../analytics/buildingProximity');
 
 /**
-@function routeParameters - routes all data parameters to certain functions
-@alias analytics/dataFilter.routeParameters
+@function routeParameters 
+@description routes all data parameters to certain functions
+@alias analytics/dataFilter:routeParameters
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Object} _data - all of the flight data
+@param {function} _callback - a generic callback
 */
 var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _callback){
 
@@ -59,8 +64,13 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
 };
 
 /**
-@function routeSingleCsvString - splits a csv string into expected data parameters
-@alias analytics/dataFilter.routeSingleCsvString
+@function routeSingleCsvString 
+@description splits a csv string into expected data parameters
+@alias analytics/dataFilter:routeSingleCsvString
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {string} _csvString - the flight data point
+@param {function} _callback - returns status of collection
 */
 var routeSingleCsvString = function(_id, _flightId, _csvString, _callback){
 
@@ -72,8 +82,13 @@ var routeSingleCsvString = function(_id, _flightId, _csvString, _callback){
 };
 
 /**
-@function routeMultiCsvString - splits a csv file into expected csv strings
-@alias analytics/dataFilter.routeMultiCsvString
+@function routeMultiCsvString 
+@description splits a csv file into expected csv strings
+@alias analytics/dataFilter:routeMultiCsvString
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {string} _csvFile - all of the flight data
+@param {function} _callback - returns status of collection
 */
 var routeMultiCsvString = function(_id, _flightId, _csvFile, _callback){
 
@@ -93,16 +108,14 @@ var routeMultiCsvString = function(_id, _flightId, _csvFile, _callback){
             });
         }
     }
-    //_callback({success: true, message: 'multiple data points collected'});
 };
 
 /**
-@function sendLiveData - sends live user drone data to interface
-@alias analytics/dataFilter.sendLiveData
-@param {Number} velocity_east - velocity in the x plane
-@param {Number} velocity_north - velocity in the y plane
-@param {Number} velocity_down - velocity in the z plane
-@param {Number} baro_alt - the altitude measured
+@function sendLiveData 
+@description sends live user drone data to interface
+@alias analytics/dataFilter:sendLiveData
+@param {string} _id - a mongo user id
+@param {Object} _data_stream - contains all data parameters
 */
 var sendLiveData = function (_id, _data_stream){
 
@@ -114,25 +127,9 @@ var sendLiveData = function (_id, _data_stream){
     wss.broadcast(JSON.stringify(_data_stream));
 };
 
-/**
-@function filterCsvString - takes a csv line and parses it into it's contents
-@alias analytics/dataFilter.filterCsvString
-@param {String} _csvString - a csv file line
-*/
-// var filterCsvString = function (_id, _csvString){
-// 	var splitData = _csvString.split(',');
-//     routeDataParameters(false, {status: true, value: null}, _id, null, splitData[0], splitData[1], splitData[2], splitData[3], 
-//     splitData[4], splitData[5], splitData[8], splitData[9], splitData[10], splitData[11], splitData[12], splitData[13], 
-//     splitData[19], splitData[20], splitData[21], splitData[22], splitData[23], splitData[24], function(){
-
-
-//     });
-// }
-
-// export
+// export functions
 module.exports = {
 	routeDataParameters: routeDataParameters,
-	//filterCsvString: filterCsvString,
     routeSingleCsvString: routeSingleCsvString,
     routeMultiCsvString: routeMultiCsvString
 };

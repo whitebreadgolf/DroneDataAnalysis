@@ -1,8 +1,5 @@
 /**
-@module safetyReport
-*/
-
-/**
+@module models/safetyReport
 @requires mongoose
 */
 

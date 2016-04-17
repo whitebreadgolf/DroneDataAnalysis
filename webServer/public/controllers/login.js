@@ -9,7 +9,7 @@ angular.module('UavOpsInterface')
 		// check username/password
 		for(var key in data){
 			if(!data[key] || data[key] === ''){ 
-				Notification({message: 'enter valid username/password'}, 'error');
+				Notification({message: 'complete all fields'}, 'error');
 				return;
 			}
 		}

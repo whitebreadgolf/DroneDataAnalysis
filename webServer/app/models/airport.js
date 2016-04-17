@@ -1,8 +1,5 @@
 /**
-@module airport
-*/
-
-/**
+@module models/airport
 @requires mongoose
 */
 

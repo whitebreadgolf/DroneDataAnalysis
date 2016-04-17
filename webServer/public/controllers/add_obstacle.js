@@ -3,16 +3,15 @@ angular.module('UavOpsInterface')
 
 	// array for our dynamic markers
 	$scope.configMarkers = [];
-	$scope.allMarkers = [];
+	$scope.allMarkers = {};
 	$scope.mapConfiguration = {
 		isValid:false, 
 		isInvalid: true,	
 	};
-
-	var req = {
-		method: 'GET', url: 'api/configuremap',
-	}
-	$http(req).then(function(data){
+	$http({
+		method: 'GET', 
+		url: 'api/configuremap'
+	}).then(function(data){
 		if(data && data.data.success){
 			for(var i=0;i<data.data.data.length;i++){
 				if(data.data.data[i].bound_s || data.data.data[i].bound_n || data.data.data[i].bound_e || data.data.data[i].bound_w){
@@ -24,7 +23,6 @@ angular.module('UavOpsInterface')
 			Notification({message: 'user must log in'}, 'warning');
 		}
 	});
-
 	var genId = function(){
 		var text = "";
 	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -33,52 +31,81 @@ angular.module('UavOpsInterface')
 	    }
 	    return text;
 	};
-
-	// when the map is clicked
-	$scope.mapClicked = function (event){
-
-		// add a new marker
-		$scope.allMarkers.push({lat: event.latLng.lat(), lon: event.latLng.lng(), id: genId()});
-		$scope.mapConfiguration.isValid = true; 
-		$scope.mapConfiguration.isInvalid = false;
-	};
-
-	// calls backend service, should not be accessable until conditions are correct
-	$scope.configureObstacle = function (){
-		
-		var req = {
-			method: 'POST', url: 'api/addobstacle',
-			data: {}
-		}
-
-		$http(req).then(function(data){
-			console.log(data);
-		});
-	};
-
-	$scope.markerClicked = function(id){
-		console.log(id);
-	}
-
-	$scope.formClicked = function(lat, lon){
-
-		var req = {
-			method: 'POST', url: 'api/addobstacle',
-			data: {lat: lat, lon: lon}
-		}
-
-		$http(req).then(function(data){
-			console.log(data);
-		});
-	}
-
-	// empties markers array
 	$scope.clearMarkers = function (){
 		
 		// empty array
-		while($scope.allMarkers.length > 0){ $scope.allMarkers.pop(); }
-
+		$scope.allMarkers = {}; 
 		$scope.mapConfiguration.isValid = false; 
 		$scope.mapConfiguration.isInvalid = true;
 	};
+	$scope.mapClicked = function (event){
+
+		// add a new marker
+		var id = genId();
+		$scope.allMarkers[id] = {
+			id: id,
+			lat: event.latLng.lat(), 
+			lon: event.latLng.lng(),
+			name: '', 
+			radius: ''
+		};
+		$scope.mapConfiguration.isValid = true; 
+		$scope.mapConfiguration.isInvalid = false;
+	};
+	$scope.removeObsticle = function(i){
+		delete $scope.allMarkers[i];
+	}
+
+
+	// Service calls and helper functions
+	var makeAddObsticleReq = function(i){
+		return $http({
+			method: 'POST', 
+			url: 'api/addobstacle',
+			data: {
+				lat: parseFloat($scope.allMarkers[i].lat), 
+				lon: parseFloat($scope.allMarkers[i].lon), 
+				radius: parseInt($scope.allMarkers[i].radius), 
+				name: $scope.allMarkers[i].name
+			}
+		}).then(function(data){
+		 	return data.data;
+		});
+	} 
+	var validObsticle = function(i){
+		return $scope.allMarkers[i].name !== '' && $scope.allMarkers[i].radius !== '';
+	}
+
+	$scope.configureAllObstacles = function (){
+		for(var i in $scope.allMarkers){
+			if(validObsticle(i)){
+				makeAddObsticleReq(i).then(function(data){
+					if(data.success)
+						Notification({message: data.message}, 'success');
+					else
+						Notification({message: data.message}, 'error');	
+				});
+				delete $scope.allMarkers[i];
+			}
+			else{
+				Notification({message: 'Obsticle with id '+i+' is not valid'}, 'warning');
+				return;
+			}
+		}
+	};
+	$scope.addObsticle = function(i){
+		if(validObsticle(i)){
+			makeAddObsticleReq(i).then(function(data){
+				delete $scope.allMarkers[i];
+				if(data.success)
+					Notification({message: data.message}, 'success');
+				else
+					Notification({message: data.message}, 'error');	
+			});
+		}
+		else{
+			Notification({message: 'Obsticle with id '+i+' is not valid'}, 'warning');
+			return;
+		}
+	}
 });

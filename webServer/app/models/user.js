@@ -1,8 +1,5 @@
 /**
-@module user
-*/
-
-/**
+@module models/user
 @requires mongoose
 @requires passport-local-mongoose
 */
@@ -19,6 +16,7 @@ var userSchema = new Schema({
 	username: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	admin: Boolean,
+	reg_id: String,
 	created_at: Date
 });
 

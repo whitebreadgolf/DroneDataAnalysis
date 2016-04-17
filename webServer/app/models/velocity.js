@@ -1,8 +1,5 @@
 /**
-@module speed
-*/
-
-/**
+@module models/velocity
 @requires mongoose
 */
 

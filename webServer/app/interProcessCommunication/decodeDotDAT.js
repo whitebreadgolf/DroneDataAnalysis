@@ -1,9 +1,8 @@
 /**
-@module decodeDotDAT
-*/
-
-/**
-@requires dataFilter
+@module interProcessCommunication/decodeDotDAT
+@description responsible for decoding a dat file
+@deprecated since the version with internal flight simulations
+@requires analytics/dataFilter
 */
 
 var dataFilter = require('../analytics/dataFilter');
@@ -15,18 +14,19 @@ var previous_time = '';
 var csv_string = '';
 
 Math.radians = function(_degrees) { return _degrees * Math.PI / 180; };
-
 Math.degrees = function(_radians) { return _radians * 180 / Math.PI; };
 
 /**
-@function abortRead - to abort the file reading process 
-@alias decodeDotDAT/abortRead
+@function abortRead 
+@description aborts the file reading process 
+@alias interProcessCommunication/decodeDotDAT:abortRead
 */
 var abortRead = function () { reader.abort(); }
 
 /**
-@function updateProgress - print out the percent loaded of a given file 
-@alias decodeDotDAT/updateProgress
+@function updateProgress 
+@description prints out the percent loaded of a given file 
+@alias interProcessCommunication/decodeDotDAT:updateProgress
 @param {Number} _percentLoaded - integer representing the progress of the download
 */
 var updateProgress = function (_percentLoaded) {
@@ -34,8 +34,9 @@ var updateProgress = function (_percentLoaded) {
 }
 
 /**
-@function convert - converts int to decoded string
-@alias decodeDotDAT/convert
+@function convert 
+@description converts int to decoded string
+@alias interProcessCommunication/decodeDotDAT:convert
 @param {Number} _integer - an integer Number
 @returns {Number} the integer input with possible appended 0 
 */
@@ -45,9 +46,10 @@ var convert = function (_integer) {
 };
 
 /**
-@function parseLittleEndianDouble - creates byte array from input string
-@alias decodeDotDAT/parseLittleEndianDouble
-@param {String} _str - the string to be converted
+@function parseLittleEndianDouble 
+@description creates byte array from input string
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianDouble
+@param {string} _str - the string to be converted
 @returns {Object} a Float64Array with internal byte array buffer
 */
 var parseLittleEndianDouble = function (_str) {
@@ -67,9 +69,10 @@ var parseLittleEndianDouble = function (_str) {
 }
 
 /**
-@function parseLittleEndianFloat - converts input string into float
-@alias decodeDotDAT/parseLittleEndianFloat
-@param {String} _str - the string to be converted
+@function parseLittleEndianFloat 
+@description converts input string into float
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianFloat
+@param {string} _str - the string to be converted
 @returns {Object} a Float64Array with internal byte array buffer
 */
 var parseLittleEndianFloat = function (_str) {
@@ -104,8 +107,9 @@ var parseLittleEndianFloat = function (_str) {
 }
 
 /**
-@function calcCrow - calculates the distance between 2 latitude/longitude points
-@alias decodeDotDAT/calcCrow
+@function calcCrow 
+@description calculates the distance between 2 latitude/longitude points
+@alias interProcessCommunication/decodeDotDAT:calcCrow
 @param {Number} _lat1 - latitude point 1
 @param {Number} _lon1 - longitude point 1
 @param {Number} _lat2 - latitude point 2
@@ -125,16 +129,18 @@ var calcCrow = function (_lat1, _lon1, _lat2, _lon2) {
 }
 
 /**
-@function toRad - convert arclength to radians
-@alias decodeDotDAT/toRad
+@function toRad 
+@description convert arclength to radians
+@alias interProcessCommunication/decodeDotDAT:toRad
 @param {Number} _value - the value of the arclength
 @returns {Number} radian value
 */
 var toRad = function (_value) { return _value * Math.PI / 180; }
 
 /**
-@function parseLittleEndianSigned32 - calculates decimal value from 32 bit unsigned hexidecimal string
-@alias decodeDotDAT/parseLittleEndianSigned32
+@function parseLittleEndianSigned32 
+@description calculates decimal value from 32 bit unsigned hexidecimal string
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianSigned32
 @param {string} _hex - hexidecimal value
 @returns {Number} decimal value 
 */
@@ -152,8 +158,9 @@ var parseLittleEndianSigned32 = function (_hex) {
 }
 
 /**
-@function parseLittleEndianUnsigned32 - calculates decimal value from 32 bit unsigned hexidecimal string
-@alias decodeDotDAT/parseLittleEndianUnsigned32
+@function parseLittleEndianUnsigned32 
+@description calculates decimal value from 32 bit unsigned hexidecimal string
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianUnsigned32
 @param {string} _hex - hexidecimal value
 @returns {Number} decimal value 
 */
@@ -169,8 +176,9 @@ var parseLittleEndianUnsigned32 = function (_hex) {
 }
 
 /**
-@function parseLittleEndianSigned16 - calculates decimal value from 16 bit signed hexidecimal string
-@alias decodeDotDAT/parseLittleEndianSigned16
+@function parseLittleEndianSigned16 
+@description calculates decimal value from 16 bit signed hexidecimal string
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianSigned16
 @param {string} _hex - hexidecimal value
 @returns {Number} decimal value 
 */
@@ -187,8 +195,9 @@ var parseLittleEndianSigned16 = function (_hex) {
 }
 
 /**
-@function parseLittleEndianUnsigned16 - calculates decimal value from 16 bit unsigned hexidecimal string
-@alias decodeDotDAT/parseLittleEndianUnsigned16
+@function parseLittleEndianUnsigned16 
+@description calculates decimal value from 16 bit unsigned hexidecimal string
+@alias interProcessCommunication/decodeDotDAT:parseLittleEndianUnsigned16
 @param {string} _hex - hexidecimal value
 @returns {Number} decimal value 
 */
@@ -204,8 +213,9 @@ var parseLittleEndianUnsigned16 = function (_hex) {
 }
 
 /**
-@function subtract_offset - calculates the hex value of an incoming byte value
-@alias decodeDotDAT/subtract_offset
+@function subtract_offset 
+@description calculates the hex value of an incoming byte value
+@alias interProcessCommunication/decodeDotDAT:subtract_offset
 @param {string} _in_byte - hexidecimal value
 @param {string} _mask - hexidecimal value
 @returns {Number} masked byte in hex
@@ -217,8 +227,9 @@ var subtract_offset = function (_in_byte, _mask) {
 }
 
 /**
-@function subtract_offset - calculates the hex value of an incoming byte value
-@alias decodeDotDAT/subtract_offset
+@function subtract_offset 
+@description calculates the hex value of an incoming byte value
+@alias interProcessCommunication/decodeDotDAT:subtract_offset
 @param {string} _number - hexidecimal value
 @param {string} _width - hexidecimal value
 @returns {Number} 
@@ -280,8 +291,10 @@ var ec_voltage = 0;
 
 
 /**
-@funtion importDataBlob - to decode a given data blob and hand off the data to a filter
-@alias interProcessCommunication/decodeDotDAT.importDataBlob
+@function importDataBlob 
+@description to decode a given data blob and hand off the data to a filter
+@alias interProcessCommunication/decodeDotDAT:importDataBlob
+@param {string} _id - a mongo user id
 @param {Uint8Array} _blob - stores characters in a byte array
 */
 var importDataBlob = function (_id, _blob){

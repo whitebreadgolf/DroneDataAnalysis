@@ -35,49 +35,60 @@
 	<div class="panel panel-default">
   		<div class="panel-heading" >
   			<h5>
-  				<span class="glyphicon glyphicon-globe"></span> {{flight.flight_name}} 
-  				<span class="pull-right"><span class="glyphicon glyphicon-time"></span> {{flight.created_at}}</span>
+  				<i class="fa fa-plane"></i> {{flight.flight_name}} 
+  				<span class="pull-right"><i class="fa fa-clock-o"></i> {{flight.created_at}}</span>
   			</h5>
   		</div>
 	  	<div class="panel-body" id="{{flight._id}}">
 			<div>
-				Remote Controller Charge: <strong>{{flight.remote_controller_charge}}</strong>
+				Remote Controller Charge: <i class="fa fa-battery-{{flight.remote_controller_charge}}"></i>
 			</div>
 			<div>
-				Flight Intelligent Battery: <strong>{{flight.intelligent_flight_battery}}</strong>
+				Flight Intelligent Battery: <i class="fa fa-battery-{{flight.intelligent_flight_battery}}"></i>
 			</div>
-			<div>Propeller 0:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_0"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_0"></span>
+			<div>Top Left Propeller:
+				<span ng-if="flight.propeller_0 == 0">Perfect condition</span>
+				<span ng-if="flight.propeller_0 == 1">Scratched</span>
+				<span ng-if="flight.propeller_0 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_0 == 3">Large chips or piece missing</span>
 			</div>
-			<div>Propeller 1:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_1"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_1"></span>
+			<div>Top Right Propeller:
+				<span ng-if="flight.propeller_1 == 0">Perfect condition</span>
+				<span ng-if="flight.propeller_1 == 1">Scratched</span>
+				<span ng-if="flight.propeller_1 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_1 == 3">Large chips or piece missing</span>
 			</div>
-			<div>Propeller 2:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_2"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_2"></span>
+			<div>Bottom Left Propeller:
+				<span ng-if="flight.propeller_2 == 0">Perfect condition</span>
+				<span ng-if="flight.propeller_2 == 1">Scratched</span>
+				<span ng-if="flight.propeller_2 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_2 == 3">Large chips or piece missing</span>
 			</div>
-			<div>Propeller 3:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.propeller_3"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.propeller_3"></span>
+			<div>Bottom Right Propeller:
+				<span ng-if="flight.propeller_3 == 0">Perfect condition</span>
+				<span ng-if="flight.propeller_3 == 1">Scratched</span>
+				<span ng-if="flight.propeller_3 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_3 == 3">Large chips or piece missing</span>
 			</div>
 			<div>Micro SD Card:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.micro_sd"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.micro_sd"></span>
+				<i class="fa fa-check" ng-if="flight.micro_sd == 1 || flight.micro_sd == 2"></i>
+				<i class="fa fa-close" ng-if="flight.micro_sd == 0"></i>
 			</div>
 			<div>Gimbal:
-				<span class="glyphicon glyphicon-ok" ng-if="flight.gimbal"></span>
-				<span class="glyphicon glyphicon-remove" ng-if="!flight.gimbal"></span>
+				<i class="fa fa-check" ng-if="flight.gimbal == 0"></i>
+				<i class="fa fa-close" ng-if="flight.gimbal == 1"></i>
 			</div>
 	  	</div>
 	  	<div class="panel-footer">
+	  		<div ng-if="flight.analyzing"><i class="fa fa-cog fa-spin fa-fw margin-bottom"></i></div>
+	  		<div ng-if="!flight.analyzing">
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ng-click="startLiveFlight(flight._id)">Start Live Flight Data Collection</div>
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT file for analysis</div>
 			<div class="btn btn-warning btn-sm" ng-if="flight.started && flight.decoding" ng-click="stopDecoding(flight._id)">Stop Decoding</div>
 			<div class="btn btn-warning btn-sm" ng-if="flight.started && !flight.decoding" ng-click="stopLiveFlight(flight._id)">Stop Live Flight</div>
 			<div class="pull-right">
 				<div class="btn btn-danger btn-sm" ng-if="!flight.started" ng-click="deletePreflight(flight._id)">Delete Flight</div>
+			</div>
 			</div>
 	  	</div>
 	</div>

@@ -1,8 +1,5 @@
 /**
-@module binaryMap
-*/
-
-/**
+@module models/binaryMap
 @requires mongoose
 */
 

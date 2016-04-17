@@ -1,12 +1,11 @@
 /**
-@module process - a module to spawn a program for signal processing capabilities
-*/
-
-/**
+@module interProcessCommunication/process 
+@description a module to spawn a program for signal processing capabilities
+@deprecated since the version with internal flight simulations
 @requires child_process
-@requires decodeDotDAT
-@requires regulationConfig
-@requires dataFilter
+@requires interProcessCommunication/decodeDotDAT
+@requires config/regulationConfig
+@requires analytics/dataFilter
 */
 
 // import packages
@@ -24,17 +23,8 @@ var SP_FP = __dirname + "/../../../signalProcessor/";
 var sp = {};
 
 /**
-@function initialize - to initialize the real cpp program and stdout callbacks on the spawed process
-@alias interProcessCommunication/process.initialize
-*/
-var initialize = function(){
-
-	// empty for now
-
-};
-
-/**
-@function initializeMock - to initialize the mock cpp program and stdout callbacks on the spawed process
+@function initializeMock 
+@description to initialize the mock cpp program and stdout callbacks on the spawed process
 @alias interProcessCommunication/process.initializeMock
 */
 var initializeMock = function(_id, _readExt, _readType){
@@ -47,11 +37,6 @@ var initializeMock = function(_id, _readExt, _readType){
 		map['high'] = "flight_data_height_error.csv";
 		map['mag'] = "flight_data_mag_error.csv";
 	}
-	// else if (_readExt == 'DAT'){
-	// 	map['dummy'] = "FLY000.DAT";
-	// 	map["normal"] = "FLY000.DAT";
-	// 	map["high"] = "FLY000.DAT";
-	// }
 
 	// any initalizations pre-function call
 	sp[_id] = spawn(MOCK_SP_FP, [MOCK_SP_DIR + map[_readType.toLowerCase()], _readExt.toLowerCase(),'real_time', _id]);
@@ -97,19 +82,16 @@ var initializeMock = function(_id, _readExt, _readType){
 };
 
 /**
-@function endMock - ends the mock flight data stream
+@function endMock
+@description ends the mock flight data stream
 @alias interProcessCommunication/process.endMock
+@param {string} _id - process id
 */
 var endMock = function (_id){
 	sp[_id].kill('SIGHUP');
 }
 
-
-/**
-all exports
-*/
 module.exports = {
-	initialize: initialize,
 	initializeMock: initializeMock,
 	endMock: endMock
 };

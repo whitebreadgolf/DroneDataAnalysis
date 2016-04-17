@@ -1,17 +1,16 @@
 /**
-@module velocity - a module to interact with the velocity data
-*/
-
-/**
-@requires velocity
+@module controllers/velocity 
+@description a module to interact with the velocity data
+@requires models/velocity
 */
 
 var Velocity = require('../models/velocity');
 
 /**
-@function getAllVelocitiesForFlightId - queries all velocities for a given flight id
+@function getAllVelocitiesForFlightId 
+@description queries all velocities for a given flight id
 @alias controllers/velocity.getAllVelocitiesForFlightId
-@param {String} _flightId - a mogoose object id
+@param {string} _flightId - a mongo object id
 @param {function} _callback - a function callback
 */
 var getAllVelocitiesForFlightId = function(_flightId, _callback){
@@ -21,6 +20,13 @@ var getAllVelocitiesForFlightId = function(_flightId, _callback){
 	});
 };
 
+/**
+@function saveVelocity 
+@description saves velocity in database
+@alias controllers/velocity.saveVelocity
+@param {Object} _data - velocity data to be saved
+@param {function} _callback - reports the status
+*/
 var saveVelocity = function(_data, _callback){
 	var vel = new Velocity(_data);
 	vel.save(function(err, data){

@@ -1,18 +1,17 @@
 /**
-@module location - a module to interact with location data
-*/
-
-/**
-@requires location
+@module controllers/location 
+@description a module to interact with location data
+@requires models/location
 */
 
 var Loc = require('../models/location');
 
 /**
-@function getAllLocationsForFlightId - queries all locations for a given flight id
-@alias controllers/velocity.getAllLocationsForFlightId
-@param {String} _flightId - a mogoose object id
-@param {function} _callback - a function callback
+@function getAllLocationsForFlightId
+@description queries all locations for a given flight id
+@alias controllers/locations.getAllLocationsForFlightId
+@param {string} _flightId - a mongo object id
+@param {function} _callback - reports the status and locations
 */
 var getAllLocationsForFlightId = function(_flightId, _callback){
 	Loc.find({flight_id: _flightId}, function(err, locations){
@@ -21,6 +20,13 @@ var getAllLocationsForFlightId = function(_flightId, _callback){
 	});
 }
 
+/**
+@function saveLocation 
+@description saves location in database
+@alias controllers/location.saveLocation
+@param {Object} _data - location data to be saved
+@param {function} _callback - reports the status
+*/
 var saveLocation = function(_data, _callback){
 	var loc = new Loc(_data);
 	loc.save(function(err, data){
@@ -30,6 +36,7 @@ var saveLocation = function(_data, _callback){
 	});
 }
 
+// export functions
 module.exports = {
 	getAllLocationsForFlightId: getAllLocationsForFlightId,
 	saveLocation: saveLocation

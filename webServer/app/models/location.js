@@ -1,8 +1,5 @@
 /**
-@module location
-*/
-
-/**
+@module models/location
 @requires mongoose
 */
 

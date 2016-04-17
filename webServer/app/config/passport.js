@@ -1,10 +1,9 @@
 /**
-@module passport
-*/
-
-/**
-@requires user
+@module config/passport 
+@description for configuring the passport user session module
+@requires models/user
 @requires passport
+@requires passport-local
 */
 
 var User = require('../models/user');
@@ -12,7 +11,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 /**
-@function setupUser - to setup passport options with express app
+@function setupUser 
+@description to setup passport options with express app
 @param {Object} _app - the express app object
 */
 var setupUser = function(_app){

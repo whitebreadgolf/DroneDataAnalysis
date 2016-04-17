@@ -1,8 +1,5 @@
 /**
-@module altitude
-*/
-
-/**
+@module models/altitude
 @requires mongoose
 */
 

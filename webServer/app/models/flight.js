@@ -1,8 +1,5 @@
 /**
-@module preflight
-*/
-
-/**
+@module models/flight
 @requires mongoose
 */
 
@@ -18,12 +15,12 @@ var flightSchema = new Schema({
 	flight_name: String,
 	remote_controller_charge: Number, 
 	intelligent_flight_battery: Number, 
-	propeller_0: String, 
-	propeller_1: String, 
-	propeller_2: String, 
-	propeller_3: String, 
-	micro_sd: String, 
-	gimbal: String,
+	propeller_0: Number, 
+	propeller_1: Number, 
+	propeller_2: Number, 
+	propeller_3: Number, 
+	micro_sd: Number, 
+	gimbal: Number,
 	flight_started: Date,
 	flight_ended: Date
 });

@@ -195,8 +195,9 @@ angular.module('UavOpsInterface')
 			return false;
 		}
 	}
-	var	stopDecoding = function(_flightId){
+	var	stopDecoding = function(_flightId, _startAnalysis, _endAnalysis){
 		if(currentDecoding.flight_id === _flightId){
+
 			// first check if the decoding was finished
 			if(currentDecoding.finished === true){
 
@@ -209,6 +210,7 @@ angular.module('UavOpsInterface')
 				$http(req).then(function(data){
 					if(data.data.success){
 						Notification({message: data.data.message}, 'success'); 
+						_startAnalysis();
 						var req = {
 							method: 'POST',
 							url: 'api/data',
@@ -217,6 +219,7 @@ angular.module('UavOpsInterface')
 						$http(req).then(function(data){
 							if(data.data.success) {
 								Notification({message: data.data.message}, 'success');
+								_endAnalysis();
 								var req = {
 									method: 'POST',
 									url: 'api/flight',
@@ -243,7 +246,7 @@ angular.module('UavOpsInterface')
 						// check if we need to start another decoding and start
 						if(decodeQueue.length > 0){ 
 							var decodingProcess = decodeQueue.pop();
-							startDecoderHelper(decodingProcess.flightId, decodingProcess.file);
+							startDecoderHelper(decodingProcess.flightId, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
 						}
 
 						// kill object
@@ -266,7 +269,7 @@ angular.module('UavOpsInterface')
 				// check if we need to start another decoding and start
 				if(decodeQueue.length > 0){ 
 					var decodingProcess = decodeQueue.pop();
-					startDecoderHelper(decodingProcess.flightId, decodingProcess.file);
+					startDecoderHelper(decodingProcess.flightId, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
 				}
 
 				// kill object
@@ -284,18 +287,21 @@ angular.module('UavOpsInterface')
 			}
 		}
 	}
-	var startDecoder = function(_flightId, _file, _callback){
+	var startDecoder = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// start decoder now
-		if(!currentDecoding) startDecoderHelper(_flightId, _file, _callback);
+		if(!currentDecoding) startDecoderHelper(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis);
 
 		// wait till finished
 		else{
-			decodeQueue.push({flightId: _flightId, file: _file});
+			decodeQueue.push({
+				flightId: _flightId, file: _file, 
+				doneDecoding:_doneDecoding, startAnalysis:_startAnalysis, endAnalysis:_endAnalysis
+			});
 			Notification({message: 'flight '+_flightId+ ' decoding queued'}, 'warning');
 		}
 	}
-	var	startDecoderHelper = function(_flightId, _file, _callback){
+	var	startDecoderHelper = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// create object
 		currentDecoding = {
@@ -682,11 +688,12 @@ angular.module('UavOpsInterface')
 	            }
 	        }
 	        if (file_length == last_byte) {
-	        //if(blob_count === 5){
+	        //if(blob_count === 6){
+
 	            // DONE WITH DECODING
-	            _callback();
+	            _doneDecoding();
 	            currentDecoding.finished = true;
-	    		stopDecoding(_flightId);
+	    		stopDecoding(_flightId, _startAnalysis, _endAnalysis);
 	        }
 	        if (file_length - (blob_count * 500000) > 500000) {
 	            blob = file.slice(blob_count * 500000, blob_count * 500000 + 500000);

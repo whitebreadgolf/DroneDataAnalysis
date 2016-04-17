@@ -1,11 +1,9 @@
 /**
-@module velocityAltiudeFilter
-*/
-
-/**
-@requires regulationConfig
-@requires wss
-@requires safetyReport
+@module analytics/velocityAltitudeFilter
+@description performs analysis on velocity and altitude parameters
+@requires config/regulationConfig
+@requires interProcessCommunication/websocket
+@requires controllers/safetyStatus
 */
 
 var regulationConfig = require('../config/regulationConfig');
@@ -13,10 +11,15 @@ var wss = require('../interProcessCommunication/websocket');
 var safetyStatus = require('../controllers/safetyStatus');
 
 /**
-@function velAltFilter - splits data into velocities and altitude
+@function velAltFilter 
+@description splits data into velocities and altitude
 @alias analytics/velocityAltiudeFilter.velAltFilter
-@param {String} _id - mongodb id for user
-@param {Object} _data_stream
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Object} _data_stream - the flight data
+@param {function} _callback - a generic callback
 */
 var velAltFilter = function (_collect, _isLive, _id, _flightId, _data_stream, _callback){
 
@@ -35,10 +38,15 @@ var velAltFilter = function (_collect, _isLive, _id, _flightId, _data_stream, _c
 };
 
 /**
-@function altFilter - applies comparative analytics to altitude
+@function altFilter 
+@description applies comparative analytics to altitude
 @alias analytics/velocityAltiudeFilter.altFilter
-@param {String} _id - mongodb id for user
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
 @param {Number} _altitude - an altitude
+@param {function} _callback - a generic callback
 */
 var altFilter = function(_collect, _isLive, _id, _flightId, _altitude, _callback){
 
@@ -80,12 +88,17 @@ var altFilter = function(_collect, _isLive, _id, _flightId, _altitude, _callback
 };
 
 /**
-@function velFilter - applies comparative analytics to velocities
+@function velFilter 
+@description applies comparative analytics to velocities
 @alias analytics/velocityAltiudeFilter.velFilter
-@param {String} _id - mongodb id for user
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
 @param {Number} _speed_x - an x velocity
 @param {Number} _speed_y - an y velocity
 @param {Number} _speed_z - an z velocity
+@param {function} _callback - a generic callback
 */
 var velFilter = function(_collect, _isLive, _id, _flightId, _speed_x, _speed_y, _speed_z, _callback){
 
@@ -103,10 +116,16 @@ var velFilter = function(_collect, _isLive, _id, _flightId, _speed_x, _speed_y, 
 };
 
 /**
-@function velXFilter - applies comparative analytics to x velocity
+@function velXFilter 
+@description applies comparative analytics to x velocity
 @alias analytics/velocityAltiudeFilter.velXFilter
-@param {String} _id - mongodb id for user
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Object} _time - current recorded time
 @param {Number} _speed_x - an x velocity
+@param {function} _callback - a generic callback
 */
 var velXFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_x, _callback){
 
@@ -149,10 +168,16 @@ var velXFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_x, _c
 };
 
 /**
-@function velYFilter - applies comparative analytics to y velocity
+@function velYFilter 
+@description applies comparative analytics to y velocity
 @alias analytics/velocityAltiudeFilter.velFilter
-@param {String} _id - mongodb id for user
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Object} _time - current recorded time
 @param {Number} _speed_y - an y velocity
+@param {function} _callback - a generic callback
 */
 var velYFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_y, _callback){
 
@@ -196,10 +221,16 @@ var velYFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_y, _c
 };
 
 /**
-@function velZFilter - applies comparative analytics to z velocity
+@function velZFilter 
+@description applies comparative analytics to z velocity
 @alias analytics/velocityAltiudeFilter.velFilter
-@param {String} _id - mongodb id for user
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Object} _time - current recorded time
 @param {Number} _speed_z - an z velocity
+@param {function} _callback - a generic callback
 */
 var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _callback){
 
@@ -241,6 +272,16 @@ var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _c
 	else _callback();
 };
 
+/**
+@function routeLiveAndSave 
+@description routes data to client and save given data
+@param {Object} _collect - to determine whether we are collecting data
+@param {Object} _isLive - to determine if the data is live
+@param {string} _id - a mongo user id
+@param {string} _flightId - a mongo flight id
+@param {Number} _data_stream - the flight data
+@param {function} _callback - a generic callback
+*/
 var routeLiveAndSave = function(_collect, _isLive, _id, _flightId, _data_stream, _callback){
 	if(_isLive.status) wss.broadcast(JSON.stringify(_data_stream));
 	if(_collect){

@@ -1,23 +1,22 @@
 /**
-@module routes - a module to initalize the web API routes
-*/
-
-/**
-@requires account
-@requires altitude
-@requires daylight
-@requires direction
-@requires location
-@requires flight
-@requires safetyStatus
-@requires speed
+@module routes/routes 
+@description a module to initalize the web API routes
+@requires controllers/account
+@requires controllers/altitude
+@requires controllers/daylight
+@requires controllers/direction
+@requires controllers/location
+@requires controllers/flight
+@requires controllers/safetyStatus
+@requires controllers/velocity
 @requires passport
-@requires user
-@requires regulationConfig
-@requires airport
+@requires models/user
+@requires models/airport
+@requires config/regulationConfig
+@requires analytics/buildingProximity
+@requires analytics/dataFilter
 */
 
-// controllers
 var account = require('./../controllers/account');
 var altitude = require('./../controllers/altitude');
 var daylight = require('./../controllers/daylight');
@@ -27,21 +26,18 @@ var flight = require('./../controllers/flight');
 var safetyStatus = require('./../controllers/safetyStatus');
 var velocity = require('./../controllers/velocity');
 var simulation = require('./../controllers/simulation');
-
-// user
 var passport = require('passport');
 var User = require('../models/user');
 var Airport = require('../models/airport');
-
-// analytics
 var regulationConfig = require('../config/regulationConfig');
 var buildingProximity = require('../analytics/buildingProximity');
 var dataFilter = require('../analytics/dataFilter');
 
 /**
-@function initRoutes - to initialize all 
-@alias routes/initRoutes
-@param {object} _app - the express app object
+@function initRoutes 
+@description initializes all routes with express app
+@alias routes/routes:initRoutes
+@param {Object} _app - the express app object
 */
 var initRoutes = function (_app){
 
@@ -50,9 +46,9 @@ var initRoutes = function (_app){
 
 		if(!(req.user)) res.json({success: false, status: 'user'}); 
 		else{
-			// buildingProximity.loadMapWithCloseLatLon(req.user._id, req.body.lat, req.body.lon, function(val){
-			// 	res.json(val);
-			// });
+			buildingProximity.addObsticleWithWidth(req.user._id, req.body.lat, req.body.lon, req.body.name, req.body.radius, function(status){
+			 	res.json(status);
+			});
 		}
 	});
 
@@ -156,7 +152,8 @@ var initRoutes = function (_app){
 			username: req.body.username,
 			name: req.body.name,
 			password: req.body.pass,
-			admin: false
+			admin: false,
+			reg_id: req.body.reg_id
 		}), req.body.pass, function(err) {
 			if (err) {
 				res.json({success: false, message:'user not registered'});
@@ -402,6 +399,7 @@ var initRoutes = function (_app){
 
 		// req - {type: ('single'|'multi'), csv_string: <string>, user_id: <string>, flight_id: <string>}
 		// res - {success: <boolean>, data: <string>}
+		console.log(req);
 		var data;
 		try{
 			var keys = [];
