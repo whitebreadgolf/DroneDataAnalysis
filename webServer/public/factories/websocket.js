@@ -1,5 +1,10 @@
+/**
+@class angular_factories.Websocket
+@memberOf angular_factories
+*/
 angular.module('UavOpsInterface')
 .factory('Websocket', function (Notification){
+	// websocket data structures
 	var ws;
 	var speed = [
 		{
@@ -24,7 +29,12 @@ angular.module('UavOpsInterface')
 	var notifications = [];
 
 	return {
-	     create: function (){ 
+		/**
+		@function createWebsocket
+		@memberOf angular_controller.createWebsocket
+		@description The function configures and sets up the websocket. 
+		*/
+	    create: function (){ 
 
 	    	// configure the websocket and incoming data flow
 			ws = new WebSocket('ws://localhost:5001');
