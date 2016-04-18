@@ -41,7 +41,7 @@ angular.module('UavOpsInterface')
 
             /**
             @member AltitudeChartOptions
-            @memberOf angular_controller.Altitude
+            @memberOf angular_controller.AltitudeHistory
             @description This options object governs the appearance of the altitude chart.
             */
             $scope.options = {

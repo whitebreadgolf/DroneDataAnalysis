@@ -98,6 +98,6 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 })
 .run(function (Websocket) {
        
-	// create on run
+	// create websocket in angular_factories on run 
 	Websocket.create();
 });
