@@ -17,6 +17,7 @@ angular.module('UavOpsInterface')
 		method: 'GET', 
 		url: 'api/configuremap'
 	}).then(function(data){
+
 	/**
 	@function configureMap
 	@memberOf angular_controller.AddObstacle
@@ -39,7 +40,7 @@ angular.module('UavOpsInterface')
 			Notification({message: 'user must log in'}, 'warning');
 		}
 	});
-	
+
 	/**
 	@function generateId
 	@memberOf angular_controller.AddObstacle
