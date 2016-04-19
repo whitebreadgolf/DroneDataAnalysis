@@ -21,20 +21,36 @@ var safetyStatus = require('../controllers/safetyStatus');
 @param {Object} _data_stream - the flight data
 @param {function} _callback - a generic callback
 */
-var velAltFilter = function (_collect, _isLive, _id, _flightId, _data_stream, _callback){
-
-	// split data 
-	var altitude = Number.parseFloat(_data_stream.altitude);
-	var speed_x = Number.parseFloat(_data_stream.speed_x);
-	var speed_y = Number.parseFloat(_data_stream.speed_y);
-	var speed_z = Number.parseFloat(_data_stream.speed_z);
+var velAltFilter = function (_time, _collect, _isLive, _id, _flightId, _data_stream, _callback){
 
 	// apply both filters synchronously
-	altFilter(_collect, _isLive, _id, _flightId, altitude, function(){
-		velFilter(_collect, _isLive, _id, _flightId, speed_x, speed_y, speed_z, function(){
+	if(_data_stream.altitude !== null && _data_stream.velocity_x !== null && _data_stream.velocity_y !== null && _data_stream.velocity_z !== null){
+		var altitude = Number.parseFloat(_data_stream.altitude);
+		var speed_x = Number.parseFloat(_data_stream.velocity_x);
+		var speed_y = Number.parseFloat(_data_stream.velocity_y);
+		var speed_z = Number.parseFloat(_data_stream.velocity_z);
+		altFilter(_time, _collect, _isLive, _id, _flightId, altitude, function(){
+			velFilter(_time, _collect, _isLive, _id, _flightId, speed_x, speed_y, speed_z, function(){
+				_callback();
+			});
+		});	
+	}
+	else if(_data_stream.velocity_x !== null && _data_stream.velocity_y !== null && _data_stream.velocity_z !== null){
+		var speed_x = Number.parseFloat(_data_stream.velocity_x);
+		var speed_y = Number.parseFloat(_data_stream.velocity_y);
+		var speed_z = Number.parseFloat(_data_stream.velocity_z);
+		velFilter(_time, _collect, _isLive, _id, _flightId, speed_x, speed_y, speed_z, function(){
 			_callback();
 		});
-	});	
+	}
+	else if(_data_stream.altitude !== null){
+		var altitude = Number.parseFloat(_data_stream.altitude);
+		altFilter(_time, _collect, _isLive, _id, _flightId, altitude, function(){
+			_callback();
+		});	
+	}
+	else
+		_callback();
 };
 
 /**
@@ -48,15 +64,13 @@ var velAltFilter = function (_collect, _isLive, _id, _flightId, _data_stream, _c
 @param {Number} _altitude - an altitude
 @param {function} _callback - a generic callback
 */
-var altFilter = function(_collect, _isLive, _id, _flightId, _altitude, _callback){
+var altFilter = function(_time, _collect, _isLive, _id, _flightId, _altitude, _callback){
 
 	var altitudeHazzard = regulationConfig.cur_flight[_id].warning.altitude.hazard;
 	var altitudeWarning = regulationConfig.cur_flight[_id].warning.altitude.warning;
 	
 	// determine time
-	var curTime;
-	if(_isLive.status) curTime = (new Date());
-	else curTime = _isLive.value * regulationConfig.app_constants.dji_dat_collect_rate + regulationConfig.cur_flight[_id].start_time;
+	var curTime = _time;
 
 	if(_altitude > regulationConfig.faa_reg.max_altitude.hazard){
 		if(altitudeHazzard === null || curTime - altitudeHazzard >= 10000){
@@ -100,12 +114,10 @@ var altFilter = function(_collect, _isLive, _id, _flightId, _altitude, _callback
 @param {Number} _speed_z - an z velocity
 @param {function} _callback - a generic callback
 */
-var velFilter = function(_collect, _isLive, _id, _flightId, _speed_x, _speed_y, _speed_z, _callback){
+var velFilter = function(_time, _collect, _isLive, _id, _flightId, _speed_x, _speed_y, _speed_z, _callback){
 
 	// determine time
-	var curTime;
-	if(_isLive.status) curTime = (new Date());
-	else curTime = _isLive.value * regulationConfig.app_constants.dji_dat_collect_rate + (new Date(regulationConfig.cur_flight[_id].start_time)).getTime();
+	var curTime = _time;
 	velXFilter(_collect, _isLive, _id, _flightId, curTime, _speed_x, function(){
 		velYFilter(_collect, _isLive, _id, _flightId, curTime, _speed_y, function(){
 			velZFilter(_collect, _isLive, _id, _flightId, curTime, _speed_z, function(){

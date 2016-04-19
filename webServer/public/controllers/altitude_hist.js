@@ -20,12 +20,24 @@ angular.module('UavOpsInterface')
             url: 'api/altitude/'+_flightId, 
         };
         $http(req).then(function(data){
-            console.log(data.data);
             $scope.showChart = true;
+
+            var altitudes = [];
+            for(var i in data.data.data){
+                altitudes.push({
+                    label: (new Date(data.data.data[i].created_at)).getTime(),
+                    value: data.data.data[i].alt
+                });
+            }
+
+            // sort
+            var sortFunc = function(a, b){return a.label-b.label};
+            altitudes.sort(sortFunc);
+
             $scope.altitudes = [
                 {
                     key: "altitudes",
-                    values: data.data.data
+                    values: altitudes
                 }
             ];
             $scope.options = {
@@ -38,10 +50,8 @@ angular.module('UavOpsInterface')
                         bottom: 40,
                         left: 55
                     },
-                    x: function(d){ 
-                        return (new Date(d.created_at)).getTime(); 
-                    },
-                    y: function(d){ return d.alt; },
+                    x: function(d){ return d.label; },
+                    y: function(d){ return d.value; },
                     useInteractiveGuideline: true,
                     xAxis: {
                         axisLabel: 'Time (s)'

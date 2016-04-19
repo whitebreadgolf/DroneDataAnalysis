@@ -40,6 +40,12 @@ angular.module('UavOpsInterface')
                     value: velocities[i].vel_z
                 });
             }
+            // sort
+            var sortFunc = function(a, b){return a.label-b.label};
+            xVals.sort(sortFunc);
+            yVals.sort(sortFunc);
+            zVals.sort(sortFunc);
+
             $scope.velocities = [
                 {
                     key: "x velocity",

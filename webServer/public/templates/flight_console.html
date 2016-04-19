@@ -80,7 +80,7 @@
 			</div>
 	  	</div>
 	  	<div class="panel-footer">
-	  		<div ng-if="flight.analyzing"><i class="fa fa-cog fa-spin fa-fw margin-bottom"></i></div>
+	  		<span ng-if="flight.analyzing"><i class="fa fa-cog fa-spin fa-fw margin-bottom"></i></span>
 	  		<div ng-if="!flight.analyzing">
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ng-click="startLiveFlight(flight._id)">Start Live Flight Data Collection</div>
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT file for analysis</div>

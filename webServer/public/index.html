@@ -19,7 +19,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <i class="fa fa-navicon"></i>
       </button>
       <a class="navbar-brand" href="#"><i class="fa fa-plane"></i> DJI Manager</a>
     </div>
@@ -32,7 +31,7 @@
             Flight <i class="fa fa-caret-square-o-down"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/preflight"><i class="fa fa-wpforms"></i> Pre-Flight</a></li>
+            <li><a href="#/preflight"><i class="fa fa-wpforms"></i> Pre-Flight Registration</a></li>
             <li><a href="#/flight_console"><i class="fa fa-tablet"></i> Flight Console</a></li>
           </ul>
         </li>
@@ -45,6 +44,8 @@
             <li><a href="#/notifications"><i class="fa fa-warning"></i> Notifications</a></li>
             <li><a href="#/velocity"><i class="fa fa-line-chart"></i> Velocity</a></li>
             <li><a href="#/altitude"><i class="fa fa-line-chart"></i> Altitude</a></li>
+            <li><a href="#/battery"><i class="fa fa-bar-chart"></i> Battery</a></li>
+            <li><a href="#/building_proximity"><i class="fa fa-bar-chart"></i> Proximity</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -52,9 +53,10 @@
             Historical <i class="fa fa-caret-square-o-down"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/airport_notifications"><i class="fa fa-warning"></i> Notifications</a></li>
+            <li><a href="#/altvel_notifications"><i class="fa fa-warning"></i> Notifications</a></li>
             <li><a href="#/velocity_hist"><i class="fa fa-line-chart"></i> Velocity</a></li>
             <li><a href="#/altitude_hist"><i class="fa fa-line-chart"></i> Altitude</a></li>
+            <li><a href="#/obstical_notifications"><i class="fa fa-line-chart"></i> Proximity</a></li>
             <li><a href="#/location_hist"><i class="fa fa-map-marker"></i> Location</a></li>
           </ul>
         </li>
@@ -116,4 +118,7 @@
 <script src="controllers/add_obstacle.js"></script>
 <script src="controllers/location_hist.js"></script>
 <script src="controllers/legal.js"></script>
+<script src="controllers/battery.js"></script>
+<script src="controllers/airport_proximity.js"></script>
+<script src="controllers/building_proximity.js"></script>
 </html>

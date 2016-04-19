@@ -1,6 +1,5 @@
 <ul class="nav nav-pills nav-justified">
 	<li role="presentation" class="active"><a href="#/airport_notifications">Airport</a></li>
-	<li role="presentation"><a href="#/altvel_notifications">Altitude and Velocity</a></li>
 	<li role="presentation"><a href="#/obstical_notifications">Building and Obsticals</a></li>
 </ul>
 <br>
@@ -9,6 +8,12 @@
 		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
   	</div>
 </div>
+<div class="row" ng-if="showAirport">
+	<div class="col-sm-12">
+		<span class="btn btn-default" ng-click="backClicked()">Back</span>
+	</div>
+</div>
+<br>
 <div ng-if="!showNotifications" ng-repeat="flight in flights | filter: searchFilter" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
@@ -21,18 +26,22 @@
 	</div>	
 	</div>
 </div>
-<div class="row" ng-if="showNotifications">
+<div class="row" ng-if="flightSelected" ng-repeat="airport in airports">
 	<div class="col-sm-12">
-	<div ng-repeat="note in notifications">
+	<div>
 		<div class="panel panel-default">
 		  	<div class="panel-body">
-				<div>{{note.report}}</div>
-				<div>{{note.value}}</div>
-				<div>{{note.created_at}}</div>
+				<div>{{airport}}</div>
 		  	</div>
-		</div>	
+		  	<div class="panel-footer">
+			<div class="btn btn-default" ng-click="clickAirport(airport)">Select Airport</div>
+	  	</div>	
+		</div>
 	</div>
 	</div>
+</div>
+<div class="row" ng-if="showAirport">
+	<nvd3 options="options" data="airportData"></nvd3>
 </div>
 <div class="row">
 <div class="col-sm-12">

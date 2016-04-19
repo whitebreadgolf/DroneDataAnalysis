@@ -26,7 +26,7 @@ var AIRPORT_SEARCH = {seg1:'https://maps.googleapis.com/maps/api/place/nearbysea
 @param {Number} _lon - the longitude of the drone
 @param {function} _callback - generic callback
 */
-var getProximitiesForEachAirport = function(_id, _flightId, _lat, _lon, _callback){
+var getProximitiesForEachAirport = function(_time, _id, _flightId, _lat, _lon, _isLive, _callback){
 	if(_lat !== 0 && _lon !== 0){
 		Airport.find({'user':_id}, function(_err, _airports){
 			if(!_err && _airports.length !== 0){
@@ -35,7 +35,7 @@ var getProximitiesForEachAirport = function(_id, _flightId, _lat, _lon, _callbac
 				for(var airport in _airports){
 					_airports[airport].id = _id;
 					_airports[airport].flightId = _flightId; 
-					calcDistanceAndSaveData(_airports[airport], _lat, _lon, function(){
+					calcDistanceAndSaveData(_time, _isLive, _airports[airport], _lat, _lon, function(){
 						airportCount++
 						if(airportCount === numAirports){
 							_callback();
@@ -60,20 +60,35 @@ var getProximitiesForEachAirport = function(_id, _flightId, _lat, _lon, _callbac
 @param {Number} _lon - the longitude of the drone
 @param {function} _callback - generic callback function
 */
-var calcDistanceAndSaveData = function(_data, _lat, _lon, _callback){
+var calcDistanceAndSaveData = function(_time, _isLive, _data, _lat, _lon, _callback){
 	var dist = measure(_lat, _lon, _data.lat, _data.lon);
 	var data = {
 		pilot: _data.id,
 		flight_id: _data.flightId,
 		type: 'airport',
-		report: 'Drone proximity for '+_data.name,
+		report: _data.name,
 		icon: _data.icon,
 		value: dist,
-		created_at: new Date()
+		created_at: _time
 	};
-	safetyStatus.saveSafetyStatus(data, function(){
-		_callback();
-	});
+    var liveData = {
+        type: 'proximity',
+        level: 'warning',
+        param: 'airport',
+        name: _data.name,
+        dist: dist,
+        time: _time
+    }
+    if(_isLive.status) 
+        wss.broadcast(JSON.stringify(liveData));
+
+    if(dist < 100000){
+        safetyStatus.saveSafetyStatus(data, function(){
+            _callback();
+        });
+    }
+	else
+        _callback();
 };
 
 /**
@@ -99,6 +114,8 @@ var findAirportsInRange = function(_startObj, _endObj, _id, _callback){
         var length = Object.keys(_airportMap).length;
         var count = 0;
         for(var airport in _airportMap){
+
+
             var data = {
                 name: airport,
                 user: _id,

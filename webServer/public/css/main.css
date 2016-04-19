@@ -1,6 +1,79 @@
 @import url("gsdk-checkbox-radio-switch.css");
 @import url("gsdk-sliders.css");
 
+.custom-marker {}
+    .custom-marker.customMarker {
+        font-size: 1.5em;
+        padding: 10px;
+        background: #fff;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: #7F7F7F solid 1px;
+    }
+    .custom-marker.customMarker:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 7px 6px 0;
+        border-color: #fff transparent;
+        display: block;
+        width: 0;
+        z-index: 1;
+        margin-left: -6px;
+        bottom: -6px;
+        left: 50%;
+    }
+    .custom-marker.customMarker:before {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 7px 6px 0;
+        border-color: #7F7F7F transparent;
+        display: block;
+        width: 0;
+        z-index: 0;
+        margin-left: -6px;
+        bottom: -7px;
+        left: 50%;
+    }
+    .custom-marker.customDot {
+        font-size: 1.5em;
+        padding: 4px;
+        background: red;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: none;
+    }
+    .custom-marker.customDot:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #fff transparent;
+        display: block;
+        width: 0;
+        z-index: 1;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
+    .custom-marker.customDot:before {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #7F7F7F transparent;
+        display: block;
+        width: 0;
+        z-index: 0;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
+
+
 /*           Animations              */
 .form-control, .input-group-addon{
     -webkit-transition: all 300ms linear;
@@ -251,82 +324,105 @@ input.ct-red + span.switch-left, input.ct-red + span + label + span.switch-right
     transition: all 0.4s;
     -webkit-transition: all 0.4s;
     font-size: 16px;
+
+    background-color: #BD2031;
+    color: #FFDF00;
 }
 .navbar-default {
-    background-color: #D9D9D9;
+    /*background-color: #D9D9D9;*/
+    background-color: #BD2031;
 
+    color: #FFDF00;
 }
 .navbar .navbar-brand {
     font-weight: 600;
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 20px;
+    color: #FFDF00;
 }
 .navbar-nav > li > a {
     margin-top: 13px;
     margin-bottom: 13px;
     padding-bottom: 12px;
     padding-top: 12px;
+    color: #FFFFFF !important;
+}
+.navbar-nav > li > a:hover {
+    color: #FFDF00 !important;
 }
 .navbar-nav > li > a [class^="fa"]{
     font-size: 18px;
+    color: #FFFFFF;
 }
 .navbar-brand{
     padding: 20px 15px;
+    color: #FFDF00 !important;
 }
 
 .navbar .btn{
     margin-top: 8px;
     margin-bottom: 8px;
+    background-color: #BD2031;
 }
 .navbar-default:not(.navbar-transparent) {
-    background-color: rgba(255, 255, 255, 0.96);
+    /*background-color: rgba(255, 255, 255, 0.96);*/
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .navbar-transparent{
+    background-color: #BD2031;
     padding-top: 15px;
-    background-color: rgba(0,0,0,.0);
+    /*background-color: rgba(0,0,0,.0);*/
 }
 .navbar-transparent .navbar-brand, [class*="navbar-ct"] .navbar-brand{
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     opacity: 0.95;
 }
 .navbar-transparent .navbar-brand:hover, .navbar-transparent .navbar-brand:focus {
-    background-color: rgba(0, 0, 0, 0);
-    color: #5E5E5E;
+    /*background-color: rgba(0, 0, 0, 0);*/
+    background-color: #BD2031;
+    /*color: #5E5E5E;*/
+    color: #FFDF00;
 }
 .navbar-transparent .nav .caret{
     border-bottom-color: #FFFFFF;
     border-top-color: #FFFFFF;
 }
 .navbar-transparent .navbar-nav > li > a, [class*="navbar-ct"] .navbar-nav > li > a{
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     border-color: #FFFFFF;
     opacity: 0.7;
 }
 .navbar-transparent .navbar-brand:hover, .navbar-transparent .navbar-brand:focus, [class*="navbar-ct"] .navbar-brand:hover, [class*="navbar-ct"] .navbar-brand:focus {
     background-color: rgba(0, 0, 0, 0);
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     opacity: 1;
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
     background-color: rgba(255, 255, 255, 0);
     border-radius: 3px;
-    color: #2C93FF;
+    /*color: #2C93FF;*/
+    color: #FFDF00;
     opacity: 1;
 }
 .navbar-default .navbar-nav > .dropdown > a:hover .caret, .navbar-default .navbar-nav > .dropdown > a:focus .caret {
     border-bottom-color: #2C93FF;
     border-top-color: #2C93FF;
+
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
     background-color: rgba(255, 255, 255, 0);
-    color: #2C93FF;
+    /*color: #2C93FF;*/
+    color: #FFDF00;
 }
 .navbar-transparent .navbar-nav > .active > a, .navbar-transparent .navbar-nav > .active > a:hover, .navbar-transparent .navbar-nav > .active > a:focus, .navbar-transparent .navbar-nav > li > a:hover, .navbar-transparent .navbar-nav > li > a:focus, [class*="navbar-ct"] .navbar-nav > .active > a, [class*="navbar-ct"] .navbar-nav > .active > a:hover, [class*="navbar-ct"] .navbar-nav > .active > a:focus, [class*="navbar-ct"] .navbar-nav > li > a:hover, [class*="navbar-ct"] .navbar-nav > li > a:focus {
     background-color: rgba(255, 255, 255, 0);
     border-radius: 3px;
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     opacity: 1;
 }
 .navbar-transparent .navbar-nav > .dropdown > a .caret, [class*="navbar-ct"] .navbar-nav > .dropdown > a .caret{
@@ -336,37 +432,48 @@ input.ct-red + span.switch-left, input.ct-red + span + label + span.switch-right
 .navbar-transparent .navbar-nav > .dropdown > a:hover .caret, .navbar-transparent .navbar-nav > .dropdown > a:focus .caret {
     border-bottom-color: #FFFFFF;
     border-top-color: #FFFFFF;
+
 }
 .navbar-transparent .navbar-nav > .open > a, .navbar-transparent .navbar-nav > .open > a:hover, .navbar-transparent .navbar-nav > .open > a:focus {
-    background-color: rgba(255, 255, 255, 0);
-    color: #FFFFFF;
+    background-color: #BD2031;
+/*    background-color: rgba(255, 255, 255, 0);
+*/    /*color: #FFFFFF;*/
+color: #FFDF00;
     opacity: 1;
 }
 .navbar .btn{
+    background-color: #BD2031;
     font-size: 16px;
     margin-top: 13px;
     margin-bottom: 13px;
+
+    color: #FFDF00;
 }
 .navbar .btn-default{
-    color: #777777;
+    /*color: #777777;*/
+    color: #FFDF00;
     border-color: #777777;
 }
 .navbar-default:not(.navbar-transparent) .btn-default:hover{
-    color: #2C93FF;
+    /*color: #2C93FF;*/
+    color: #FFDF00;
     border-color: #2C93FF;
 }
 .navbar-transparent .btn-default, [class*="navbar-ct"] .btn-default{
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     border-color: #FFFFFF;
 }
 [class*="navbar-ct"] .btn-default.btn-fill{
-    color: #777777;
+    /*color: #777777;*/
+    color: #FFDF00;
     background-color: #FFFFFF;
     opacity: 0.9;
 }
 [class*="navbar-ct"] .btn-default.btn-fill:hover, [class*="navbar-ct"] .btn-default.btn-fill:focus, [class*="navbar-ct"] .btn-default.btn-fill:active, [class*="navbar-ct"] .btn-default.btn-fill.active, [class*="navbar-ct"] .open .dropdown-toggle.btn-fill.btn-default{
     border-color: #FFFFFF;
     opacity: 1;
+
 }
 .navbar-form{
     box-shadow: none;
@@ -379,10 +486,12 @@ input.ct-red + span.switch-left, input.ct-red + span + label + span.switch-right
     padding: 0;
     font-size: 16px;
     line-height: 20px;
-    color: #777777;
+    /*color: #777777;*/
+    color: #FFDF00;
 }
 .navbar-transparent .navbar-form .form-control, [class*="navbar-ct"] .navbar-form .form-control{
-    color: #FFFFFF;
+    /*color: #FFFFFF;*/
+    color: #FFDF00;
     border: 0;
     border-bottom: 1px solid rgba(255,255,255,.6);
 }

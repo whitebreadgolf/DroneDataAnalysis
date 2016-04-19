@@ -317,6 +317,7 @@ angular.module('UavOpsInterface')
 
 		// start progress bar
 		currentDecoding.progress_bar.setHeight('2px');
+		currentDecoding.progress_bar.setColor('#FFDF00');
     	currentDecoding.progress_bar.start();
 
     	currentDecoding.progress_interval = $interval(function(){

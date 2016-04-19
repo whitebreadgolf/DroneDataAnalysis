@@ -521,7 +521,7 @@ var shrinkQueueTo = function(_queue, _num){
 @param {Number} _lon - the longitude to be checked
 @param {function} _callback - generic callback
 */
-var loadBuildingProximity = function(_isLive, _flightId, _id, _lat, _lon, _callback){
+var loadBuildingProximity = function(_time, _isLive, _flightId, _id, _lat, _lon, _callback){
     loadMapWithCloseLatLon(_id, _lat, _lon, function (_maps){
         if(_maps === -1) 
             _callback(-1);
@@ -532,15 +532,12 @@ var loadBuildingProximity = function(_isLive, _flightId, _id, _lat, _lon, _callb
                     if(_dist === -1) 
                         _callback('err'); // no building found, don't report
                     else{
-                        var curTime;
-                        if(_isLive.status) curTime = (new Date());
-                        else curTime = _isLive.value * regulationConfig.app_constants.dji_dat_collect_rate + regulationConfig.cur_flight[_id].start_time;
                         var liveData = {
-                            type: 'notification',
+                            type: 'proximity',
                             level: 'warning',
-                            param: 'proximity',
-                            text: 'Your drone is '+_dist+' meters from an obsticle',
-                            time: curTime - regulationConfig.cur_flight[_id].start_time
+                            param: 'building',
+                            dist: _dist,
+                            time: _time
                         }
                         if(_isLive.status) wss.broadcast(JSON.stringify(liveData));
                        
@@ -549,10 +546,10 @@ var loadBuildingProximity = function(_isLive, _flightId, _id, _lat, _lon, _callb
                             pilot: _id, 
                             flight_id: _flightId, 
                             type: 'proximity',
-                            report: 'obsticle proximity (building or configured obsticle)', 
+                            report: 'obsticle', 
                             value: _dist,
                             icon: null,
-                            created_at: new Date()
+                            created_at: _time,
                         };  
 
                         safetyStatus.saveSafetyStatus(collectData, function(){

@@ -15,6 +15,7 @@ var magneticWarningFilter = require('./magneticWarningFilter');
 var velocityAltitudeFilter = require('./velocityAltitudeFilter');
 var dataSaveFilter = require('./dataSaveFilter');
 var buildingProximity = require('../analytics/buildingProximity');
+var airportProximity = require('../analytics/airportProximity');
 
 /**
 @function routeParameters 
@@ -29,16 +30,15 @@ var buildingProximity = require('../analytics/buildingProximity');
 */
 var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _callback){
 
-    // create data for magnetic warning filter and velAlt
-    var mag_data_stream = {
+    // all data object-ified
+    var data_stream = {
+        battery: _data[12],
         gyro_x: _data[9],
         gyro_y: _data[10],
         gyro_z: _data[11],
-        mag_x: _data[14],
-        mag_y: _data[15],
-        mag_z: _data[16],
-    };
-    var data_stream = {
+        acc_x: _data[6],
+        acc_y: _data[7],
+        acc_z: _data[8],
         velocity_x: _data[4], 
         velocity_y: _data[3], 
         velocity_z: _data[5], 
@@ -47,20 +47,42 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
         longitude: _data[1]
     };
 
+    // replace string null with null
+    for(var key in data_stream){
+        if(data_stream[key] === 'null')
+            data_stream[key] = null;
+    }
 
 	// apply filters and send
-    //magneticWarningFilter.magFilter(_id, mag_data_stream);
-    velocityAltitudeFilter.velAltFilter(_collect, _isLive, _id, _flightId, data_stream, function(){
-        // send data to interface if live
-        // collect data if collection is on
-        if(_isLive.status) sendLiveData(_id, data_stream);
-        if(_collect){ 
-            dataSaveFilter.routeDataParameters(_id, _flightId, _isLive, data_stream, function(){
-                _callback();
-            }); 
-        }
-        else _callback();
-    });
+    var curTime;
+    if(_isLive.status) 
+        curTime = (new Date());
+    else 
+        curTime = _isLive.value * regulationConfig.app_constants.dji_dat_collect_rate + (new Date(regulationConfig.cur_flight[_id].start_time)).getTime();
+    
+    // send live data if live
+    if(_isLive.status) 
+        sendLiveData(_id, data_stream);
+
+    if(!regulationConfig.cur_flight[_id].last_collect || (curTime - regulationConfig.cur_flight[_id].last_collect) >= regulationConfig.app_constants.app_collection_rate){
+        regulationConfig.cur_flight[_id].last_collect = curTime;
+        velocityAltitudeFilter.velAltFilter(curTime, _collect, _isLive, _id, _flightId, data_stream, function(){
+            buildingProximity.loadBuildingProximity(curTime, _isLive, _flightId, _id, data_stream.latitude, data_stream.longitude, function(_dist){
+                airportProximity.getProximitiesForEachAirport(curTime, _id, _flightId, data_stream.latitude, data_stream.longitude, _isLive, function(){
+                    
+                    // collect data if collection is on       
+                    dataSaveFilter.routeDataParameters(curTime, _id, _flightId, _isLive, data_stream, function(){
+                        _callback();
+                    }); 
+                }); 
+            });
+        });
+    }
+    else{
+        velocityAltitudeFilter.velAltFilter(curTime, _collect, _isLive, _id, _flightId, data_stream, function(){            
+            _callback();
+        }); 
+    }
 };
 
 /**
@@ -102,7 +124,6 @@ var routeMultiCsvString = function(_id, _flightId, _csvFile, _callback){
             // split actual csv data
             var splitData = csvStrings[i].split(',');
             routeDataParameters(true, {status: false, value: i}, _id, _flightId, splitData, function(){
-
                 count++;
                 if(count === totalLength) _callback({success: true, message: 'multiple data points collected'});
             });

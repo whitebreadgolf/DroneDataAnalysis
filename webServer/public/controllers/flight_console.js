@@ -1,5 +1,5 @@
 angular.module('UavOpsInterface')
-.controller('FlightConsoleCtrl', function($scope, $http, Notification, Decoder){
+.controller('FlightConsoleCtrl', function($scope, $http, Notification, Decoder, Websocket){
 	
 	$scope.noFlightData = true;
 	$scope.flightDataError = true;
@@ -83,6 +83,8 @@ angular.module('UavOpsInterface')
 				Notification({message: data.data.message}, 'success'); 
 			}
 			else Notification({message: data.data.message}, 'error');
+
+			Websocket.deleteAllLiveData();
 		}); 
 	}
 

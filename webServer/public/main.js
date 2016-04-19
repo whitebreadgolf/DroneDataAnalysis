@@ -54,6 +54,21 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			controller: 'PostFlightConsoleCtrl'
 		})
 
+		.when('/battery', {
+			templateUrl: 'templates/battery.html',
+			controller: 'BatteryCtrl'
+		})
+
+		.when('/airport_proximity', {
+			templateUrl: 'templates/airport_proximity.html',
+			controller: 'AirportProxCtrl'
+		})
+
+		.when('/building_proximity', {
+			templateUrl: 'templates/building_proximity.html',
+			controller: 'BuildingProxCtrl'
+		})
+
 		// notifications
 		.when('/notifications', {
 			templateUrl: 'templates/notifications.html',

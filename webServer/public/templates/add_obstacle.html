@@ -5,44 +5,15 @@
 	</div>
 </div>
 <br>
-<style type="text/css">
-	.custom-marker {}
-	.custom-marker.customMarker {
-		font-size: 1.5em;
-		padding: 10px;
-		background: #fff;
-		-webkit-border-radius: 4px;
-		-moz-border-radius: 4px;
-		border-radius: 4px;
-		border: #7F7F7F solid 1px;
-	}
-	.custom-marker.customMarker:after {
-		content: '';
-		position: absolute;
-		border-style: solid;
-		border-width: 7px 6px 0;
-		border-color: #fff transparent;
-		display: block;
-		width: 0;
-		z-index: 1;
-		margin-left: -6px;
-		bottom: -6px;
-		left: 50%;
-	}
-	.custom-marker.customMarker:before {
-        content: '';
-        position: absolute;
-        border-style: solid;
-        border-width: 7px 6px 0;
-        border-color: #7F7F7F transparent;
-        display: block;
-        width: 0;
-        z-index: 0;
-        margin-left: -6px;
-        bottom: -7px;
-        left: 50%;
-    }
-</style>
+<div class="row">
+	<div class="col-sm-6">
+		<button ng-click="clearMarkers()" class="btn btn-default" style="width:100%;border-radius:0px">Clear all markers</button>
+	</div>
+	<div class="col-sm-6">
+		<button ng-click="configureAllObstacles()" class="btn btn-danger" style="width:100%;border-radius:0px">Configure All Obsticles</button>
+	</div>
+</div>
+<br>
 <div class="row">
 	<div class="col-sm-12">
 		<ng-map style="height:500px;"
@@ -53,9 +24,9 @@
 					position="{{pos.lat}},{{pos.lon}}">
 				<div class="customMarker"><div>{{pos.id}}</div> </div>
 			</custom-marker>
-			<marker ng-repeat="pos in configMarkers" 
+			<custom-marker ng-repeat="pos in configMarkers" 
 					position="{{pos.lat}},{{pos.lon}}"
-			></marker>
+			><div class="customDot"><div></div> </div></custom-marker>
 		</ng-map>
 	</div>
 </div>
@@ -78,20 +49,11 @@
 		<div class="panel-footer">
 			<div class="row">
 				<div class="col-sm-12">
-					<button class="btn btn-primary" ng-click="addObsticle(pos.id)">Add</button>
-					<div class="pull-right"><button class="btn btn-danger" ng-click="removeObsticle(pos.id)">Remove</button></div>
+					<button class="btn btn-danger" ng-click="addObsticle(pos.id)">Add</button>
+					<div class="pull-right"><button class="btn btn-default" ng-click="removeObsticle(pos.id)">Remove</button></div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<br>
-<div class="row">
-	<div class="col-sm-6">
-		<button ng-click="clearMarkers()" class="btn btn-danger" style="width:100%;border-radius:0px">Clear all markers</button>
-	</div>
-	<div class="col-sm-6">
-		<button ng-click="configureAllObstacles()" class="btn btn-primary" style="width:100%;border-radius:0px">Configure All Obsticles</button>
 	</div>
 </div>
 <br>

@@ -83,11 +83,8 @@ var initRoutes = function (_app){
 
 		// req - {username: <string>, pass: <string>}
 		// res - {success: <boolean>, message: <string>}
-		var keys = [];
-		for(var k in req.body) keys.push(k);
-		var key = keys[0];
-		var data = JSON.parse(key);
-		User.authenticate()(data.username, data.pass, function (err, user, options) {
+		
+		User.authenticate()(req.body.username, req.body.pass, function (err, user, options) {
 	        if (user === false) {
 	            res.json({
 	                message: options.message,
@@ -399,41 +396,19 @@ var initRoutes = function (_app){
 
 		// req - {type: ('single'|'multi'), csv_string: <string>, user_id: <string>, flight_id: <string>}
 		// res - {success: <boolean>, data: <string>}
-		console.log(req);
-		var data;
-		try{
-			var keys = [];
-			for(var k in req.body) keys.push(k);
-			var key = keys[0];
-			data = JSON.parse(key);
-		}catch(err){}
 
 		// user must be logged in or a key provided
-		if(req.user || req.body.user_id || data.user_id){
+		if(req.user || req.body.user_id){
 
 			// set correct user id from req body or session 
 			var user_id;
-			var flight_id;
-			var csv_string;
-			var type;
-			if(req.user){ 
+			var flight_id = req.body.flight_id;
+			var csv_string = req.body.csv_string;
+			var type = req.body.type;
+			if(req.user)
 				user_id = req.user._id;
-				flight_id = req.body.flight_id;
-				csv_string = req.body.csv_string;
-				type = req.body.type;
-			}
-			else if(req.body.user_id){
+			else if(req.body.user_id)
 				user_id = req.body.user_id;
-				flight_id = req.body.flight_id;
-				csv_string = req.body.csv_string;
-				type = req.body.type;
-			}
-			else{
-				user_id = data.user_id;
-				flight_id = data.flight_id;
-				csv_string = data.csv_string;
-				type = data.type;
-			}
 
 			// forward to data filter based on type
 			if(type === 'single'){
