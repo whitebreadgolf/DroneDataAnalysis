@@ -1,6 +1,7 @@
 /**
 @class angular_controller.AddObstacle
 @memberOf angular_controller
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .controller('AddObstacleCtrl', function ($scope, $http, Notification) {

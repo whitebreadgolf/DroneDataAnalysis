@@ -1,3 +1,10 @@
+/**
+@class angular_factories.DecoderFactory
+@description responsible for decoding a dat file
+@deprecated since the version with internal flight simulations
+@requires Notification
+@requires ngProgressFactory
+*/
 angular.module('UavOpsInterface')
 .factory('Decoder', function (ngProgressFactory, Notification, $interval, $http){
 
@@ -5,11 +12,25 @@ angular.module('UavOpsInterface')
 	var currentDecoding = null;
 	var decodeQueue = [];
 
+	/**
+	@function convert 
+	@memberOf angular_factories.DecoderFactory
+	@description converts int to decoded string
+	@param {Number} _integer - an integer Number
+	@returns {Number} the integer input with possible appended 0 
+	*/
 	function convert(integer) {
 	    var str = Number(integer).toString(16);
 	    return str.length == 1 ? "0" + str : str;
 	};
 
+	/**
+	@function parseLittleEndianDouble 
+	@memberOf angular_factories.DecoderFactory
+	@description creates byte array from input string
+	@param {string} _str - the string to be converted
+	@returns {Object} a Float64Array with internal byte array buffer
+	*/
 	function parseLittleEndianDouble(str) {
 	    var buffer = new ArrayBuffer(8);
 	    var bytes = new Uint8Array(buffer);
@@ -26,6 +47,13 @@ angular.module('UavOpsInterface')
 	    return my_double;
 	}
 
+	/**
+	@function parseLittleEndianFloat 
+	@memberOf angular_factories.DecoderFactory
+	@description converts input string into float
+	@param {string} _str - the string to be converted
+	@returns {Object} a Float64Array with internal byte array buffer
+	*/
 	function parseLittleEndianFloat(str) {
 	    var f = 0,
 	        sign, order, mantiss, exp, int = 0,
@@ -58,6 +86,16 @@ angular.module('UavOpsInterface')
 	    return f * sign;
 	}
 
+	/**
+	@function calcCrow 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates the distance between 2 latitude/longitude points
+	@param {Number} _lat1 - latitude point 1
+	@param {Number} _lon1 - longitude point 1
+	@param {Number} _lat2 - latitude point 2
+	@param {Number} _lon2 - longitude point 2
+	@returns {Number} distance from point 1 to point 2
+	*/
 	function calcCrow(lat1, lon1, lat2, lon2) {
 	    var R = 6371;
 	    var dLat = toRad(lat2 - lat1);
@@ -71,10 +109,24 @@ angular.module('UavOpsInterface')
 	    return d;
 	}
 
+	/**
+	@function toRad 
+	@memberOf angular_factories.DecoderFactory
+	@description convert arclength to radians
+	@param {Number} _value - the value of the arclength
+	@returns {Number} radian value
+	*/
 	function toRad(Value) {
 	    return Value * Math.PI / 180;
 	}
 
+	/**
+	@function parseLittleEndianSigned32 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates decimal value from 32 bit unsigned hexidecimal string
+	@param {string} _hex - hexidecimal value
+	@returns {Number} decimal value 
+	*/
 	function parseLittleEndianSigned32(hex) {
 	    var result = 0;
 	    var pow = 0;
@@ -89,6 +141,13 @@ angular.module('UavOpsInterface')
 	    return result;
 	}
 
+	/**
+	@function parseLittleEndianUnsigned32 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates decimal value from 32 bit unsigned hexidecimal string
+	@param {string} _hex - hexidecimal value
+	@returns {Number} decimal value 
+	*/
 	function parseLittleEndianUnsigned32(hex) {
 	    var result = 0;
 	    var pow = 0;
@@ -100,6 +159,13 @@ angular.module('UavOpsInterface')
 	    return result;
 	}
 
+	/**
+	@function parseLittleEndianSigned16 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates decimal value from 16 bit signed hexidecimal string
+	@param {string} _hex - hexidecimal value
+	@returns {Number} decimal value 
+	*/
 	function parseLittleEndianSigned16(hex) {
 	    var result = 0;
 	    var pow = 0;
@@ -114,6 +180,13 @@ angular.module('UavOpsInterface')
 	    return result;
 	}
 
+	/**
+	@function parseLittleEndianUnsigned16
+	@memberOf angular_factories.DecoderFactory 
+	@description calculates decimal value from 16 bit unsigned hexidecimal string
+	@param {string} _hex - hexidecimal value
+	@returns {Number} decimal value 
+	*/
 	function parseLittleEndianUnsigned16(hex) {
 	    var result = 0;
 	    var pow = 0;
@@ -125,6 +198,14 @@ angular.module('UavOpsInterface')
 	    return result;
 	}
 
+	/**
+	@function subtract_offset 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates the hex value of an incoming byte value
+	@param {string} _in_byte - hexidecimal value
+	@param {string} _mask - hexidecimal value
+	@returns {Number} masked byte in hex
+	*/
 	function subtract_offset(in_byte, mask) {
 	    var the_byte = parseInt(in_byte, 16) ^ mask;
 	    if (the_byte < 0)
@@ -132,6 +213,14 @@ angular.module('UavOpsInterface')
 	    return dec2hex(the_byte);
 	}
 
+	/**
+	@function zeroFill 
+	@memberOf angular_factories.DecoderFactory
+	@description calculates the hex value of an incoming byte value
+	@param {string} _number - hexidecimal value
+	@param {string} _width - hexidecimal value
+	@returns {Number} 
+	*/
 	function zeroFill(number, width) {
 	    width -= number.toString().length;
 	    if (width > 0) {
@@ -195,6 +284,16 @@ angular.module('UavOpsInterface')
 			return false;
 		}
 	}
+
+	/**
+	@function stopDecoding
+	@memberOf angular_factories.DecoderFactory
+	@description calculates the hex value of an incoming byte value
+	@param {String} _flightId - Flight id
+	@param {Callback} _startAnalysis - callbacks to start analysis
+	@param {Callback} _endAnalysis - callbacks to end analysis
+	@returns {Number} 
+	*/
 	var	stopDecoding = function(_flightId, _startAnalysis, _endAnalysis){
 		if(currentDecoding.flight_id === _flightId){
 
@@ -287,6 +386,19 @@ angular.module('UavOpsInterface')
 			}
 		}
 	}
+
+	/**
+	@function startDecoder
+	@memberOf angular_factories.DecoderFactory
+	@description Starts the decoding process.
+	@param {String} _flightId - Flight id
+	@param {Object} _file - File to be decoded.
+	@param {Callback} _doneDecoding - callbacks to be performed once 
+	the decoding process is complete
+	@param {Callback} _startAnalysis - callbacks to start analysis
+	@param {Callback} _endAnalysis - callbacks to end analysis
+	@returns {Number} 
+	*/
 	var startDecoder = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// start decoder now
@@ -301,6 +413,19 @@ angular.module('UavOpsInterface')
 			Notification({message: 'flight '+_flightId+ ' decoding queued'}, 'warning');
 		}
 	}
+
+	/**
+	@function startDecoderHelper
+	@memberOf angular_factories.DecoderFactory
+	@description Helps startDecoder perform the decoding process.
+	@param {String} _flightId - Flight id
+	@param {Object} _file - File to be decoded.
+	@param {Callback} _doneDecoding - callbacks to be performed once 
+	the decoding process is complete
+	@param {Callback} _startAnalysis - callbacks to start analysis
+	@param {Callback} _endAnalysis - callbacks to end analysis
+	@returns {Number} 
+	*/
 	var	startDecoderHelper = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// create object

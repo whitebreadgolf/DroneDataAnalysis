@@ -227,7 +227,7 @@ var subtract_offset = function (_in_byte, _mask) {
 }
 
 /**
-@function subtract_offset 
+@function zeroFill 
 @description calculates the hex value of an incoming byte value
 @alias interProcessCommunication/decodeDotDAT:subtract_offset
 @param {string} _number - hexidecimal value
