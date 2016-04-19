@@ -1,0 +1,45 @@
+<div class="row">
+	<div class="form-group col-sm-12">
+		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
+  	</div>
+</div>
+<div ng-if="!showChart" ng-repeat="flight in flights | filter: searchFilter" class="row">
+	<div class="col-sm-12">
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+			<div>{{flight.flight_name}}</div>
+	  	</div>
+	  	<div class="panel-footer">
+			<div class="btn btn-default" ng-click="flightSearch(flight._id)">Search Flight</div>
+	  	</div>
+	</div>	
+	</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="noData">
+	<div class="alert alert-warning">
+	    <strong>No flight data to query</strong>
+	</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div ng-if="dataError">
+	<div class="alert alert-warning">
+	    <strong>Flight data error</strong>
+	</div>
+</div>
+</div>
+</div>
+
+<div ng-if="showChart" class="row">
+	<div class="col-sm-12">
+		<ng-map style="height:500px;"
+			zoom="15"
+			center="current-location"> 
+			<marker ng-repeat="pos in allMarkers" position="{{pos.lat}},{{pos.lon}}"></marker>
+		</ng-map>
+	</div>
+</div>

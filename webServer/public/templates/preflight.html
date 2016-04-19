@@ -1,0 +1,152 @@
+<div class="row">
+	<div class="col-sm-12">
+ 	<h2>Pre-Flight Inspection Registration</h2>
+ 	<p>
+ 		Before the DJI Data Manager can record flight data there needs to be a record of the flight and its inpection. Complete the questions below to initaite a flight. Avoiding drone flight accidents can be as simple as identifying issues with the drone pre-flight. All questions are required.
+ 	</p>
+ 	</div>
+ </div>
+ <br>
+ <form ng-submit="submit()">
+ 
+ 	<div class="row">
+ 		<div class="col-sm-12">
+	 		<div class="panel panel-default">
+		 		<div class="panel-heading">
+		 			<h4>Flight Name</h4>
+		 			<p>Enter a name for your flight here. Make it memorable so you can easily retrieve flight postflight feedback. An example of a name would be "First flight at cherry hill park." You do not need to make it too long or include a date.</p>
+		 		</div>
+		 		<div class="panel-body">
+					<div class="form-group">
+				 		<input class="form-control" type="text" ng-model="name">
+				 	</div>
+		 		</div>
+	 		</div>
+ 		</div>
+ 	</div>
+ 
+ 	<div class="row">
+	 	<div class="col-sm-12">
+	 		<div class="panel panel-default">
+	 			<div class="panel-heading">
+	 				<h4><i class="fa fa-battery-4"></i> Battery Charges</h4>
+	 				<p>The charge of the drone's battery can be found at the tail end of the drone on the removable battery. The controller's charge can be found on the face of the controller at the bottom. It is recommended that a drone operator has full charge in both the drone and controller before taking flight.</p>
+	 			</div>
+	 			<div class="panel-body">
+	 				<div class="row">
+						<div class="form-group col-sm-3">
+					 		<label>Controller Charge</label>
+					 		<select class="form-control" ng-model="controllerCharge">
+					 			<option value='0'>Empty</option>
+					 			<option value='1'>One Quarter</option>
+					 			<option value='2'>Half</option>
+					 			<option value='3'>Three Quarters</option>
+					 			<option value='4'>Full Charge</option>
+					 		</select>
+					 	</div>
+					 	<div class="form-group col-sm-3">
+					 		<label>Drone Charge</label>
+					 		<select class="form-control" ng-model="droneCharge">
+					 			<option value='0'>Empty</option>
+					 			<option value='1'>One Quarter</option>
+					 			<option value='2'>Half</option>
+					 			<option value='3'>Three Quarters</option>
+					 			<option value='4'>Full Charge</option>
+					 		</select>
+					 	</div>
+	 				</div>
+	 			</div>
+	 		</div>
+	 	</div>
+ 	</div>
+ 
+ 	<div class="row">
+ 		<div class="col-sm-12">
+ 			<div class="panel panel-default">
+ 				<div class="panel-heading">
+ 					<h4></i> Propeller Conditions</h4>
+ 					<p>All propeller positions are relative to a top-down forward facing view of the DJI Phantom. It is reccomended that all cracked propellers are replaced before additional flights.</p>
+ 				</div>
+ 				<div class="panel-body">
+ 					<div class="row">
+ 						<div class="form-group col-sm-6">
+							<strong>Top Left Propeller</strong>
+							<select class="form-control" ng-model="propeller1">
+					 			<option value='0'>Perfect condition</option>
+					 			<option value='1'>Scratched</option>
+					 			<option value='2'>Visibly cracked or chipped</option>
+					 			<option value='3'>Large chips or piece missing</option>
+					 		</select>
+					 	</div>
+					 	<div class="form-group col-sm-6">
+							<strong>Top Right Propeller</strong>
+							<select class="form-control" ng-model="propeller2">
+					 			<option value='0'>Perfect condition</option>
+					 			<option value='1'>Scratched</option>
+					 			<option value='2'>Visibly cracked or chipped</option>
+					 			<option value='3'>Large chips or piece missing</option>
+					 		</select>
+					 	</div>
+					 	<div class="form-group col-sm-6">
+							<strong>Bottom Left Propeller</strong>
+							<select class="form-control" ng-model="propeller3">
+					 			<option value='0'>Perfect condition</option>
+					 			<option value='1'>Scratched</option>
+					 			<option value='2'>Visibly cracked or chipped</option>
+					 			<option value='3'>Large chips or piece missing</option>
+					 		</select>
+					 	</div>
+					 	<div class="form-group col-sm-6">
+							<strong>Bottom Right Propeller</strong>
+							<select class="form-control" ng-model="propeller4">
+					 			<option value='0'>Perfect condition</option>
+					 			<option value='1'>Scratched</option>
+					 			<option value='2'>Visibly cracked or chipped</option>
+					 			<option value='3'>Large chips or piece missing</option>
+					 		</select>	
+					 	</div>
+ 					</div>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+ 
+ 	<div class="row">
+ 		<div class="col-sm-12">
+ 			<div class="panel panel-default">
+ 				<div class="panel-heading">
+ 					<h4>Miscellaneous</h4>
+ 					<p>These are various questions about the state of the drone.</p>
+ 				</div>
+ 				<div class="panel-body">
+ 					<div class="row">
+						<div class="form-group col-sm-6">
+					 		<label>Are the drone's micro SD cards loose?</label>
+					 		<select class="form-control" ng-model="sdCard">
+					 			<option value='0'>Yes</option>
+					 			<option value='1'>No, they were never loose.</option>
+					 			<option value='2'>No, I fixed the issue.</option>
+					 		</select>
+					 	</div>
+					 	<div class="form-group col-sm-6">
+					 		<label>Is the gimbal operational and free of obstacles?</label>
+					 		<select class="form-control" ng-model="gimbal">
+					 			<option value='0'>Yes</option>
+					 			<option value='1'>No</option>
+					 		</select>
+					 	</div>
+ 					</div>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</div>
+ 
+ 	<br>
+ 
+ 	<div class="row">
+ 		<div class="col-sm-12">
+ 			<button type="submit" class="btn btn-primary">Submit</button>
+ 		</div>
+ 	</div>
+ 	
+ </form>

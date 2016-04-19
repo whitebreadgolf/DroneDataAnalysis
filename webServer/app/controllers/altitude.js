@@ -1,18 +1,17 @@
 /**
-@module altitude - controller to interact with altitude data
-*/
-
-/**
-@requires altitude
+@module controllers/altitude 
+@description controller to interact with altitude data
+@requires models/altitude
 */
 
 var Altitude = require('../models/altitude');
 
 /**
-@function getAllAltitudesForFlightId - queries all altitudes for a given flight id
+@function getAllAltitudesForFlightId 
+@description queries all altitudes for a given flight id
 @alias controllers/altitude.getAllAltitudesForFlightId
-@param {String} _flightId - a mogoose object id
-@param {function} _callback - a function callback
+@param {string} _flightId - a mogoose object id
+@param {function} _callback - returns status and altitudes
 */
 var getAllAltitudesForFlightId = function(_flightId, _callback){
 	Altitude.find({flight_id: _flightId}, function(err, altitudes){
@@ -21,6 +20,24 @@ var getAllAltitudesForFlightId = function(_flightId, _callback){
 	});
 }
 
+/**
+@function saveAltitude 
+@description saves a single altitude data parameter
+@alias controllers/altitude.saveAltitude
+@param {Object} _data - the data to create an altitude object
+@param {function} _callback - returns status
+*/
+var saveAltitude = function(_data, _callback){
+	var alt = new Altitude(_data);
+	alt.save(function(err, data){
+		if(err) console.log(err);
+		else console.log('collected altitude');
+		_callback();
+	});
+}
+
+// export functions
 module.exports = {
-	getAllAltitudesForFlightId: getAllAltitudesForFlightId
+	getAllAltitudesForFlightId: getAllAltitudesForFlightId,
+	saveAltitude: saveAltitude
 };

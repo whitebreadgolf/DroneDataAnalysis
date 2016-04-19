@@ -1,12 +1,11 @@
 /**
-@module process - a module to spawn a program for signal processing capabilities
-*/
-
-/**
+@module interProcessCommunication/process 
+@description a module to spawn a program for signal processing capabilities
+@deprecated since the version with internal flight simulations
 @requires child_process
-@requires decodeDotDAT
-@requires regulationConfig
-@requires dataFilter
+@requires interProcessCommunication/decodeDotDAT
+@requires config/regulationConfig
+@requires analytics/dataFilter
 */
 
 // import packages
@@ -24,17 +23,8 @@ var SP_FP = __dirname + "/../../../signalProcessor/";
 var sp = {};
 
 /**
-@function initialize - to initialize the real cpp program and stdout callbacks on the spawed process
-@alias interProcessCommunication/process.initialize
-*/
-var initialize = function(){
-
-	// empty for now
-
-};
-
-/**
-@function initializeMock - to initialize the mock cpp program and stdout callbacks on the spawed process
+@function initializeMock 
+@description to initialize the mock cpp program and stdout callbacks on the spawed process
 @alias interProcessCommunication/process.initializeMock
 */
 var initializeMock = function(_id, _readExt, _readType){
@@ -46,11 +36,6 @@ var initializeMock = function(_id, _readExt, _readType){
 		map['normal'] = "flight_data.csv";
 		map['high'] = "flight_data_height_error.csv";
 		map['mag'] = "flight_data_mag_error.csv";
-	}
-	else if (_readExt == 'DAT'){
-		map['dummy'] = "FLY000.DAT";
-		map["normal"] = "FLY000.DAT";
-		map["high"] = "FLY000.DAT";
 	}
 
 	// any initalizations pre-function call
@@ -71,18 +56,18 @@ var initializeMock = function(_id, _readExt, _readType){
 	    space_index++;
 
 	    // check read type and filter accordingly
-		if(regulationConfig.cur_flight[id].simulation.file_read === 'DAT'){
+		// if(regulationConfig.cur_flight[id].simulation.file_read === 'DAT'){
 
-			// convert to uint8 array 
-	    	var view = new Uint8Array(new ArrayBuffer(data.length));
-	    	for (var i = space_index; i < data.length; ++i) {
-	        	view[i] = data[i];
-	    	}
+		// 	// convert to uint8 array 
+	 //    	var view = new Uint8Array(new ArrayBuffer(data.length));
+	 //    	for (var i = space_index; i < data.length; ++i) {
+	 //        	view[i] = data[i];
+	 //    	}
 
-			// decode sequence
-			decode.importDataBlob(id, view);
-		}
-		else if(regulationConfig.cur_flight[id].simulation.file_read === 'CSV'){
+		// 	// decode sequence
+		// 	decode.importDataBlob(id, view);
+		// }
+		if(regulationConfig.cur_flight[id].simulation.file_read === 'CSV'){
 
 			// feed in csv data			
 			dataFilter.filterCsvString(id, dataString.substr(space_index, data.length));
@@ -97,19 +82,16 @@ var initializeMock = function(_id, _readExt, _readType){
 };
 
 /**
-@function endMock - ends the mock flight data stream
+@function endMock
+@description ends the mock flight data stream
 @alias interProcessCommunication/process.endMock
+@param {string} _id - process id
 */
 var endMock = function (_id){
 	sp[_id].kill('SIGHUP');
 }
 
-
-/**
-all exports
-*/
 module.exports = {
-	initialize: initialize,
 	initializeMock: initializeMock,
 	endMock: endMock
 };

@@ -1,45 +1,41 @@
 /**
-@module magneticWarningFilter
-*/
-
-/**
-@requires websocket
-@requires regulationConfig
+@module analytics/magneticWarningFilter
+@description performs analysis on the magnetometer data
+@deprecated until this feature performs properly
+@requires interProcessCommunication/websocket
+@requires config/regulationConfig
 */
 
 var wss = require('../interProcessCommunication/websocket');
 var regulationConfig = require('../config/regulationConfig');
 
 // if the absolute value of a number is less than this value, then it will be considered 0
-const zero_threshold = 0.000001;
+var zero_threshold = 0.000001;
 
 // constant threshold used to determine whether the magnetic field is being altered by more than the earth's magnetic field
-const mag_threshold = 1;
+var mag_threshold = 1;
 
 // global mag and gyro queue
 var gm_queue = [];
 
 /**
-@function magFilter - to generate notifications based on differences in magnetic field readings and gyroscope reading
-@param {Number} gyrox - gyroscope data in the x plane
-@param {Number} gyroy - gyroscope data in the y plane
-@param {Number} gyroz - gyroscope data in the z plane
-@param {Number} magx - magnetic field data in the x plane
-@param {Number} magy - magnetic field data in the y plane
-@param {Number} magz - magnetic field data in the z plane
+@function magFilter
+@description generates notifications based on differences in magnetic field readings and gyroscope reading
+@param {string} _id - a mongo user id
+@param {Number} _data_stream - gyroscopic and magnometer data in the x, y and z planes
 */
-var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
+var magFilter = function(_id, _data_stream){
 
 	// create datapoint of magnetic and gyro data to add to queue
 	var magData = {
-		gyro_x: Number.parseFloat(gyrox),
-		gyro_y: Number.parseFloat(gyroy),
-		gyro_z: Number.parseFloat(gyroz),
-		mag_x: Number.parseFloat(magx),
-		mag_y: Number.parseFloat(magy),
-		mag_z: Number.parseFloat(magz)
+		gyro_x: Number.parseFloat(_data_stream.gyro_x),
+		gyro_y: Number.parseFloat(_data_stream.gyro_y),
+		gyro_z: Number.parseFloat(_data_stream.gyro_z),
+		mag_x: Number.parseFloat(_data_stream.mag_x),
+		mag_y: Number.parseFloat(_data_stream.mag_y),
+		mag_z: Number.parseFloat(_data_stream.mag_z)
  	};
- 	//console.log("gyro: " + gyro_x);
+
  	if (Math.abs(magData.gyro_x) < zero_threshold || magData.gyro_x == null) {
  		magData.gyro_x = 0;
  	}
@@ -95,9 +91,14 @@ var magFilter = function(_id, gyrox, gyroy, gyroz, magx, magy, magz){
 
 		gm_queue = [];
 	}
-	
 }
 
+/**
+@function gyromagDiff 
+@description calculates difference in gyroscopic and magnometer data
+@param {Number} i - index of queue
+@returns {Number} difference in gyroscopic and magnometer data
+*/
 var gyromagDiff = function(i) {
 	var gm_diff = {
 		gyro_x: gm_queue[i].gyro_x - gm_queue[i-1].gyro_x,
@@ -110,6 +111,7 @@ var gyromagDiff = function(i) {
 	return gm_diff;
 }
 
+// export publice functions
 module.exports = {
 	magFilter: magFilter
 };

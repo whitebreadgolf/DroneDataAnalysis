@@ -1,8 +1,5 @@
 /**
-@module speed
-*/
-
-/**
+@module models/velocity
 @requires mongoose
 */
 
@@ -14,8 +11,10 @@ var Schema = mongoose.Schema;
 // describe user in schema
 var velocitySchema = new Schema({
 	flight_id: { type: Schema.Types.ObjectId, ref: 'Flight' },
-	val: { type: Number, required: true},
-	time: Date
+	vel_x: { type: Number, required: true},
+	vel_y: { type: Number, required: true},
+	vel_z: { type: Number, required: true},
+	created_at: Date
 });
 
 // declare exported module

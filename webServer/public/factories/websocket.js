@@ -1,6 +1,10 @@
+/**
+@class angular_factories.Websocket
+@memberOf angular_factories
+*/
 angular.module('UavOpsInterface')
 .factory('Websocket', function (Notification){
-
+	// websocket data structures
 	var ws;
 	var speed = [
 		{
@@ -16,29 +20,32 @@ angular.module('UavOpsInterface')
 			values: []
 		}
 	];
-
 	var altitude = [
 		{
 	 		key: "Altitude",
 	 		values: []
 		}
 	];
-
 	var notifications = [];
 
 	return {
-	     create: function (){ 
+		/**
+		@function createWebsocket
+		@memberOf angular_controller.createWebsocket
+		@description The function configures and sets up the websocket. 
+		*/
+	    create: function (){ 
 
 	    	// configure the websocket and incoming data flow
 			ws = new WebSocket('ws://localhost:5001');
 			ws.onmessage = function (event) {
 
 			 	var jsonData = JSON.parse(event.data);
-
+			 	console.log(jsonData);
 				if(jsonData.type === 'data'){
 
 					// build altitude data
-					if(jsonData.altitude < 0.01) jsonData.altitude = 0;
+					if(jsonData.altitude < 0.01 && jsonData.altitude > -0.01) jsonData.altitude = 0;
 					var pushAlt = { "label" : jsonData.time/1000 , "value":jsonData.altitude};
 					altitude[0].values.push(pushAlt);
 					if (altitude[0].values.length > 15){
@@ -46,24 +53,24 @@ angular.module('UavOpsInterface')
 					}
 
 					// build velocity x data
-					if(jsonData.speed_x < 0.01) jsonData.speed_x = 0;
-					var pushX = {"label":jsonData.time/1000, "value":jsonData.speed_x};
+					if(jsonData.velocity_x < 0.01 && jsonData.velocity_x > -0.01) jsonData.velocity_x = 0;
+					var pushX = {"label":jsonData.time/1000, "value":jsonData.velocity_x};
 					speed[0].values.push(pushX);
 					if (speed[0].values.length > 15){
 						speed[0].values.shift();
 					}
 
 					// build velocity y data
-					if(jsonData.speed_y < 0.01) jsonData.speed_y = 0;
-					var pushY = {"label":jsonData.time/1000, "value":jsonData.speed_y};
+					if(jsonData.velocity_y < 0.01 && jsonData.velocity_y > -0.01) jsonData.velocity_y = 0;
+					var pushY = {"label":jsonData.time/1000, "value":jsonData.velocity_y};
 					speed[1].values.push(pushY);
 					if (speed[1].values.length > 15){
 						speed[1].values.shift();
 					}
 
 					// build velocity z data
-					if(jsonData.speed_z < 0.01) jsonData.speed_z = 0;
-					var pushZ = {"label":jsonData.time/1000, "value":jsonData.speed_z};
+					if(jsonData.velocity_z < 0.01 && jsonData.velocity_z > -0.01) jsonData.velocity_z = 0;
+					var pushZ = {"label":jsonData.time/1000, "value":jsonData.velocity_z};
 					speed[2].values.push(pushZ);
 					if (speed[2].values.length > 15){
 						speed[2].values.shift();

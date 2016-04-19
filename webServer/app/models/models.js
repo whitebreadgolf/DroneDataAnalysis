@@ -1,20 +1,21 @@
 /**
-@module models
-*/
-
-/**
-@requires mongoose
-@requires alititude
-@requires binaryMap
-@requires location
-@requires preflight
-@requires safetyReport
-@requires speed
-@requires user
+@module models/models
+@description initializes all of the mongoose models and connects to the db
+@requires models/mongoose
+@requires models/airport
+@requires models/altitude
+@requires models/binaryMap
+@requires models/location
+@requires models/flight
+@requires models/safetyReport
+@requires models/velocity
+@requires models/user
 */
 
 var mongoose = require('mongoose');
+var airport = require('./airport');
 var altitude = require('./altitude');
+var obstical = require('./obstical');
 var binaryMap = require('./binaryMap');
 var location = require('./location');
 var flight = require('./flight');
@@ -23,13 +24,14 @@ var velocity = require('./velocity');
 var user = require('./user');
 
 /**
-@function connectDb - a function to connect to the mongodb and session db
+@function connectDb 
+@description connects to mongodb 
 @param {object} _app - the express app object
 */
 var connectDb = function (_app){
 
 	// connect db
-	mongoose.connect('mongodb://localhost/uav_db');
+	mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||'mongodb://localhost/uav_db');
 };
 
 // export empty module

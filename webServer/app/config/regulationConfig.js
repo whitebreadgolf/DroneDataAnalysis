@@ -1,9 +1,10 @@
 /**
-@module regulationConfig
+@module config/regulationConfig 
+@description stores and interacts with temporary app configuration data 
 */
 
 /**
-@public {Object} faa_reg - object to store faa reguation constants for flight data
+Object to store faa reguation constants for flight data
 */
 var faa_reg = {
 	max_velocity:{
@@ -17,26 +18,43 @@ var faa_reg = {
 };
 
 /**
-@public {Object} cur_flight - to store current flight data, supports multiple user flights
+Stores current flight data, supports multiple user flights
 */
 var cur_flight = {};
 
 /**
-@function startFlight - to insert current flight data for a given user
-@param {String} _id - mongoose user id
+Stores application constants
 */
-var startFlight = function(_id, _readExt){
+var app_constants = {
+	dji_dat_collect_rate: 10,
+	app_collection_rate: 20000 // milliseconds
+};
+
+/**
+@function startFlight 
+@description inserts current flight data for a given user
+@param {string} _id - mongo user id
+@param {Object} _startObj - to describe what type of flight should be started
+*/
+var startFlight = function(_id, _startObj){
 
 	// add the flight data
 	cur_flight[_id] = {
 
-		// start of flight
+		// start of flight and last collected
 		start_time: new Date(), 
+		last_collect: null,
 
 		// simulation status
 		simulation: {
-			status: true,
-			file_read: _readExt
+			status: null,
+			file_read: null
+		},
+
+		// other type of flight
+		flight_type: {
+			real_time: null,
+			decoding: null
 		},
 
 		// ongoing warning data
@@ -72,16 +90,27 @@ var startFlight = function(_id, _readExt){
 			y: null,
 			initialized: false
 		}
+	};
+
+	// check start object
+	if(_startObj.simulation){
+		cur_flight[_id].simulation.status = true;
+		cur_flight[_id].simulation.file_read = _startObj.simulation;
+	}
+	else if(_startObj.real_time){
+		cur_flight[_id].flight_type.real_time = _startObj.real_time;
+	}
+	else if(_startObj.decoding){
+		cur_flight[_id].flight_type.decoding = _startObj.decoding;
 	}
 };
 
 /**
-@function endFlight - to clear current flight data for a given user
-@param {String} _id - mongoose user id
+@function endFlight 
+@description clears current flight data for a given user
+@param {string} _id - mongo user id
 */
 var endFlight = function(_id){
-
-	// first save all flight data
 
 	// remove data from object
 	cur_flight[_id] = null;
@@ -90,6 +119,7 @@ var endFlight = function(_id){
 // export public data and functions
 module.exports = {
 	faa_reg: faa_reg,
+	app_constants: app_constants,
 	cur_flight: cur_flight,
 	startFlight: startFlight,
 	endFlight: endFlight

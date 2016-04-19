@@ -1,22 +1,23 @@
 /**
-@module account - controller to interact with user accounts directly
-*/
-
-/**
-@requires buildingProximity
-@requires user
+@module controllers/account
+@description A controller to interact with user accounts
+@requires analytics/buildingProximity
+@requires models/user
+@requires models/airport
 */
 
 var buildingProximity = require('../analytics/buildingProximity');
 var User = require('../models/user');
 var BinaryMap = require('../models/binaryMap');
+var Airport = require('../models/airport');
 
 /**
-@function configureUserMap - function to generate a bitmap of the given range of longitudes and latitudes
+@function configureUserMap
+@description Generates a bitmap of the given range of longitudes and latitudes
 @alias controllers/account.configureUserMap
-@param {object} _latLngNW - longitude latitude object for the Northwest border
-@param {object} _latLngWE - longitude latitude object for the Southest border
-@param {String} _username - a username
+@param {Object} _latLngNW - longitude latitude object for the Northwest border
+@param {Object} _latLngWE - longitude latitude object for the Southest border
+@param {string} _id - a mongo user id
 @param {function} _callback - a callback function for the result of the operation
 */
 var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
@@ -37,21 +38,63 @@ var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
 							mapCount++;
 
 							// generate range once we delete all maps
-							if(mapCount === numMaps) buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+							if(mapCount === numMaps){
+								deleteAllAirportsForUser(_id, function(){
+									console.log('done deleting airports');
+									buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+								});
+							}
 						}
 					});
 				} 
 			}
-			else buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+			else{ 
+				deleteAllAirportsForUser(_id, function(){
+					console.log('done deleting airports');
+					buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+				});
+			}
 		}
 	});
-	
 }
 
 /**
-@function isUserMapConfigured - function to check if a given user already generated a map
+@function deleteAllAirportsForUser 
+@description deletes all airports in database for a user
+@param {string} _id - a mongo user id
+@param {function} _callback - a generic callback
+*/
+var deleteAllAirportsForUser = function(_id, _callback){
+	Airport.find({ 'user': _id }, function (err, airports) {
+		if (err || airports === null) _callback('error'); 
+		else{
+			var numAirports = airports.length;
+			var airportCount = 0;
+
+			// delete all maps
+			if(numAirports > 0){
+				for(var i=0;i<numAirports;i++){
+					airports[i].remove(function(err, data){
+						if (err) console.log(err);
+						else {
+							airportCount++;
+
+							// generate range once we delete all maps
+							if(airportCount === numAirports) _callback();
+						}
+					});
+				} 
+			}
+			else _callback();
+		}
+	});
+};
+
+/**
+@function isUserMapConfigured 
+@description function to check if a given user already generated a map
 @alias controllers/account.isUserMapConfigured
-@param {String} _username - a username
+@param {string} _id - a mongo user id
 @param {function} _callback - a callback function for the result of the operation
 */
 var getUserMapConfigured = function (_id, _callback){
@@ -70,14 +113,14 @@ var getUserMapConfigured = function (_id, _callback){
 
 
 /**
-@function loginUser - a function to login a user
+@function loginUser 
+@description used to login a user
 @alias controllers/account.loginUser
-@param {String} _username - username
-@param {String} _pass - password
-@param {Function} _callback - a callback function
+@param {string} _username - a username
+@param {string} _pass - a password
+@param {function} _callback - a callback function to report the results of a login attempt
 */
 var loginUser = function (_username, _pass, _callback){
-
 	User.findOne({ 'username': _username, 'password': _pass }, function (err, user) {
 		if (err || user === null){
 			_callback('error'); 
@@ -87,12 +130,13 @@ var loginUser = function (_username, _pass, _callback){
 }
 
 /**
-@function createNewUser - a function to create a new user
+@function createNewUser 
+@description to create a new user
 @alias controllers/account.createNewUser
-@param {String} _username - username
-@param {String} _pass - password
-@param {String} _name - the users full name
-@param {Function} _callback - a callback function
+@param {string} _username - username
+@param {string} _pass - password
+@param {string} _name - the users full name
+@param {function} _callback - a callback function to report the results of an account creation
 */
 var createNewUser = function (_username, _pass, _name, _callback){
 

@@ -1,3 +1,7 @@
 database
 node_modules
 app/config/config.js
+backend_docs/*.html
+backend_docs/styles
+backend_docs/fonts
+backend_docs/scripts

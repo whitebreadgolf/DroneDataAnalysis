@@ -1,10 +1,24 @@
+/**
+@class angular_controller.Velocity
+@memberOf angular_controller
+*/
 angular.module('UavOpsInterface')
 .controller('VelocityCtrl', function ($scope, Websocket, $interval){
-
+    /**
+    @function getSpeed
+    @memberOf angular_controller.Speed
+    @description The function will attempt to get the most recent speed information
+    from the websocket at a regular interval.
+    */
 	$interval(function (){
   		$scope.speeds = Websocket.getSpeed();
 	}, 100);
 
+    /**
+    @member VelocityChartOptions
+    @memberOf angular_controller.Velocity
+    @description This options object governs the appearance of the velocity chart.
+    */
   	$scope.options = {
   		chart: {
 	        type: 'lineChart',
@@ -28,24 +42,27 @@ angular.module('UavOpsInterface')
 	        },
 	        yAxis: {
 	            axisLabel: 'Velocity (m/s)',
+                tickFormat: function(d){
+                    return d3.format('.02f')(d);
+                },
 	            axisLabelDistance: 30
 	        }
     	}, 
     	title: {
             enable: true,
-            text: 'Drone Velocities Over Time'
+            text: 'Drone\'s Velocity Over Time'
         },
         subtitle: {
             enable: true,
-            text: 'This displays the drone velocities in meters per second over seconds.',
+            text: 'This displays the drone\'s velocity in meters per second over seconds elapsed',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
             }
         },
         caption: {
-            enable: true,
-            html: '<b>Figure 1.</b> Lorem ipsum dolor sit amet, at eam blandit sadipscing, <span style="text-decoration: underline;">vim adhuc sanctus disputando ex</span>, cu usu affert alienum urbanitas. <i>Cum in purto erat, mea ne nominavi persecuti reformidans.</i> Docendi blandit abhorreant ea has, minim tantas alterum pro eu. <span style="color: darkred;">Exerci graeci ad vix, elit tacimates ea duo</span>. Id mel eruditi fuisset. Stet vidit patrioque in pro, eum ex veri verterem abhorreant, id unum oportere intellegam nec<sup>[1, <a href="https://github.com/krispo/angular-nvd3" target="_blank">2</a>, 3]</sup>.',
+            enable: false,
+            html: ' ',
             css: {
                 'text-align': 'justify',
                 'margin': '10px 13px 0px 7px'

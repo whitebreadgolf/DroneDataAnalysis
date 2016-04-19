@@ -1,8 +1,5 @@
 /**
-@module binaryMap
-*/
-
-/**
+@module models/binaryMap
 @requires mongoose
 */
 
@@ -13,14 +10,14 @@ var Schema = mongoose.Schema;
 
 // describe user in schema
 var binaryMapSchema = new Schema({
-	user: { type: Schema.Types.ObjectId, ref: 'user'},
+	user: {type: Schema.Types.ObjectId, ref: 'User'},
 	lat: Number,
 	lon: Number,
 	x_coord: Number,
 	y_coord: Number,
 	width: Number,
-	heigth: Number,
-
+	height: Number,
+	
 	// bounds
 	bound_n: Boolean,
 	bound_s: Boolean,
@@ -29,6 +26,8 @@ var binaryMapSchema = new Schema({
 
 	// computed
 	distance: Number,
+
+	obstical_ids:[{type: Schema.Types.ObjectId, ref: 'Obstical'}],
 
 	values: [Boolean],
 	created_at: Date
