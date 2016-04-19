@@ -79,8 +79,8 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 		})
 		
 		// home page and legal
-		.when('/about', {
-			templateUrl: 'templates/about.html',
+		.when('/legal', {
+			templateUrl: 'templates/legal.html',
 			controller: 'LegalCtrl'
 		})
 		.otherwise({
