@@ -1,3 +1,8 @@
+/**
+@class angular_controller.AltitudeVelocityNotifications
+@memberOf angular_controller
+@requires angular_factories.FlightName
+*/
 angular.module('UavOpsInterface')
 .controller('AltVelNotificationsCtrl', function ($scope, $http, FlightName){
 		
@@ -12,7 +17,15 @@ angular.module('UavOpsInterface')
         $scope.showNotifications = false;
     };
 
-	// load data for id
+	
+	/**
+	@function configureMap
+	@memberOf angular_controller.SearchNotification
+	@param {String} - flightId
+	@description The function takes in a flight id and uses it to search for notifications of
+	hazard and warning levels and adds them into the notifications array to display on the front
+	end.
+	*/
 	$scope.flightSearch = function(_flightId){
 		var req = {
 			method: 'GET', 

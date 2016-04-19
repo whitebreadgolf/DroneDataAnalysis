@@ -1,3 +1,8 @@
+/**
+@class angular_controller.Legal
+@memberOf angular_controller
+@requires TrackHeight
+*/
 angular.module('UavOpsInterface')
 .controller('LegalCtrl', function($scope, TrackHeight, $interval){
 

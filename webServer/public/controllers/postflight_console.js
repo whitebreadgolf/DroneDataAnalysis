@@ -1,3 +1,9 @@
+/**
+@class angular_controller.PostFlightConsole
+@memberOf angular_controller
+@description This module helps to display the data needed for 
+post flight procedures. 
+*/
 angular.module('UavOpsInterface')
 .controller('PostFlightConsoleCtrl', function($scope, $http){
 	
@@ -5,6 +11,15 @@ angular.module('UavOpsInterface')
 	$scope.flightDataError = true;
 	$scope.searchTerm = '';
 	$scope.flights = [];
+
+	/**
+	@function flightSearch
+	@memberOf angular_controller.PostFlightConsole
+	@param {Object} flight - Flight object containing all the corresponding flight data.
+	@description This function takes in a flight object and checks whether the object contains
+	data that relate to the search terms. If the object doesn't contain the search terms, then 
+	the function returns true.
+	*/
 	$scope.searchFilter = function (flight) { 
 		if($scope.searchTerm === '') return true;
 		else{

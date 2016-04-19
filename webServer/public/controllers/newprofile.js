@@ -1,6 +1,18 @@
+/**
+@class angular_controller.NewProfile
+@memberOf angular_controller
+@requires Notification
+*/
 angular.module('UavOpsInterface')
 .controller('NewProfileCtrl', function($scope, $http, Notification){
 	
+	/**
+	@function newProfileSubmit
+	@memberOf angular_controller.NewProfile
+	@description This function takes in a name, username, and password
+	combination from the scoped textboxes and saves it as a user in the
+	database.
+	*/
 	$scope.submit = function (){
 
 		var req = {

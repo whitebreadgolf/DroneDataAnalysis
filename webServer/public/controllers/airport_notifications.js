@@ -1,3 +1,8 @@
+/**
+@class angular_controller.AirportNotifications
+@memberOf angular_controller
+@requires angular_controller.FlightName
+*/
 angular.module('UavOpsInterface')
 .controller('AirportNotificationsCtrl', function ($scope, $http, FlightName){
 		
@@ -34,12 +39,10 @@ angular.module('UavOpsInterface')
     	var airArr = [];
     	for(var i in allNotifications){
 			if(allNotifications[i].report === _name){
-				//if(allNotifications[i]){
-					airArr.push({
-						label: (new Date(allNotifications[i].created_at)).getTime(),
-						value: allNotifications[i].value
-					});
-				//}
+				airArr.push({
+					label: (new Date(allNotifications[i].created_at)).getTime(),
+					value: allNotifications[i].value
+				});
 			}
 		}
 		airArr.sort(function(a,b){ return a.label-b.label; });
@@ -49,7 +52,13 @@ angular.module('UavOpsInterface')
 		$scope.showAirport = true;
     }
 
-	// load data for id
+	/** 
+	@function flightSearch
+	@memberOf angular_controller.AirportNotifications
+	@description Given the flight id parameter, this function will push any airport-relevant 
+	notifications to the controller.
+	@param {String} _flightId - Flight id
+	*/
 	$scope.flightSearch = function(_flightId){
 		var req = {
 			method: 'GET', 
@@ -87,16 +96,10 @@ angular.module('UavOpsInterface')
                 left: 55
             },
             x: function(d){
-             	//if(d)
-             		return d.label; 
-             	//else
-             		//return '';
+             	return d.label; 
          	},
             y: function(d){ 
-            	//if(d)
-            		return d.value; 
-            	//else
-            		//return 0;
+            	return d.value; 
         	},
             useInteractiveGuideline: true,
             xAxis: {

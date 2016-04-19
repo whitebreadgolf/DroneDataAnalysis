@@ -1,5 +1,10 @@
+/**
+@class angular_factories.FlightName
+@memberOf angular_factories
+*/
 angular.module('UavOpsInterface')
 .factory('FlightName', function ($http){
+	 
 	var substringMatcher = function(strs) {
 		return function findMatches(q, cb) {
 			var matches, substringRegex;

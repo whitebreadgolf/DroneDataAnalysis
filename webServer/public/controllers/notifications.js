@@ -1,3 +1,10 @@
+/**
+@class angular_controller.Notifications
+@memberOf angular_controller
+@description This module accesses notifications in websocket which enables
+notifications to show on screen.
+@requires angular_factories.Websocket
+*/
 angular.module('UavOpsInterface')
 .controller('NotificationsCtrl', function($scope, Websocket, $interval){
   

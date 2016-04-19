@@ -1,3 +1,8 @@
+/**
+@class angular_controller.AltitudeHistory
+@memberOf angular_controller
+@requires angular_factories.FlightName
+*/
 angular.module('UavOpsInterface')
 .controller('AltitudeHistCtrl', function ($scope, $http, FlightName){	
 	
@@ -13,7 +18,13 @@ angular.module('UavOpsInterface')
         $scope.showChart = false;
     };
 
-    // load data for id
+    /**
+    @function getAltitudeHistory
+    @memberOf angular_controller.AltitudeHistory
+    @param {String} - flightId
+    @description The function takes in a flightId and uses it to load the altitude
+    history for that user.
+    */
     $scope.flightSearch = function(_flightId){
         var req = {
             method: 'GET', 
@@ -40,6 +51,12 @@ angular.module('UavOpsInterface')
                     values: altitudes
                 }
             ];
+
+            /**
+            @member AltitudeChartOptions
+            @memberOf angular_controller.AltitudeHistory
+            @description This options object governs the appearance of the altitude chart.
+            */
             $scope.options = {
                 chart: {
                     type: 'lineChart',

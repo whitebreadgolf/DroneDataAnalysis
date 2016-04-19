@@ -49,25 +49,25 @@
 			<div>Top Left Propeller:
 				<span ng-if="flight.propeller_0 == 0">Perfect condition</span>
 				<span ng-if="flight.propeller_0 == 1">Scratched</span>
-				<span ng-if="flight.propeller_0 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_0 == 2">Visibly cracked or chipped</span>
 				<span ng-if="flight.propeller_0 == 3">Large chips or piece missing</span>
 			</div>
 			<div>Top Right Propeller:
 				<span ng-if="flight.propeller_1 == 0">Perfect condition</span>
 				<span ng-if="flight.propeller_1 == 1">Scratched</span>
-				<span ng-if="flight.propeller_1 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_1 == 2">Visibly cracked or chipped</span>
 				<span ng-if="flight.propeller_1 == 3">Large chips or piece missing</span>
 			</div>
 			<div>Bottom Left Propeller:
 				<span ng-if="flight.propeller_2 == 0">Perfect condition</span>
 				<span ng-if="flight.propeller_2 == 1">Scratched</span>
-				<span ng-if="flight.propeller_2 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_2 == 2">Visibly cracked or chipped</span>
 				<span ng-if="flight.propeller_2 == 3">Large chips or piece missing</span>
 			</div>
 			<div>Bottom Right Propeller:
 				<span ng-if="flight.propeller_3 == 0">Perfect condition</span>
 				<span ng-if="flight.propeller_3 == 1">Scratched</span>
-				<span ng-if="flight.propeller_3 == 2">Visably cracked or chipped</span>
+				<span ng-if="flight.propeller_3 == 2">Visibly cracked or chipped</span>
 				<span ng-if="flight.propeller_3 == 3">Large chips or piece missing</span>
 			</div>
 			<div>Micro SD Card:
@@ -83,7 +83,7 @@
 	  		<span ng-if="flight.analyzing"><i class="fa fa-cog fa-spin fa-fw margin-bottom"></i></span>
 	  		<div ng-if="!flight.analyzing">
 			<div class="btn btn-default btn-sm" ng-if="!flight.started" ng-click="startLiveFlight(flight._id)">Start Live Flight Data Collection</div>
-			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT file for analysis</div>
+			<div class="btn btn-default btn-sm" ng-if="!flight.started" ngf-select="uploadFile($file, flight._id)">Upload DAT File for Analysis</div>
 			<div class="btn btn-warning btn-sm" ng-if="flight.started && flight.decoding" ng-click="stopDecoding(flight._id)">Stop Decoding</div>
 			<div class="btn btn-warning btn-sm" ng-if="flight.started && !flight.decoding" ng-click="stopLiveFlight(flight._id)">Stop Live Flight</div>
 			<div class="pull-right">
