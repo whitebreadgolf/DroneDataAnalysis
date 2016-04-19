@@ -1,6 +1,7 @@
 /**
 @class angular_factories.Websocket
 @memberOf angular_factories
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .factory('Websocket', function (Notification){

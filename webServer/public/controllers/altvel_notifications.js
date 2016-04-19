@@ -1,6 +1,7 @@
 /**
 @class angular_controller.AltitudeVelocityNotifications
 @memberOf angular_controller
+@requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
 .controller('AltVelNotificationsCtrl', function ($scope, $http, FlightName){

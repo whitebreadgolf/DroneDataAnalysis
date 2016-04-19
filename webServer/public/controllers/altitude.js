@@ -1,6 +1,7 @@
 /**
 @class angular_controller.Altitude
 @memberOf angular_controller
+@requires angular_factories.Websocket
 */
 angular.module('UavOpsInterface')
 .controller('AltitudeCtrl', function ($scope, Websocket, $interval){	

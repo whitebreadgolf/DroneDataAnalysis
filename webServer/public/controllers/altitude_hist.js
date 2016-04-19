@@ -1,6 +1,7 @@
 /**
 @class angular_controller.AltitudeHistory
 @memberOf angular_controller
+@requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
 .controller('AltitudeHistCtrl', function ($scope, $http, FlightName){	

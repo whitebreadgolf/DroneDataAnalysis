@@ -1,6 +1,7 @@
 /**
 @class angular_controller.ObsticalNotifications
 @memberOf angular_controller
+@requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
 .controller('ObsticalNotificationsCtrl', function ($scope, $http, FlightName){

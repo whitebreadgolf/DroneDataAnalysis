@@ -1,6 +1,7 @@
 /**
 @class angular_controller.Login
 @memberOf angular_controller
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .controller('LoginCtrl', function($scope, $http, Notification){

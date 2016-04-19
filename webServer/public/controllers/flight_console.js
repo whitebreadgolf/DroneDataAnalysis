@@ -1,6 +1,8 @@
 /**
 @class angular_controller.FlightConsole
 @memberOf angular_controller
+@requires Notification
+@requires angular_factories.Decoder
 */
 angular.module('UavOpsInterface')
 .controller('FlightConsoleCtrl', function($scope, $http, Notification, Decoder){

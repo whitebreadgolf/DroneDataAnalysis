@@ -3,6 +3,7 @@
 @memberOf angular_controller
 @description This module allows the user to search for and display their location history
 associated with a specific flight.
+@requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
 .controller('LocationHistCtrl', function ($scope, $http, FlightName){	

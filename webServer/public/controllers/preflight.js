@@ -5,6 +5,7 @@
 preflight checks. It also takes in data from the scoped textboxes, 
 saves them as part of a preflight data object, and notifies the user
 whether the save was successful or not.
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .controller('PreflightCtrl', function($scope, $http, Notification){

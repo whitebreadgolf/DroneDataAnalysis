@@ -1,5 +1,5 @@
 /**
-@class angular_factories.FlightNameFactory
+@class angular_factories.FlightName
 @memberOf angular_factories
 */
 angular.module('UavOpsInterface')

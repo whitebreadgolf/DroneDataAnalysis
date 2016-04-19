@@ -1,6 +1,7 @@
 /**
 @class angular_controller.Velocity
 @memberOf angular_controller
+@requires angular_factories.Websocket
 */
 angular.module('UavOpsInterface')
 .controller('VelocityCtrl', function ($scope, Websocket, $interval){

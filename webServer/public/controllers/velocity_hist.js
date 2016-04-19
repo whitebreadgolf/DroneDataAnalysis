@@ -1,6 +1,7 @@
 /**
 @class angular_controller.VelocityHistory
 @memberOf angular_controller
+@requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
 .controller('VelocityHistCtrl', function ($scope, $http, FlightName){	

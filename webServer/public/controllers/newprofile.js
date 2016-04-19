@@ -1,6 +1,7 @@
 /**
 @class angular_controller.NewProfile
 @memberOf angular_controller
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .controller('NewProfileCtrl', function($scope, $http, Notification){

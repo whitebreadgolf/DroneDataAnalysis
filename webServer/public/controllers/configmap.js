@@ -1,6 +1,7 @@
 /**
 @class angular_controller.ConfigMap
 @memberOf angular_controller
+@requires Notification
 */
 angular.module('UavOpsInterface')
 .controller('ConfigMapCtrl', function ($scope, $http, Notification) {

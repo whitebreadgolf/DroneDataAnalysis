@@ -1,5 +1,5 @@
 /**
-@class angular_factories.DecoderFactory
+@class angular_factories.Decoder
 @description responsible for decoding a dat file
 @deprecated since the version with internal flight simulations
 @requires Notification

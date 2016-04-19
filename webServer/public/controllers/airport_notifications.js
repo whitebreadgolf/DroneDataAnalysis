@@ -1,3 +1,8 @@
+/**
+@class angular_controller.AirportNotifications
+@memberOf angular_controller
+@requires angular_controller.FlightName
+*/
 angular.module('UavOpsInterface')
 .controller('AirportNotificationsCtrl', function ($scope, $http, FlightName){
 		
@@ -12,7 +17,13 @@ angular.module('UavOpsInterface')
         $scope.showNotifications = false;
     };
 
-	// load data for id
+	/** 
+	@function flightSearch
+	@memberOf angular_controller.AirportNotifications
+	@description Given the flight id parameter, this function will push any airport-relevant 
+	notifications to the controller.
+	@param {String} _flightId - Flight id
+	*/
 	$scope.notifications = [];
 	$scope.flightSearch = function(_flightId){
 		var req = {
