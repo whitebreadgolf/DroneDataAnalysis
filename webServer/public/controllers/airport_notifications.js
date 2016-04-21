@@ -44,6 +44,13 @@ angular.module('UavOpsInterface')
         }
     }
 
+    /** 
+	@function clickAirport
+	@memberOf angular_controller.AirportNotifications
+	@description Given the name parameter, this function allows the user to filter the 
+	flight data that is relevant to the clicked airport. 
+	@param {String} _name - Name of airport
+	*/
     $scope.clickAirport = function(_name){
     	$scope.flightSelected = false;
     	var airArr = [];

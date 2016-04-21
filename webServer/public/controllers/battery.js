@@ -1,3 +1,8 @@
+/**
+@class angular_controller.Battery
+@memberOf angular_controller
+@requires angular_controller.Websocket
+*/
 angular.module('UavOpsInterface')
 .controller('BatteryCtrl', function ($scope, Websocket, $interval){	
 	
@@ -5,6 +10,11 @@ angular.module('UavOpsInterface')
   		$scope.batteries = Websocket.getBattery();
 	}, 1000); 
 
+    /**
+    @member BatteryChartOptions
+    @memberOf angular_controller.Battery
+    @description This options object governs the appearance of the battery chart.
+    */
 	$scope.options = {
         "chart": {
             "type": "discreteBarChart",
