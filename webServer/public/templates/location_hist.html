@@ -1,9 +1,40 @@
-<div class="row">
-	<div class="form-group col-sm-12">
-		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
+
+<ul class="nav nav-pills nav-justified">
+  <li role="presentation"><a href="#/velocity_hist">Velocity</a></li>
+  <li role="presentation"><a href="#/altitude_hist">Altitude</a></li>
+  <li role="presentation"><a href="#/acceleration_hist">Acceleration</a></li>
+  <li role="presentation"><a href="#/battery_hist">Battery</a></li>
+  <li role="presentation" class="active"><a href="#/location_hist">Location</a></li>
+</ul>
+<br>
+<div class="row" >
+	<div class="col-sm-12" >
+		<input ng-show="!toggleInput" class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter">
+		<div ng-show="toggleInput" class="form-group" style="padding-bottom:20px">
+			<datepicker date-month-title="selected year">
+			    <input class="form-control"  ng-model="startDate" placeholder="Enter Start Date"/>
+			</datepicker>
+			<br>
+			<br>
+			<datepicker date-month-title="selected year">
+			    <input class="form-control"  ng-model="endDate" placeholder="Enter End Date"/>
+			</datepicker>
+   		</div>   		
   	</div>
 </div>
-<div ng-if="!showChart" ng-repeat="flight in flights | filter: searchFilter" class="row">
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<div>
+			<span ng-if="showBack" class="btn btn-default btn-sm" ng-click="backClicked()">Back</span>
+			<span class="btn btn-warning btn-sm" ng-click="toggleInput = !toggleInput">Toggle Flight Name/Date Search</span>
+			<span class="btn btn-danger btn-sm" ng-click="searchFlights()">Search Flights</span>
+		</div>
+		<div style="border-bottom: 1px solid #dddddd; padding-bottom:10px"></div>
+	</div>
+</div>
+<br>
+<div ng-if="!showChart" ng-repeat="flight in flights" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
 	  	<div class="panel-body">
@@ -39,7 +70,11 @@
 		<ng-map style="height:500px;"
 			zoom="15"
 			center="current-location"> 
-			<marker ng-repeat="pos in allMarkers" position="{{pos.lat}},{{pos.lon}}"></marker>
+			<custom-marker 
+				ng-repeat="pos in allMarkers" 
+				position="{{pos.lat}},{{pos.lon}}"
+				on-click="handleGraphClick(mark, mark.created_at)"
+			><div class="customDot"><div></div> </div></custom-marker>
 		</ng-map>
 	</div>
 </div>

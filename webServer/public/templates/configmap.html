@@ -12,9 +12,8 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		<p>Select an area below by placing two markers on the map. One should go in the farthest northwest area of operation while the other should go in the farthest southeast area of operation. This configuration will give the DJI Data Manager a better idea of what <strong>you</strong> as the operator need to keep in mind when operating your drone in this specific area. 
-
-			Press the button under the map to configure the location. Every time a location is configured, it overwrites the previous configured location. NOTE: this feature will only be available with a WiFi connection.</p>
+		<p>Select an area below by placing two markers on the map. One should go in the farthest northwest area of operation while the other should go in the farthest southeast area of operation. This configuration will give the DJI Data Manager a better idea of what <strong>you</strong> as the operator need to keep in mind when operating your drone in this specific area. Press the button under the map to configure the location. Every time a location is configured, it overwrites the previous configured location. NOTE: this feature will only be available with a WiFi connection.</p>
+		<p>Red dots represent the map configuration points and yellow dots represent user added obstacles. All obstacles will be erased when the map is reconfigured.</p>
 	</div>
 </div>
 
@@ -43,10 +42,13 @@
 			center="current-location" 
 			on-click="mapClicked()">
 			<custom-marker ng-repeat="pos in allMarkers" position="{{pos.lat}},{{pos.lon}}">
-				<div class="customDot"><div></div> </div>
+				<div class="customDotAddObstacle"><div></div></div>
 			</custom-marker>
 			<custom-marker ng-repeat="pos in configMarkers" position="{{pos.lat}},{{pos.lon}}">
-				<div class="customDot"><div></div> </div>
+				<div class="customDot"><div></div></div>
+			</custom-marker>
+			<custom-marker ng-repeat="pos in obstacleMarkers" position="{{pos.lat}},{{pos.lon}}">
+				<div class="customDotObstacle"><div></div></div>
 			</custom-marker>
 		</ng-map>
 	</div>

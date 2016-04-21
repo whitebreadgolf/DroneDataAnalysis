@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // describe user in schema
-var obsticalSchema = new Schema({
+var obstacleSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: 'User'},
 	lat: Number,
 	lon: Number,
@@ -18,7 +18,7 @@ var obsticalSchema = new Schema({
 });
 
 // declare exported module
-var Obstical = mongoose.model('Obstical', obsticalSchema);
+var Obstacle = mongoose.model('Obstacle', obstacleSchema);
 
 // export module 
-module.exports = Obstical;
+module.exports = Obstacle;

@@ -1,16 +1,20 @@
 <div class="row">
 	<div class="col-sm-12">
 		<h3>Add Obstacles to Fly Zone:</h3>
-		<p>Click within the boundary to add an obstacle to your configuration map.</p>
+		<p>Click within the boundary to add an obstacle to your configuration map. Red dots represent the map configuration boundary and yellow dots represent user added obstacles.</p>
 	</div>
 </div>
 <br>
 <div class="row">
 	<div class="col-sm-6">
-		<button ng-click="clearMarkers()" class="btn btn-default" style="width:100%;border-radius:0px">Clear All Markers</button>
+		<button ng-click="clearMarkers()" class="btn btn-default" style="width:100%;border-radius:0px">
+			Clear All Markers
+		</button>
 	</div>
 	<div class="col-sm-6">
-		<button ng-click="configureAllObstacles()" class="btn btn-danger" style="width:100%;border-radius:0px">Configure All Obsticles</button>
+		<button ng-click="configureAllObstacles()" class="btn btn-danger" style="width:100%;border-radius:0px">
+			Configure All Obstacles
+		</button>
 	</div>
 </div>
 <br>
@@ -27,6 +31,11 @@
 			<custom-marker ng-repeat="pos in configMarkers" 
 					position="{{pos.lat}},{{pos.lon}}"
 			><div class="customDot"><div></div> </div></custom-marker>
+			<custom-marker 
+				ng-repeat="pos in obstacleMarkers" 
+				position="{{pos.lat}},{{pos.lon}}">
+				<div class="customDotObstacle"><div></div></div>
+			</custom-marker>
 		</ng-map>
 	</div>
 </div>

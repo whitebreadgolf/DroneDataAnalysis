@@ -1,10 +1,5 @@
-/**
-@class angular_controller.VelocityHistory
-@memberOf angular_controller
-@requires angular_factories.FlightName
-*/
 angular.module('UavOpsInterface')
-.controller('VelocityHistCtrl', function ($scope, $http, FlightName, $uibModal){	
+.controller('AccelerationHistCtrl', function ($scope, $http, FlightName, $uibModal){	
 	$scope.showChart = false;
     $scope.toggleInput = false;
     $scope.showBack = false;
@@ -44,17 +39,10 @@ angular.module('UavOpsInterface')
         }
     }
 
-    /**
-    @function getVelocityHistory
-    @memberOf angular_controller.VelocityHistory
-    @param {String} - flightId
-    @description The function takes in a flightId and uses it to load the velocity
-    history for that user.
-    */
     $scope.flightSearch = function(_flightId){
         var req = {
             method: 'GET', 
-            url: 'api/velocity/'+_flightId, 
+            url: 'api/acceleration/'+_flightId, 
         };
 
         /**
@@ -70,19 +58,19 @@ angular.module('UavOpsInterface')
             var xVals = [];
             var yVals = [];
             var zVals = [];
-            var velocities = data.data.data
-            for(var i in velocities){
+            var accelerations = data.data.data
+            for(var i in accelerations){
                 xVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
-                    value: velocities[i].vel_x
+                    label: (new Date(accelerations[i].created_at)).getTime(),
+                    value: accelerations[i].acc_x
                 });
                 yVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
-                    value: velocities[i].vel_y
+                    label: (new Date(accelerations[i].created_at)).getTime(),
+                    value: accelerations[i].acc_y
                 });
                 zVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
-                    value: velocities[i].vel_z
+                    label: (new Date(accelerations[i].created_at)).getTime(),
+                    value: accelerations[i].acc_z
                 });
             }
             // sort
@@ -91,17 +79,17 @@ angular.module('UavOpsInterface')
             yVals.sort(sortFunc);
             zVals.sort(sortFunc);
 
-            $scope.velocities = [
+            $scope.accelerations = [
                 {
-                    key: "x velocity",
+                    key: "x acceleration",
                     values: xVals
                 },
                 {
-                    key: "y velocity",
+                    key: "y acceleration",
                     values: yVals
                 },
                 {
-                    key: "z velocity",
+                    key: "z acceleration",
                     values: zVals
                 }
             ];
@@ -128,7 +116,7 @@ angular.module('UavOpsInterface')
                         axisLabel: 'Time (ms)'
                     },
                     yAxis: {
-                        axisLabel: 'Velocity (m/s)',
+                        axisLabel: 'Acceleration (m/s)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -137,13 +125,21 @@ angular.module('UavOpsInterface')
                 },
                 title: {
                     enable: true,
-                    text: 'Drone\'s Velocity Over Time'
+                    text: 'Drone\'s Acceleration Over Time'
                 },
                 subtitle: {
                     enable: true,
-                    text: 'This displays the drone\'s velocity in meters per second over milliseconds elapsed. To get more information, click on a point.',
+                    text: 'This displays the drone\'s acceleration in meters per second squared over milliseconds elapsed. To get more information, click on a point.',
                     css: {
                         'text-align': 'center',
+                        'margin': '10px 13px 0px 7px'
+                    }
+                },
+                caption: {
+                    enable: false,
+                    html: ' ',
+                    css: {
+                        'text-align': 'justify',
                         'margin': '10px 13px 0px 7px'
                     }
                 }
@@ -152,7 +148,7 @@ angular.module('UavOpsInterface')
         var handleGraphClick = function (event) {
             var time = point = event[0].point.label;
             var reroute = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
-            var text = 'You selected a point from a velocity graph. Would you like to see all datapoints collected with the timestamp: ';
+            var text = 'You selected a point from a acceleration graph. Would you like to see all datapoints collected with the timestamp: ';
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'templates/histGraphModal.html',

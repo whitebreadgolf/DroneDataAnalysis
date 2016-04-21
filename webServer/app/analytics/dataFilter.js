@@ -32,7 +32,7 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
 
     // all data object-ified
     var data_stream = {
-        battery: _data[12],
+        battery: _data[18],
         gyro_x: _data[9],
         gyro_y: _data[10],
         gyro_z: _data[11],
@@ -49,7 +49,7 @@ var routeDataParameters = function (_collect, _isLive, _id, _flightId, _data, _c
 
     // replace string null with null
     for(var key in data_stream){
-        if(data_stream[key] === 'null')
+        if(data_stream === undefined || data_stream === null || data_stream[key] === 'null')
             data_stream[key] = null;
     }
 

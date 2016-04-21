@@ -2,7 +2,7 @@ angular.module('UavOpsInterface')
 .controller('BatteryCtrl', function ($scope, Websocket, $interval){	
 	
 	$interval(function (){
-  		$scope.battery = Websocket.getBattery();
+  		$scope.batteries = Websocket.getBattery();
 	}, 1000); 
 
 	$scope.options = {
@@ -15,6 +15,8 @@ angular.module('UavOpsInterface')
                 "bottom": 50,
                 "left": 55
             },
+            x: function(d){ return d.label; },
+            y: function(d){ return d.value; },
             "showValues": true,
             "duration": 500,
             "xAxis": {

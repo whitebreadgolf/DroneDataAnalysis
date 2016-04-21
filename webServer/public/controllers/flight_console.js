@@ -50,7 +50,10 @@ angular.module('UavOpsInterface')
 					}
 				}
 			}
-			else Notification({message: data.data.message}, 'error'); 
+			else {
+				$scope.type = 'error';
+				Notification({message: data.data.message, scope: $scope}); 
+			}
 		});
 	};
 
@@ -97,9 +100,13 @@ angular.module('UavOpsInterface')
 		};
 		$http(req).then(function(data){
 			if(data.data.success){ 
-				Notification({message: data.data.message}, 'success'); 
+				$scope.type = 'success';
+				Notification({message: data.data.message, scope: $scope}); 
 			}
-			else Notification({message: data.data.message}, 'error');
+			else {
+				$scope.type = 'error';
+				Notification({message: data.data.message, scope: $scope});
+			}
 		}); 
 	}
 
@@ -125,9 +132,13 @@ angular.module('UavOpsInterface')
 		};
 		$http(req).then(function(data){
 			if(data.data.success){ 
-				Notification({message: data.data.message}, 'success'); 
+				$scope.type = 'success';
+				Notification({message: data.data.message, scope: $scope}); 
 			}
-			else Notification({message: data.data.message}, 'error');
+			else {
+				$scope.type = 'error';
+				Notification({message: data.data.message, scope: $scope});
+			}
 
 			Websocket.deleteAllLiveData();
 		}); 
@@ -199,7 +210,7 @@ angular.module('UavOpsInterface')
 					else if(Decoder.isRunningOrInQueue($scope.flights[i]._id)) $scope.flights[i].started = true;
 					else $scope.flights[i].started = false;
 					$scope.flights[i].analyzing = false;
-					$scope.flights[i].created_at = $scope.flights[i].created_at;
+					$scope.flights[i].created_at = (new Date($scope.flights[i].created_at)).toString();
 				}
 			}
 		} 

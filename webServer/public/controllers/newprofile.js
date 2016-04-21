@@ -23,14 +23,21 @@ angular.module('UavOpsInterface')
 
 		for(var key in req.data){
 			if(!req.data[key] || req.data[key] === ''){ 
-				Notification({message: 'complete all fields'}, 'error');
+				$scope.type = 'error';
+				Notification({message: 'complete all fields', scope: $scope});
 				return;
 			}
 		}
 
 		$http(req).then(function(data){
-			if(data.data.success) Notification({message: 'User registered, please log in'}, 'success'); 
-			else Notification({message: data.data.message}, 'error');
+			if(data.data.success) {
+				$scope.type = 'success';
+				Notification({message: 'User registered, please log in', scope: $scope});
+			} 
+			else {
+				$scope.type = 'error';
+				Notification({message: data.data.message, scope: $scope});
+			}
 		});
 		
 	}

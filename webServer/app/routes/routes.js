@@ -29,9 +29,19 @@ var simulation = require('./../controllers/simulation');
 var passport = require('passport');
 var User = require('../models/user');
 var Airport = require('../models/airport');
+var Obstacle = require('../models/obstacle');
 var regulationConfig = require('../config/regulationConfig');
 var buildingProximity = require('../analytics/buildingProximity');
 var dataFilter = require('../analytics/dataFilter');
+var battery = require('./../controllers/battery');
+var acceleration = require('./../controllers/acceleration');
+
+var Altitude = require('../models/altitude');
+var Acceleration = require('../models/acceleration');
+var Battery = require('../models/battery');
+var Loc = require('../models/location');
+var SafetyReport = require('../models/safetyReport');
+var Velocity = require('../models/velocity');
 
 /**
 @function initRoutes 
@@ -83,7 +93,6 @@ var initRoutes = function (_app){
 
 		// req - {username: <string>, pass: <string>}
 		// res - {success: <boolean>, message: <string>}
-		
 		User.authenticate()(req.body.username, req.body.pass, function (err, user, options) {
 	        if (user === false) {
 	            res.json({
@@ -217,25 +226,109 @@ var initRoutes = function (_app){
 		else res.json({success: false, message: 'user must log in'});
 	});	
 
+	// GET battery
+	_app.get('/api/battery/:id', function (req, res){
+	
+		// res - {data_points: [<double>, ….]}
+
+		if(req.user && req.params.id){
+			battery.getAllBatteriesForFlightId(req.params.id, function(batteries){
+				res.json(batteries);
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
+	});
+
+	// GET acceleration
+	_app.get('/api/acceleration/:id', function (req, res){
+	
+		// res - {data_points: [<double>, ….]}
+
+		if(req.user && req.params.id){
+			acceleration.getAllAccelerationsForFlightId(req.params.id, function(accelerations){
+				res.json(accelerations);
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
+	});
+
+	// GET all
+	_app.get('/api/all/:flightId/:time', function (req, res){
+
+		// res - {data_point: {}}
+		
+		if(req.user && req.params.flightId && req.params.time){
+		
+			var datMap = {};
+			var time = req.params.time;
+			var flightId = req.params.flightId;
+			Altitude.findOne({created_at: time, flight_id: flightId}, function (err, data){
+				datMap['altitude'] = data;
+				Acceleration.findOne({created_at: time, flight_id: flightId}, function (err, data){
+					datMap['acceleration'] = data;
+					Battery.findOne({created_at: time, flight_id: flightId}, function (err, data){
+						datMap['battery'] = data;
+						Loc.findOne({created_at: time, flight_id: flightId}, function (err, data){
+							datMap['location'] = data;
+							SafetyReport.findOne({created_at: time, flight_id: flightId}, function (err, data){
+								datMap['safetyReport'] = data;
+								Velocity.findOne({created_at: time, flight_id: flightId}, function (err, data){
+									datMap['velocity'] = data;
+									res.json({success:true, data: datMap});
+								});
+							});	
+						});
+					});
+				});
+			});
+		}
+		else res.json({success: false, data: 'user must log in'});
+	});
+
 	//////////////////////////////////////////////////////////////////////////
 	/////////// END GET endpoints for basic flight data paramters ////////////
+	//////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////
+	///////////////// GET endpoints for generated parameters /////////////////
+	//////////////////////////////////////////////////////////////////////////
+
+	// GET airports
+	_app.get('/api/airports', function (req, res){
+	
+		// res - {data_points: [<double>, ….]}
+
+		if(req.user){
+			Airport.find({'user':req.user._id}, function(_err, _airports){
+				res.json({success: true, data: _airports});
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
+	});
+
+	// GET obstacles
+	_app.get('/api/obstacles', function (req, res){
+	
+		// res - {data_points: [<double>, ….]}
+
+		if(req.user){
+			Obstacle.find({user: req.user._id}, function(err, data){
+				res.json({success: true, data: data});
+			});
+		}
+		else res.json({success: false, message: 'user must log in'});
+	});
+
+	//////////////////////////////////////////////////////////////////////////
+	/////////////// END GET endpoints for generated parameters ///////////////
 	//////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////////////////////////////////
 	///////////////// GET endpoints for airport interaction //////////////////
 	//////////////////////////////////////////////////////////////////////////
 
-	_app.get('/api/airports/:id', function (req, res){
 	
-		// res - {data_points: [<double>, ….]}
-
-		if(req.user && req.params.id){
-			Airport.find({'user':req.params.id}, function(_err, _airports){
-				res.json({success: true, data: _airports});
-			});
-		}
-		else res.json({success: false, message: 'user must log in'});
-	});
 
 	//////////////////////////////////////////////////////////////////////////
 	/////////////// END GET endpoints for airport interaction ////////////////

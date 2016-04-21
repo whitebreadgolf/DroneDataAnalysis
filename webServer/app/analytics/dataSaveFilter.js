@@ -47,7 +47,7 @@ var routeDataParameters = function(_time, _id, _flightId, _isLive, _data_stream,
 
 /**
 @function saveAltitudeIfCollecting
-@description routes data parameters to check and save if necessary
+@description saves altitude parameter
 @param {string} _flightId - a mongo flight id
 @param {Object} _time - current recorded time
 @param {Number} _altitude - an altitude data point
@@ -59,14 +59,18 @@ var saveAltitudeIfCollecting = function(_flightId, _time, _altitude, _callback){
 		alt: _altitude,
 		created_at: _time
 	};
-	altitude.saveAltitude(data, function(){
+	if(_altitude !== null && _altitude !== undefined){
+		altitude.saveAltitude(data, function(){
+			_callback();
+		});
+	}
+	else
 		_callback();
-	});
 };
 
 /**
 @function saveVelocityIfCollecting 
-@description routes data parameters to check and save if necessary
+@description saves velocity parameter
 @param {string} _flightId - a mongo flight id
 @param {Object} _time - current recorded time
 @param {Number} _vel_x - an x velocity data point
@@ -75,7 +79,7 @@ var saveAltitudeIfCollecting = function(_flightId, _time, _altitude, _callback){
 @param {function} _callback - a generic callback
 */
 var saveVelocityIfCollecting = function(_flightId, _time, _vel_x, _vel_y, _vel_z, _callback){
-	if(_vel_x !== null && _vel_y !== null && _vel_z !== null){
+	if(_vel_x !== null && _vel_y !== null && _vel_z !== null && _vel_x !== undefined && _vel_y !== undefined && _vel_z !== undefined){
 		var data = {
 			flight_id: _flightId,
 			vel_x: _vel_x,
@@ -93,7 +97,7 @@ var saveVelocityIfCollecting = function(_flightId, _time, _vel_x, _vel_y, _vel_z
 
 /**
 @function saveLocationIfCollecting 
-@description routes data parameters to check and save if necessary
+@description saves location parameter
 @param {string} _flightId - a mongo flight id
 @param {Object} _time - current recorded time
 @param {Number} _lat - an latitude data point
@@ -114,14 +118,14 @@ var saveLocationIfCollecting = function(_flightId, _time, _lat, _lon, _callback)
 
 /**
 @function saveBatteryIfCollecting 
-@description 
+@description saves battery parameter
 @param {string} _flightId - a mongo flight id
 @param {Object} _time - current recorded time
 @param {Number} _battery - a battery charge value
 @param {function} _callback - a generic callback
 */
 var saveBatteryIfCollecting = function(_flightId, _time, _battery, _callback){
-	if(_battery !== null){
+	if(_battery !== null && _battery !== undefined){
 		var data = {
 			flight_id: _flightId,
 			battery: _battery,
@@ -137,7 +141,7 @@ var saveBatteryIfCollecting = function(_flightId, _time, _battery, _callback){
 
 /**
 @function saveAccelerationIfCollecting 
-@description 
+@description saves acceleration parameter
 @param {string} _flightId - a mongo flight id
 @param {Object} _time - current recorded time
 @param {Number} _acc_x - an x acceleration data point

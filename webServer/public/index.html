@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/nvd3/build/nv.d3.min.css">
   <link rel="stylesheet" type="text/css" href="bower_components/angular-ui-notification/dist/angular-ui-notification.min.css">
+  <link href="bower_components/angularjs-datepicker/src/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="bower_components/ngprogress/ngProgress.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
@@ -20,12 +21,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><i class="fa fa-plane"></i> DJI Manager</a>
+      <a class="navbar-brand" href="#/about"><i class="fa fa-plane"></i> DJI Data Manager</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#/legal">Legal</a></li>
+        <li><a href="#/about">About</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Flight <i class="fa fa-caret-square-o-down"></i>
@@ -41,11 +42,8 @@
             Real-Time <i class="fa fa-caret-square-o-down"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/notifications"><i class="fa fa-warning"></i> Notifications</a></li>
-            <li><a href="#/velocity"><i class="fa fa-line-chart"></i> Velocity</a></li>
-            <li><a href="#/altitude"><i class="fa fa-line-chart"></i> Altitude</a></li>
-            <li><a href="#/battery"><i class="fa fa-bar-chart"></i> Battery</a></li>
-            <li><a href="#/building_proximity"><i class="fa fa-bar-chart"></i> Proximity</a></li>
+            <li><a href="#/notifications"><i class="fa fa-line-chart"></i> Analytics</a></li>
+            <li><a href="#/velocity"><i class="fa fa-line-chart"></i> Raw Data</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -53,11 +51,8 @@
             Historical <i class="fa fa-caret-square-o-down"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/altvel_notifications"><i class="fa fa-warning"></i> Notifications</a></li>
-            <li><a href="#/velocity_hist"><i class="fa fa-line-chart"></i> Velocity</a></li>
-            <li><a href="#/altitude_hist"><i class="fa fa-line-chart"></i> Altitude</a></li>
-            <li><a href="#/obstical_notifications"><i class="fa fa-line-chart"></i> Proximity</a></li>
-            <li><a href="#/location_hist"><i class="fa fa-map-marker"></i> Location</a></li>
+            <li><a href="#/altvel_notifications"><i class="fa fa-line-chart"></i> Analytics</a></li>
+            <li><a href="#/velocity_hist"><i class="fa fa-line-chart"></i> Raw Data</a></li>
           </ul>
         </li>
       </ul>
@@ -96,9 +91,10 @@
 <script src="bower_components/ngprogress/build/ngprogress.min.js"></script>
 <script src="bower_components/ngtweet/dist/ngtweet.min.js"></script>
 <script src="bower_components/angular-track-height/angular-track-height.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/angularjs-datepicker/src/js/angular-datepicker.js"></script>
 <script src="main.js"></script>
 <script src="factories/websocket.js"></script>
-<script src="factories/session.js"></script>
 <script src="factories/decoderFactory.js"></script>
 <script src="factories/flightNameFactory.js"></script>
 <script src="controllers/login.js"></script>
@@ -121,4 +117,9 @@
 <script src="controllers/battery.js"></script>
 <script src="controllers/airport_proximity.js"></script>
 <script src="controllers/building_proximity.js"></script>
+<script src="controllers/histGraphModal.js"></script>
+<script src="controllers/data_overview.js"></script>
+<script src="controllers/acceleration_hist.js"></script>
+<script src="controllers/acceleration.js"></script>
+<script src="controllers/battery_hist.js"></script>
 </html>

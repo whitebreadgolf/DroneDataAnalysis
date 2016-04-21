@@ -7,13 +7,13 @@
 var Battery = require('../models/battery');
 
 /**
-@function getAllBatterysForFlightId 
+@function getAllBatteriesForFlightId 
 @description queries all batterys for a given flight id
-@alias controllers/battery.getAllBatterysForFlightId
+@alias controllers/battery.getAllBatteriesForFlightId
 @param {string} _flightId - a mogoose object id
 @param {function} _callback - returns status and batterys
 */
-var getAllBatterysForFlightId = function(_flightId, _callback){
+var getAllBatteriesForFlightId = function(_flightId, _callback){
 	Battery.find({flight_id: _flightId}, function(err, batterys){
 		if(err) _callback({success: false, data: 'error querying battery'});
 		else _callback({success: true, data: batterys});
@@ -38,6 +38,6 @@ var saveBattery = function(_data, _callback){
 
 // export functions
 module.exports = {
-	getAllBatterysForFlightId: getAllBatterysForFlightId,
+	getAllBatteriesForFlightId: getAllBatteriesForFlightId,
 	saveBattery: saveBattery
 };

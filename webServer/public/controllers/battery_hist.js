@@ -1,10 +1,5 @@
-/**
-@class angular_controller.AltitudeHistory
-@memberOf angular_controller
-@requires angular_factories.FlightName
-*/
 angular.module('UavOpsInterface')
-.controller('AltitudeHistCtrl', function ($scope, $http, FlightName, $uibModal){	
+.controller('BatteryHistCtrl', function ($scope, $http, FlightName, $uibModal){	
 	
     $scope.showChart = false;
     $scope.toggleInput = false;
@@ -24,44 +19,32 @@ angular.module('UavOpsInterface')
         $scope.showBack = false;
     };
   
-    /**
-    @function getAltitudeHistory
-    @memberOf angular_controller.AltitudeHistory
-    @param {string} - flightId
-    @description The function takes in a flightId and uses it to load the altitude
-    history for that user.
-    */
     $scope.flightSearch = function(_flightId){
         var req = {
             method: 'GET', 
-            url: 'api/altitude/'+_flightId, 
+            url: 'api/battery/'+_flightId, 
         };
         $http(req).then(function(data){
             $scope.showChart = true;
             $scope.showBack = true;
-            var altitudes = [];
+            var batteries = [];
             for(var i in data.data.data){
-                altitudes.push({
+                batteries.push({
                     label: (new Date(data.data.data[i].created_at)),
-                    value: data.data.data[i].alt
+                    value: data.data.data[i].battery
                 });
             }
 
             // sort
             var sortFunc = function(a, b){return a.label-b.label};
-            altitudes.sort(sortFunc);
-            $scope.altitudes = [
+            batteries.sort(sortFunc);
+            $scope.batteries = [
                 {
-                    key: "altitudes",
-                    values: altitudes
+                    key: "battery levels",
+                    values: batteries
                 }
             ];
 
-            /**
-            @member AltitudeChartOptions
-            @memberOf angular_controller.AltitudeHistory
-            @description This options object governs the appearance of the altitude chart.
-            */
             $scope.options = {
                 chart: {
                     type: 'lineChart',
@@ -84,7 +67,7 @@ angular.module('UavOpsInterface')
                         axisLabel: 'Time (ms)'
                     },
                     yAxis: {
-                        axisLabel: 'Altitude (m)',
+                        axisLabel: 'Charge',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -93,11 +76,11 @@ angular.module('UavOpsInterface')
                 },
                 title: {
                     enable: true,
-                    text: 'Drone Altitude Over Time'
+                    text: 'Drone Battery Charge Over Time'
                 },
                 subtitle: {
                     enable: true,
-                    text: 'This displays the drone altitude in meters over seconds. To get more information, click on a point.',
+                    text: 'This displays the battery charge of the drone over milliseconds. To get more information, click on a point.',
                     css: {
                         'text-align': 'center',
                         'margin': '10px 13px 0px 7px'
@@ -109,7 +92,7 @@ angular.module('UavOpsInterface')
         var handleGraphClick = function (event) {
             var time = point = event[0].point.label;
             var reroute = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
-            var text = 'You selected a point from an altitude graph. Would you like to see all datapoints collected with the timestamp: ';
+            var text = 'You selected a point from a battery charge graph. Would you like to see all datapoints collected with the timestamp: ';
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'templates/histGraphModal.html',

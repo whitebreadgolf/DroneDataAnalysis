@@ -1,4 +1,4 @@
-angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification', 'ngFileUpload', 'ngProgress', 'ngtweet', 'TrackHeight'])
+angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification', 'ngFileUpload', 'ngProgress', 'ngtweet', 'TrackHeight', 'ui.bootstrap', '720kb.datepicker'])
 .config(function ($routeProvider, NotificationProvider) {
 	$routeProvider
 
@@ -30,6 +30,16 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			controller: 'VelocityHistCtrl'
 		})
 
+		// acceleration
+		.when('/acceleration', {
+			templateUrl: 'templates/acceleration.html',
+			controller: 'AccelerationCtrl'
+		})
+		.when('/acceleration_hist', {
+			templateUrl: 'templates/acceleration_hist.html',
+			controller: 'AccelerationHistCtrl'
+		})
+
 		// altitude
 		.when('/altitude', {
 			templateUrl: 'templates/altitude.html',
@@ -54,9 +64,19 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			controller: 'PostFlightConsoleCtrl'
 		})
 
+		.when('/data_overview/:flightId/:time', {
+			templateUrl: 'templates/data_overview.html',
+			controller: 'DataOverviewCtrl'
+		})
+
+		// batery
 		.when('/battery', {
 			templateUrl: 'templates/battery.html',
 			controller: 'BatteryCtrl'
+		})
+		.when('/battery_hist', {
+			templateUrl: 'templates/battery_hist.html',
+			controller: 'BatteryHistCtrl'
 		})
 
 		.when('/airport_proximity', {
@@ -94,15 +114,16 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 		})
 		
 		// home page and legal
-		.when('/legal', {
+		.when('/about', {
 			templateUrl: 'templates/legal.html',
 			controller: 'LegalCtrl'
 		})
 		.otherwise({
-			redirectTo: '/legal'
+			redirectTo: '/about'
 		});
 
 	NotificationProvider.setOptions({
+		templateUrl: 'templates/notification_template.html',
         delay: 2000,
         startTop: 20,
         startRight: 10,
@@ -116,4 +137,7 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
        
 	// create websocket in angular_factories on run 
 	Websocket.create();
-});
+})
+;
+
+

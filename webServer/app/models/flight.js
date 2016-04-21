@@ -22,7 +22,8 @@ var flightSchema = new Schema({
 	micro_sd: Number, 
 	gimbal: Number,
 	flight_started: Date,
-	flight_ended: Date
+	flight_ended: Date,
+	created_at: Date
 });
 
 // declare exported module

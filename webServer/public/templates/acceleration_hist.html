@@ -1,7 +1,9 @@
 <ul class="nav nav-pills nav-justified">
-	<li role="presentation" class="active"><a href="#/altvel_notifications">Altitude and Velocity Notifications</a></li>
-	<li role="presentation" ><a href="#/airport_notifications">Airport Proximity</a></li>
-	<li role="presentation"><a href="#/obstical_notifications">Obstacle Proximity</a></li>
+  <li role="presentation"><a href="#/velocity_hist">Velocity</a></li>
+  <li role="presentation"><a href="#/altitude_hist">Altitude</a></li>
+  <li role="presentation" class="active"><a href="#/acceleration_hist">Acceleration</a></li>
+  <li role="presentation"><a href="#/battery_hist">Battery</a></li>
+  <li role="presentation"><a href="#/location_hist">Location</a></li>
 </ul>
 <br>
 <div class="row" >
@@ -31,7 +33,8 @@
 	</div>
 </div>
 <br>
-<div ng-if="!showNotifications" ng-repeat="flight in flights" class="row">
+<div ng-if="!showChart">
+<div ng-repeat="flight in flights" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
 	  	<div class="panel-body">
@@ -43,18 +46,9 @@
 	</div>	
 	</div>
 </div>
-<div class="row" ng-if="showNotifications">
-	<div class="col-sm-12">
-	<div ng-repeat="note in notifications">
-		<div class="panel panel-default">
-		  	<div class="panel-body">
-				<div>{{note.report}}</div>
-				<div>{{note.value}}</div>
-				<div>{{note.created_at}}</div>
-		  	</div>
-		</div>	
-	</div>
-	</div>
+</div>
+<div ng-if="showChart">
+	<nvd3 options="options" data="accelerations"></nvd3>
 </div>
 <div class="row">
 <div class="col-sm-12">

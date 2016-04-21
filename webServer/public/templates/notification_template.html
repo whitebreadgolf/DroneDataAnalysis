@@ -1,0 +1,36 @@
+<style type="text/css">
+.notification{
+	position: fixed;
+    z-index: 9999;
+    cursor: pointer;
+    -webkit-transition: all ease .5s;
+    -o-transition: all ease .5s;
+    transition: all ease .5s;
+    color: rgb(26, 26, 26);
+    border-radius: 5px;
+    border:1px solid #dddddd;
+    background-color: rgba(230, 230, 230, .6);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .3);
+}
+.red{
+	color: red !important;
+}
+.green{
+	color: green !important;
+}
+.blue{
+	color: blue !important;
+}
+.yellow{
+	color: yellow !important;
+}
+</style>
+<div class="alert notification">
+	<div>
+		<span ng-if="type == 'error'"><i class="fa fa-remove red"></i></span>
+		<span ng-if="type == 'success'"><i class="fa fa-check green"></i></span>
+		<span ng-if="type == 'info'"><i class="fa fa-info blue"></i></span>
+		<span ng-if="type == 'warning'"><i class="fa fa-warning yellow"></i></span>
+    	<strong> {{message}}</strong>
+	</div>
+</div>

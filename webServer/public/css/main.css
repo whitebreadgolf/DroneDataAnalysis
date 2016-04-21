@@ -72,7 +72,76 @@
         bottom: 0px;
         left: 50%;
     }
-
+    .custom-marker.customDotObstacle {
+        font-size: 1.5em;
+        padding: 4px;
+        background: yellow;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: none;
+    }
+    .custom-marker.customDotObstacle:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #fff transparent;
+        display: block;
+        width: 0;
+        z-index: 1;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
+    .custom-marker.customDotObstacle:before {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #7F7F7F transparent;
+        display: block;
+        width: 0;
+        z-index: 0;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
+    .custom-marker.customDotAddObstacle {
+        font-size: 1.5em;
+        padding: 4px;
+        background: blue;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: none;
+    }
+    .custom-marker.customDotAddObstacle:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #fff transparent;
+        display: block;
+        width: 0;
+        z-index: 1;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
+    .custom-marker.customDotAddObstacle:before {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 2px 2px 0;
+        border-color: #7F7F7F transparent;
+        display: block;
+        width: 0;
+        z-index: 0;
+        margin-left: -6px;
+        bottom: 0px;
+        left: 50%;
+    }
 
 /*           Animations              */
 .form-control, .input-group-addon{
@@ -331,6 +400,7 @@ input.ct-red + span.switch-left, input.ct-red + span + label + span.switch-right
 .navbar-default {
     /*background-color: #D9D9D9;*/
     background-color: #BD2031;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
 
     color: #FFDF00;
 }
@@ -690,4 +760,68 @@ color: #FFDF00;
 }
 .panel-title a:hover,.panel-title a:focus{
     color: #333333;
+}
+
+
+/* NAV pills*/
+/*            Navigation menu                */
+.nav-pills > li + li {
+    margin-left: 0;
+}
+.nav-pills > li > a {
+    border: 1px solid #BD2031;
+    border-radius: 0;
+    color: #BD2031;
+    margin-left: -1px;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: #F5F5F5;
+}
+.nav-pills.ct-blue > li.active > a, .nav-pills.ct-blue > li.active > a:hover, .nav-pills.ct-blue > li.active > a:focus, .pagination.ct-blue > .active > a, .pagination.ct-blue > .active > span, .pagination.ct-blue > .active > a:hover, .pagination.ct-blue > .active > span:hover, .pagination.ct-blue > .active > a:focus, .pagination.ct-blue > .active > span:focus{
+   background-color: #BD2031;
+}
+.nav-pills.ct-azure > li.active > a, .nav-pills.ct-azure > li.active > a:hover, .nav-pills.ct-azure > li.active > a:focus, .pagination.ct-azure > .active > a, .pagination.ct-azure > .active > span, .pagination.ct-azure > .active > a:hover, .pagination.ct-azure > .active > span:hover, .pagination.ct-azure > .active > a:focus, .pagination.ct-azure > .active > span:focus{
+    background-color: #2C93FF;
+}
+.nav-pills.ct-green > li.active > a, .nav-pills.ct-green > li.active > a:hover, .nav-pills.ct-green > li.active > a:focus, .pagination.ct-green > .active > a, .pagination.ct-green > .active > span, .pagination.ct-green > .active > a:hover, .pagination.ct-green > .active > span:hover, .pagination.ct-green > .active > a:focus, .pagination.ct-green > .active > span:focus{
+   background-color: #05AE0E;
+}
+.nav-pills.ct-orange > li.active > a, .nav-pills.ct-orange > li.active > a:hover, .nav-pills.ct-orange > li.active > a:focus, .pagination.ct-orange > .active > a, .pagination.ct-orange > .active > span, .pagination.ct-orange > .active > a:hover, .pagination.ct-orange > .active > span:hover, .pagination.ct-orange > .active > a:focus, .pagination.ct-orange > .active > span:focus{
+   background-color: #FF9500;
+}
+.nav-pills.ct-red > li.active > a, .nav-pills.ct-red > li.active > a:hover, .nav-pills.ct-red > li.active > a:focus, .pagination.ct-red > .active > a, .pagination.ct-red > .active > span, .pagination.ct-red > .active > a:hover, .pagination.ct-red > .active > span:hover, .pagination.ct-red > .active > a:focus, .pagination.ct-red > .active > span:focus{
+   background-color: #FF3B30;
+}
+.nav-pills.ct-blue > li > a {
+    border: 1px solid #3472F7;
+    color: #3472F7;
+}
+.nav-pills.ct-azure > li > a {
+    border: 1px solid #2C93FF;
+    color: #2C93FF;
+}
+.nav-pills.ct-green > li > a {
+    border: 1px solid #05AE0E;
+    color: #05AE0E;
+}
+.nav-pills.ct-orange > li > a {
+    border: 1px solid #FF9500;
+    color: #FF9500;
+}
+.nav-pills.ct-red > li > a {
+    border: 1px solid #FF3B30;
+    color: #FF3B30;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: #BD2031;
+    color: #FFFFFF;
+}
+
+.nav-pills > li:first-child > a{
+    border-radius: 4px 0 0 4px;
+    margin: 0;
+}
+.nav-pills > li:last-child > a{
+    border-radius: 0 4px 4px 0;
 }

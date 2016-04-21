@@ -4,20 +4,16 @@
 @requires Notification
 */
 angular.module('UavOpsInterface')
-.controller('AddObstacleCtrl', function ($scope, $http, Notification) {
+.controller('AddObstacleCtrl', function ($scope, $http, Notification){
 
 	// array for our dynamic markers
 	$scope.configMarkers = [];
+	$scope.obstacleMarkers = [];
 	$scope.allMarkers = {};
 	$scope.mapConfiguration = {
 		isValid:false, 
 		isInvalid: true,	
 	};
-
-	$http({
-		method: 'GET', 
-		url: 'api/configuremap'
-	}).then(function(data){
 
 	/**
 	@function configureMap
@@ -38,8 +34,17 @@ angular.module('UavOpsInterface')
 			}
 		}
 		else if(data && !data.data.success){
-			Notification({message: 'user must log in'}, 'warning');
+			$scope.type = 'warning';
+			Notification({message: 'user must log in', scope: $scope});
 		}
+		var req = {
+				method: 'GET', url: 'api/obstacles',
+			}
+			$http(req).then(function(data){
+				for(var i in data.data.data){
+					$scope.obstacleMarkers = data.data.data;
+				}
+			});
 	});
 
 	/**
@@ -54,15 +59,15 @@ angular.module('UavOpsInterface')
 	        text += possible.charAt(Math.floor(Math.random() * possible.length));
 	    }
 	    return text;
-	};
+	}
 
-	$scope.clearMarkers = function (){
-		
+	$scope.clearMarkers = function (text){
+		console.log(text);
 		// empty array
 		$scope.allMarkers = {}; 
 		$scope.mapConfiguration.isValid = false; 
 		$scope.mapConfiguration.isInvalid = true;
-	};
+	}
 
 	/**
 	@function AddMapMarker
@@ -86,7 +91,7 @@ angular.module('UavOpsInterface')
 		};
 		$scope.mapConfiguration.isValid = true; 
 		$scope.mapConfiguration.isInvalid = false;
-	};
+	}
 	$scope.removeObsticle = function(i){
 		delete $scope.allMarkers[i];
 	}
@@ -98,24 +103,17 @@ angular.module('UavOpsInterface')
 	checks so this option should not be accessable until conditions are correct.
 	*/
 	$scope.configureObstacle = function (){
-		
 		var req = {
 			method: 'POST', url: 'api/addobstacle',
 			data: {}
 		}
-
 		$http(req).then(function(data){
 			console.log(data);
 		});
 	};
 
-	$scope.markerClicked = function(id){
-		console.log(id);
-	}
-
-
 	// Service calls and helper functions
-	var makeAddObsticleReq = function(i){
+	var makeAddObstacleReq = function(i){
 		return $http({
 			method: 'POST', 
 			url: 'api/addobstacle',
@@ -129,26 +127,31 @@ angular.module('UavOpsInterface')
 		 	return data.data;
 		});
 	} 
-	var validObsticle = function(i){
+	var validObstacle = function(i){
 		return $scope.allMarkers[i].name !== '' && $scope.allMarkers[i].radius !== '';
 	}
-
 	$scope.configureAllObstacles = function (){
 		for(var i in $scope.allMarkers){
-			if(validObsticle(i)){
-				makeAddObsticleReq(i).then(function(data){
-					if(data.success)
-						Notification({message: data.message}, 'success');
-					else
-						Notification({message: data.message}, 'error');	
+			if(validObstacle(i)){
+				makeAddObstacleReq(i).then(function(data){
+					if(data.success){
+						$scope.type = 'success';
+						Notification({message: data.message, scope: $scope});
+					}
+					else{
+						$scope.type = 'error';
+						Notification({message: data.message, scope: $scope});	
+					}
 				});
 				delete $scope.allMarkers[i];
 			}
 			else{
-				Notification({message: 'Obsticle with id '+i+' is not valid'}, 'warning');
+				$scope.type = 'warning';
+				Notification({message: 'Obsticle with id '+i+' is not valid', scope: $scope});
 				return;
 			}
 		}
+	}
 
 	/** 
 	@function ClearObstacleMarkers
@@ -162,20 +165,25 @@ angular.module('UavOpsInterface')
 
 		$scope.mapConfiguration.isValid = false; 
 		$scope.mapConfiguration.isInvalid = true;
-	};
+	}
 	
 	$scope.addObsticle = function(i){
-		if(validObsticle(i)){
-			makeAddObsticleReq(i).then(function(data){
+		if(validObstacle(i)){
+			makeAddObstacleReq(i).then(function(data){
 				delete $scope.allMarkers[i];
-				if(data.success)
-					Notification({message: data.message}, 'success');
-				else
-					Notification({message: data.message}, 'error');	
+				if(data.success){
+					$scope.type ='success';
+					Notification({message: data.message, scope: $scope});
+				}
+				else{
+					$scope.type ='error';
+					Notification({message: data.message, scope: $scope});	
+				}
 			});
 		}
 		else{
-			Notification({message: 'Obsticle with id '+i+' is not valid'}, 'warning');
+			$scope.type = 'warning';
+			Notification({message: 'Obsticle with id '+i+' is not valid', scope: $scope});
 			return;
 		}
 	}

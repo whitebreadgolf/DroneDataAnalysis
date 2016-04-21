@@ -1,25 +1,10 @@
-/**
-@class angular_controller.Velocity
-@memberOf angular_controller
-@requires angular_factories.Websocket
-*/
 angular.module('UavOpsInterface')
-.controller('VelocityCtrl', function ($scope, Websocket, $interval){
-    /**
-    @function getSpeed
-    @memberOf angular_controller.Speed
-    @description The function will attempt to get the most recent speed information
-    from the websocket at a regular interval.
-    */
+.controller('AccelerationCtrl', function ($scope, Websocket, $interval){
+   
 	$interval(function (){
-  		$scope.velocities = Websocket.getVelocity();
+  		$scope.accelerations = Websocket.getAcceleration();
 	}, 100);
 
-    /**
-    @member VelocityChartOptions
-    @memberOf angular_controller.Velocity
-    @description This options object governs the appearance of the velocity chart.
-    */
   	$scope.options = {
   		chart: {
 	        type: 'lineChart',
@@ -39,10 +24,10 @@ angular.module('UavOpsInterface')
 	        },
 	        deepWatchData: true,
 	        xAxis: {
-	            axisLabel: 'Time elapsed (s)'
+	            axisLabel: 'Time elapsed (ms)'
 	        },
 	        yAxis: {
-	            axisLabel: 'Velocity (m/s)',
+	            axisLabel: 'Acceleration (m/s)',
                 tickFormat: function(d){
                     return d3.format('.02f')(d);
                 },
@@ -51,7 +36,7 @@ angular.module('UavOpsInterface')
     	}, 
     	title: {
             enable: true,
-            text: 'Drone\'s Velocity Over Time'
+            text: 'Drone\'s Acceleration Over Time'
         },
         subtitle: {
             enable: true,

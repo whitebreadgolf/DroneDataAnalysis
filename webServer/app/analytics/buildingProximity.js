@@ -17,6 +17,7 @@ var config = require('../config/config');
 var getPixels = require('get-pixels');
 var ndarray = require('ndarray');
 var BinaryMap = require('../models/binaryMap');
+var Obstacle = require('../models/obstacle');
 var Airport = require('../models/airport');
 var regulationConfig = require('../config/regulationConfig');
 var when = require('when');
@@ -270,13 +271,20 @@ var addObsticleWithWidth = function(_id, _lat, _lon, _name, _radius, _callback){
         else{
             translateLatLonToGridPoint(_lat, _lon, _maps, function (_map, _droneloc){
 
-                printMap(_map.values);
-                console.log();
                 // the radius in points
                 var pointRad = Math.floor(100*(_radius/_map.distance));
                 highlightPointRadius(_map, pointRad, _droneloc, function(_map){
-                    printMap(_map.values);
-                    _callback({success: true, message: ''});
+                    var data = {
+                        user: _id,
+                        lat: _lat,
+                        lon: _lon,
+                        width: _radius,
+                        created_at: new Date()
+                    };
+                    var obs = new Obstacle(data);
+                    obs.save().then(function(){
+                        _callback({success: true, message: 'Added obstical to configuration map'});
+                    });
                 });
             });
         }

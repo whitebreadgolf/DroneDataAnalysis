@@ -6,6 +6,7 @@
 angular.module('UavOpsInterface')
 .factory('Websocket', function (Notification){
 	// websocket data structures
+	var scope = {};
 	var ws;
 	var speed = [
 		{
@@ -48,7 +49,10 @@ angular.module('UavOpsInterface')
 		}
 	]
 	var airports = [
-		
+		{
+			key: "Airports",
+			values: []
+		}
 	];
 	var battery = [
 		{
@@ -71,11 +75,10 @@ angular.module('UavOpsInterface')
 			ws.onmessage = function (event) {
 
 			 	var jsonData = JSON.parse(event.data);
-			 	console.log(jsonData);
 				if(jsonData.type === 'data'){
 
 					// build altitude data
-					if(jsonData.altitude !== null){
+					if(jsonData.altitude !== null && jsonData.altitude !== undefined){
 						if(jsonData.altitude < 0.01 && jsonData.altitude > -0.01) 
 							jsonData.altitude = 0;
 						var pushAlt = { "label" : jsonData.time/1000 , "value":jsonData.altitude};
@@ -85,7 +88,7 @@ angular.module('UavOpsInterface')
 					}
 
 					// build velocity x data
-					if(jsonData.velocity_x !== null){
+					if(jsonData.velocity_x !== null && jsonData.velocity_x !== undefined){
 						if(jsonData.velocity_x < 0.01 && jsonData.velocity_x > -0.01) 
 							jsonData.velocity_x = 0;
 						var pushX = {"label":jsonData.time/1000, "value":jsonData.velocity_x};
@@ -95,7 +98,7 @@ angular.module('UavOpsInterface')
 					}
 
 					// build velocity y data
-					if(jsonData.velocity_y !== null){
+					if(jsonData.velocity_y !== null && jsonData.velocity_y !== undefined){
 						if(jsonData.velocity_y < 0.01 && jsonData.velocity_y > -0.01) 
 							jsonData.velocity_y = 0;
 						var pushY = {"label":jsonData.time/1000, "value":jsonData.velocity_y};
@@ -105,7 +108,7 @@ angular.module('UavOpsInterface')
 					}
 
 					// build velocity z data
-					if(jsonData.velocity_z !== null){
+					if(jsonData.velocity_z !== null && jsonData.velocity_z !== undefined){
 						if(jsonData.velocity_z < 0.01 && jsonData.velocity_z > -0.01) 
 							jsonData.velocity_z = 0;
 						var pushZ = {"label":jsonData.time/1000, "value":jsonData.velocity_z};
@@ -115,17 +118,17 @@ angular.module('UavOpsInterface')
 					}
 
 					// build acceleration x data
-					if(jsonData.acc_yacc_y !== null){
-						if(jsonData.acc_y < 0.01 && jsonData.acc_y > -0.01) 
-							jsonData.acc_y = 0;
-						var pushX = {"label":jsonData.time/1000, "value":jsonData.acc_y};
+					if(jsonData.acc_x !== null && jsonData.acc_x !== undefined){
+						if(jsonData.acc_x < 0.01 && jsonData.acc_x > -0.01) 
+							jsonData.acc_x = 0;
+						var pushX = {"label":jsonData.time/1000, "value":jsonData.acc_x};
 						acceleration[0].values.push(pushX);
 						if (acceleration[0].values.length > 15)
 							acceleration[0].values.shift();
 					}
 
 					// build acceleration y data
-					if(jsonData.acc_y !== null){
+					if(jsonData.acc_y !== null && jsonData.acc_y !== undefined){
 						if(jsonData.acc_y < 0.01 && jsonData.acc_y > -0.01) 
 							jsonData.acc_y = 0;
 						var pushY = {"label":jsonData.time/1000, "value":jsonData.acc_y};
@@ -135,7 +138,7 @@ angular.module('UavOpsInterface')
 					}
 
 					// build acceleration z data
-					if(jsonData.acc_z !== null){
+					if(jsonData.acc_z !== null && jsonData.acc_z !== undefined){
 						if(jsonData.acc_z < 0.01 && jsonData.acc_z > -0.01) 
 							jsonData.acc_z = 0;
 						var pushZ = {"label":jsonData.time/1000, "value":jsonData.acc_z};
@@ -145,7 +148,7 @@ angular.module('UavOpsInterface')
 					}
 
 					// build battery data
-					if(jsonData.battery !== null){
+					if(jsonData.battery !== null && jsonData.battery !== undefined){
 						if(jsonData.battery < 0.01 && jsonData.battery > -0.01) 
 							jsonData.battery = 0;
 						var pushBat = {"label":jsonData.time/1000, "value":jsonData.battery};
@@ -163,29 +166,37 @@ angular.module('UavOpsInterface')
 					};
 					notifications.push(pushNotif);
 
-					if(jsonData.level === 'warning') 
-						Notification({message: jsonData.param}, 'warning');
-					else if(jsonData.level === 'hazard') 
-						Notification({message: jsonData.param}, 'error'); 
-					else if(jsonData.level === 'update') 
-						Notification({message: jsonData.param}, 'info');
+					if(jsonData.level === 'warning'){
+						scope.type = 'warning';
+						Notification({message: jsonData.param, scope: scope});
+					} 
+					else if(jsonData.level === 'hazard') {
+						scope.type = 'error';
+						Notification({message: jsonData.param, scope: scope}); 
+					} 
+					else if(jsonData.level === 'update') {
+						scope.type = 'info';
+						Notification({message: jsonData.param, scope: scope});
+					} 
 				}
 				else if(jsonData.type === 'proximity'){
+					console.log(jsonData);
 					if(jsonData.param === 'building'){
-						building[0].values[0] = {"label":jsonData.time/1000, "value":jsonData.dist};
+						building[0].values[0] = {label:jsonData.time, value:jsonData.dist};
 					}
 					else if(jsonData.param === 'airport'){
 						var flag = false;
-						for(var i in airports){
-							if(airports[i].key === jsonData.name){
+						for(var i in airports[0].values){
+							if(airports[0].values[i].label === jsonData.name){
 								flag = true;
-								airports[i].values[0] = jsonData.dist;
+								airports[0].values[i] = {label: jsonData.name, value:jsonData.dist};
 							}	
 						}
 
 						// not in graph yet
-						if(!flag)
-							airports.push({key: jsonData.name, values: [jsonData.dist]});
+						if(!flag){
+							airports[0].values.push({label: jsonData.name, value:jsonData.dist});
+						}
 					}
 				}
 				else{
@@ -195,7 +206,7 @@ angular.module('UavOpsInterface')
 	    },
 
 	    // all getters
-	    getSpeed: function(){ return speed; },
+	    getVelocity: function(){ return speed; },
 	    getAltitude: function(){ return altitude; },
 	    getNotifications: function(){ return notifications; },
 		getBattery: function(){ return battery; },

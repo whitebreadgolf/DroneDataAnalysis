@@ -1,15 +1,37 @@
 <ul class="nav nav-pills nav-justified">
-	<li role="presentation"><a href="#/airport_notifications">Airport</a></li>
-	<li role="presentation" class="active"><a href="#/obstical_notifications">Building and Obsticals</a></li>
+	<li role="presentation"><a href="#/altvel_notifications">Altitude and Velocity Notifications</a></li>
+	<li role="presentation"><a href="#/airport_notifications">Airport Proximity</a></li>
+	<li role="presentation" class="active"><a href="#/obstical_notifications">Obstacle Proximity</a></li>
 </ul>
 <br>
-<div class="row">
-	<div class="form-group col-sm-12">
-		<input class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter" ng-click="searchClicked()">
+<div class="row" >
+	<div class="col-sm-12" >
+		<input ng-show="!toggleInput" class="form-control" type="text" placeholder="Enter a Flight Name" ng-model="searchFilter">
+		<div ng-show="toggleInput" class="form-group" style="padding-bottom:20px">
+			<datepicker date-month-title="selected year">
+			    <input class="form-control"  ng-model="startDate" placeholder="Enter Start Date"/>
+			</datepicker>
+			<br>
+			<br>
+			<datepicker date-month-title="selected year">
+			    <input class="form-control"  ng-model="endDate" placeholder="Enter End Date"/>
+			</datepicker>
+   		</div>   		
   	</div>
 </div>
-
-<div ng-if="!showNotifications" ng-repeat="flight in flights | filter: searchFilter" class="row">
+<br>
+<div class="row">
+	<div class="col-sm-12">
+		<div>
+			<span ng-if="showBack" class="btn btn-default btn-sm" ng-click="backClicked()">Back</span>
+			<span class="btn btn-warning btn-sm" ng-click="toggleInput = !toggleInput">Toggle Flight Name/Date Search</span>
+			<span class="btn btn-danger btn-sm" ng-click="searchFlights()">Search Flights</span>
+		</div>
+		<div style="border-bottom: 1px solid #dddddd; padding-bottom:10px"></div>
+	</div>
+</div>
+<br>
+<div ng-if="!flightSelected" ng-repeat="flight in flights" class="row">
 	<div class="col-sm-12">
 	<div class="panel panel-default">
 	  	<div class="panel-body">
@@ -22,24 +44,10 @@
 	</div>
 </div>
 
-<div class="row" ng-if="flightSelected" ng-repeat="airport in airports">
-	<div class="col-sm-12">
-	<div>
-		<div class="panel panel-default">
-		  	<div class="panel-body">
-				<div>{{airport}}</div>
-		  	</div>
-		</div>
-		<div class="panel-footer">
-			<div class="btn btn-default" ng-click="clickAirport(airport)">Select Airport</div>
-	  	</div>	
-	</div>
-	</div>
+<div class="row" ng-if="flightSelected">
+	<nvd3 options="options" data="obstacleData"></nvd3>
 </div>
 
-<div class="row" ng-if="showAirport">
-	<nvd3 options="options" data="airportData"></nvd3>
-</div>
 <div class="row">
 <div class="col-sm-12">
 <div ng-if="noData">

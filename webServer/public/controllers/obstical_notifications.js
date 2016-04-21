@@ -4,39 +4,51 @@
 @requires angular_factories.FlightName
 */
 angular.module('UavOpsInterface')
-.controller('ObsticalNotificationsCtrl', function ($scope, $http, FlightName){
-		
+.controller('ObsticalNotificationsCtrl', function ($scope, $http, FlightName, $uibModal){
+	
+    $scope.toggleInput = false;
+    $scope.showBack = false;
+    $scope.searchFilter = '';
+    var allFlights = [];	
 	$scope.flightSelected = false;
-	$scope.airports = [];
-	$scope.showAirport = false;
-	$scope.airportData = [];
-	var allNotifications = [];
+	$scope.obstacleData = [
+        {
+            key: 'obstacle proximity', 
+            values:[]
+        }
+    ];
 
 	FlightName.getFlights().then(function(flightObj){ 
 		$scope.flights = flightObj.flights;
+        allFlights = flightObj.flights;
 		$scope.noData = flightObj.noData;
 		$scope.dataError = flightObj.dataError;
-	});
+	});	
 
-	$scope.showNotifications = false;
-	$scope.searchClicked = function(){
-        $scope.showNotifications = false;
+    $scope.backClicked = function(){
         $scope.flightSelected = false;
-        $scope.showAirport = false;
+        $scope.showBack = false;
     };
-
-    $scope.clickAirport = function(_name){
-    	var airObj = {key: _name, values:[]};
-    	for(var i in allNotifications){
-			if(allNotifications[i].report === _name){
-				airObj.values.push({
-					label: allNotifications[i].created_at,
-					value: allNotifications[i].value
-				});
-			}
-		}
-		$scope.airportData[0] = airObj;
-		$scope.showAirport = true;
+    $scope.searchFlights = function(){
+        $scope.flights = [];
+        if($scope.toggleInput){
+            var startDate = new Date($scope.startDate);
+            var endDate = new Date($scope.endDate);
+            for(var i in allFlights){
+                var date = new Date(allFlights[i].flight_started);
+                
+                if(date > startDate && date < endDate){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }
+        }
+        else{
+            for(var i in allFlights){
+                if(allFlights[i].flight_name.indexOf($scope.searchFilter) > -1){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }       
+        }
     }
 
 	/**
@@ -52,64 +64,77 @@ angular.module('UavOpsInterface')
 		};
 		$http(req).then(function(data){
 			var notifications = data.data.data;
-			$scope.showNotifications = true;
-			$scope.notifications = [];
 			for(var i in notifications){
 				if(notifications[i].type === 'proximity'){
-					allNotifications.push({
-						report: notifications[i].report,
+					$scope.obstacleData[0].values.push({
 						value: notifications[i].value,
-						created_at: notifications[i].created_at
+						label: new Date(notifications[i].created_at).getTime()
 					});
 				}
 			}
-			$scope.flightSelected = true;		
-		});
-	};
-
-	$scope.options = {
-        chart: {
-            type: 'lineChart',
-            height: 450,
-            margin : {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: 55
-            },
-            x: function(d){ return d.label; },
-            y: function(d){ return d.value; },
-            useInteractiveGuideline: true,
-            xAxis: {
-                axisLabel: 'Time (s)'
-            },
-            yAxis: {
-                axisLabel: 'Distance (m)',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
+            $scope.obstacleData[0].values.sort(function(a,b){ return a.label-b.label; });
+			$scope.flightSelected = true;
+            $scope.showBack = true;
+        	$scope.options = {
+                chart: {
+                    type: 'lineChart',
+                    height: 450,
+                    margin : {
+                        top: 20,
+                        right: 20,
+                        bottom: 40,
+                        left: 55
+                    },
+                    lines: {
+                        dispatch: {
+                            elementClick: handleGraphClick
+                        }
+                    },
+                    x: function(d){ return d.label; },
+                    y: function(d){ return d.value; },
+                    useInteractiveGuideline: true,
+                    xAxis: {
+                        axisLabel: 'Time (ms)'
+                    },
+                    yAxis: {
+                        axisLabel: 'Distance (m)',
+                        tickFormat: function(d){
+                            return d3.format('.02f')(d);
+                        },
+                        axisLabelDistance: -10
+                    }
                 },
-                axisLabelDistance: -10
-            }
-        },
-        title: {
-            enable: true,
-            text: 'Drone\'s Airport Proximity'
-        },
-        subtitle: {
-            enable: true,
-            text: 'This displays the drone\'s proximity to an airport',
-            css: {
-                'text-align': 'center',
-                'margin': '10px 13px 0px 7px'
-            }
-        },
-        caption: {
-            enable: false,
-            html: ' ',
-            css: {
-                'text-align': 'justify',
-                'margin': '10px 13px 0px 7px'
-            }
-        }
+                title: {
+                    enable: true,
+                    text: 'Drone\'s Obstacle Proximity'
+                },
+                subtitle: {
+                    enable: true,
+                    text: 'This displays the drone\'s proximity to an obstacle',
+                    css: {
+                        'text-align': 'center',
+                        'margin': '10px 13px 0px 7px'
+                    }
+                }
+            };
+        });
+
+        var handleGraphClick = function (event) {
+            console.log(event);
+            var time = point = event[0].point.label;
+            var reroute = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
+            var text = 'You selected a point from a velocity graph. Would you like to see all datapoints collected with the timestamp: ';
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'templates/histGraphModal.html',
+                controller: 'HistGraphModal',
+                size: 'small',
+                resolve: {
+                    text: function(){ return text; },
+                    time: function(){ return time; },
+                    reroute: function(){ return reroute; }
+                }
+            });
+        };
     };
 });

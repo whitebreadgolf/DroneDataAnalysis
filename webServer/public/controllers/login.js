@@ -22,15 +22,23 @@ angular.module('UavOpsInterface')
 		// check username/password
 		for(var key in data){
 			if(!data[key] || data[key] === ''){ 
-				Notification({message: 'complete all fields'}, 'error');
+				$scope.type = 'error';
+				Notification({message: 'complete all fields', scope: $scope});
 				return;
 			}
 		}
 
 		var req = { method: 'POST', url: 'api/login', data: data};
 		$http(req).then(function(data){
-			if(data.data.success) Notification({message: 'Welcome '+data.data.user.name}, 'success'); 
-			else Notification({message: data.data.message}, 'error');
+
+			if(data.data.success) {
+				$scope.type = 'success';
+				Notification({message: 'Welcome '+data.data.user.name, scope: $scope});
+			} 
+			else {
+				$scope.type = 'error';
+				Notification({message: data.data.message, scope: $scope});
+			}
 		});	
 	}	
 });

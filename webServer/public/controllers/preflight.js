@@ -24,11 +24,11 @@ angular.module('UavOpsInterface')
 			micro_sd: parseInt($scope.sdCard),
 			gimbal: parseInt($scope.gimbal)
 		};
-		console.log(preflightData);
 		for(var key in preflightData){
 			
-			if(preflightData[key] === undefined || preflightData[key] === ''){ 
-				Notification({message: 'fill out all data-fields'}, 'error');
+			if(preflightData[key] === undefined || preflightData[key] === ''){
+				$scope.type = 'error';
+				Notification({message: 'fill out all data-fields', scope: $scope});
 				return;
 			}
 		}
@@ -40,8 +40,14 @@ angular.module('UavOpsInterface')
 		};
 
 		$http(req).then(function(data){
-			if(data.data.success) Notification({message: data.data.message}, 'success'); 
-			else Notification({message: data.data.message}, 'error');
+			if(data.data.success){
+				$scope.type ='success';
+				Notification({message: data.data.message, scope: $scope}); 
+			}
+			else {
+				$scope.type ='error';
+				Notification({message: data.data.message, scope: $scope});
+			}
 		});	
 	};
 });

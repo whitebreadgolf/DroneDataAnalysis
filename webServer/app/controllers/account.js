@@ -10,6 +10,7 @@ var buildingProximity = require('../analytics/buildingProximity');
 var User = require('../models/user');
 var BinaryMap = require('../models/binaryMap');
 var Airport = require('../models/airport');
+var Obstacle = require('../models/obstacle');
 
 /**
 @function configureUserMap
@@ -39,10 +40,12 @@ var configureUserMap = function (_latLngNW, _latLngSE, _id, _callback){
 
 							// generate range once we delete all maps
 							if(mapCount === numMaps){
-								deleteAllAirportsForUser(_id, function(){
-									console.log('done deleting airports');
-									buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
-								});
+								deleteAllObstaclesForUser(_id, function(){
+									deleteAllAirportsForUser(_id, function(){
+										console.log('done deleting airports');
+										buildingProximity.generateMapWithRange(_latLngNW, _latLngSE, _id, _callback);
+									});
+								});	
 							}
 						}
 					});
@@ -89,6 +92,36 @@ var deleteAllAirportsForUser = function(_id, _callback){
 		}
 	});
 };
+
+var deleteAllObstaclesForUser = function(_id, _callback){
+	Obstacle.find({ 'user': _id }, function (err, obstacles) {
+		if (err || obstacles === null) _callback('error'); 
+		else{
+			var numObstacles = obstacles.length;
+			var obstacleCount = 0;
+
+			// delete all maps
+			if(numObstacles > 0){
+				for(var i=0;i<numObstacles;i++){
+					obstacles[i].remove(function(err, data){
+						if (err) console.log(err);
+						else {
+							obstacleCount++;
+
+							// generate range once we delete all maps
+							if(obstacleCount === numObstacles){
+								_callback()
+							}
+						}
+					});
+				} 
+			}
+			else{ 
+				_callback();
+			}
+		}
+	});
+}
 
 /**
 @function isUserMapConfigured 

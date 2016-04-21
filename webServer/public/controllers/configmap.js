@@ -9,6 +9,7 @@ angular.module('UavOpsInterface')
 	// array for our dynamic markers
 	$scope.allMarkers = [];
 	$scope.configMarkers = [];
+	$scope.obstacleMarkers = [];
 	$scope.alreadyConfigured = false;
 	$scope.notConfigured = false;
 	$scope.configuring = false;
@@ -31,9 +32,18 @@ angular.module('UavOpsInterface')
 			$scope.alreadyConfigured = true;
 			$scope.notConfigured = false;
 			$scope.configMarkers = data.data.data;
+			var req = {
+				method: 'GET', url: 'api/obstacles',
+			}
+			$http(req).then(function(data){
+				for(var i in data.data.data){
+					$scope.obstacleMarkers = data.data.data;
+				}
+			});
 		}
 		else if(data && !data.data.success){
-			Notification({message: 'user must log in'}, 'warning');
+			$scope.type = 'warning';
+			Notification({message: 'user must log in', scope: $scope});
 		}
 	});
 

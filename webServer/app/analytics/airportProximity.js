@@ -10,7 +10,8 @@
 var Airport = require('../models/airport');
 var safetyStatus = require('../controllers/safetyStatus');
 var request = require('request');
-config = require('../config/config');
+var config = require('../config/config');
+var wss = require('../interProcessCommunication/websocket');
 
 //module constants
 var R = 6378.137;
@@ -79,7 +80,7 @@ var calcDistanceAndSaveData = function(_time, _isLive, _data, _lat, _lon, _callb
         dist: dist,
         time: _time
     }
-    if(_isLive.status) 
+    if(_isLive.status && dist < 100000) 
         wss.broadcast(JSON.stringify(liveData));
 
     if(dist < 100000){

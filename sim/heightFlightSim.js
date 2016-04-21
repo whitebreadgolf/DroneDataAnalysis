@@ -1,10 +1,11 @@
 var http = require('http');
 var fs = require('fs');
 var sleep = require('sleep');
+var querystring = require('querystring');
 var DOMAIN = 'localhost';
 
 var authenticateUser = function(){
-	var post_data = JSON.stringify({username: 'karl', pass: 'karl'});
+	var post_data = querystring.stringify({username: 'karl', pass: 'karl'});
 
 	// An object of options to indicate where to post to
 	var post_options = {
@@ -64,19 +65,20 @@ var getCurrentFlight = function(_id){
 var startDataFlow = function(_id, _flightId){
 
 	// read file first
-	fs.readFile('flight_data_height_error.csv', 'utf8', function (_err, _data){
+	fs.readFile('flight_data_big.csv', 'utf8', function (_err, _data){
 		if (_err) throw err;
-		var rows = _data.split(' ');
+		var rows = _data.split('\n');
 		dataFlow(_id, _flightId, rows, 0);
 	});
 }
 var dataFlow = function(_id, _flightId, _rows, _fd){
-	var post_data = JSON.stringify({
+	var post_data = querystring.stringify({
 	    user_id: _id,
 	    type: 'single',
 	    csv_string: _rows[_fd],
 	    flight_id: _flightId
 	});
+	console.log(_rows[_fd]);
 	var post_options = {
 		host: DOMAIN, port: '5000', path: '/api/data', method: 'POST',
 		headers: {
@@ -95,8 +97,8 @@ var dataFlow = function(_id, _flightId, _rows, _fd){
 		res.on('end', function(){
 			response = JSON.parse(response);
 			console.log(response.message);
-			sleep.sleep(2);
-			dataFlow(_id, _flightId, _rows, _fd+1);
+	 		sleep.sleep(2);
+	 		dataFlow(_id, _flightId, _rows, _fd+1);
 		});
 	});	
 

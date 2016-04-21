@@ -11,7 +11,7 @@ angular.module('UavOpsInterface')
 	// map for current decodings
 	var currentDecoding = null;
 	var decodeQueue = [];
-
+	var scope = {};
 	/**
 	@function convert 
 	@memberOf angular_factories.DecoderFactory
@@ -308,7 +308,8 @@ angular.module('UavOpsInterface')
 				};
 				$http(req).then(function(data){
 					if(data.data.success){
-						Notification({message: data.data.message}, 'success'); 
+						//scope.type = 'success';
+						Notification({message: data.data.message}); 
 						_startAnalysis();
 						var req = {
 							method: 'POST',
@@ -317,7 +318,8 @@ angular.module('UavOpsInterface')
 						};
 						$http(req).then(function(data){
 							if(data.data.success) {
-								Notification({message: data.data.message}, 'success');
+								//scope.type = 'success';
+								Notification({message: data.data.message});
 								_endAnalysis();
 								var req = {
 									method: 'POST',
@@ -325,13 +327,22 @@ angular.module('UavOpsInterface')
 									data: {type: 'decoding', flight_id: _flightId, action: 'end'}
 								};
 								$http(req).then(function(data){
-									if(data.data.success) Notification({message: data.data.message}, 'success'); 
-									else Notification({message: data.data.message}, 'error');
+									if(data.data.success){
+										//scope.type = 'success';
+										Notification({message: data.data.message});
+									} 
+									else {
+										//scope.type = 'error';
+										Notification({message: data.data.message});
+									}
 
 									// controller needs to know that we are done
 								}); 
 							}
-							else Notification({message: data.data.message}, 'error');
+							else {
+								//scope.type = 'error';
+								Notification({message: data.data.message, scope: scope});
+							}
 						});
 
 						// destroy current updating and set current object data and stop progress bar animation
@@ -351,11 +362,15 @@ angular.module('UavOpsInterface')
 						// kill object
 						currentDecoding = null;
 					}
-					else Notification({message: data.data.message}, 'error');
+					else {
+						//scope.type = 'error';
+						Notification({message: data.data.message});
+					}
 				});
 			}
 			else{ 
-				Notification({message: 'flight '+_flightId+ ' stopped'}, 'info'); 
+				//scope.type = 'info';
+				Notification({message: 'flight '+_flightId+ ' stopped', scope: scope}); 
 
 				// destroy current updating and set current object data and stop progress bar animation
 				// stop file reading
@@ -380,7 +395,8 @@ angular.module('UavOpsInterface')
 		else{
 			for(var i=0;i<decodeQueue.length;i++){
 				if(decodeQueue[i].flightId === _flightId){ 
-					Notification({message: 'flight '+_flightId+ ' dequeued'}, 'info');
+					//scope.type = 'info';
+					Notification({message: 'flight '+_flightId+ ' dequeued'});
 					decodeQueue.splice(i, 1);
 				}
 			}
@@ -410,7 +426,9 @@ angular.module('UavOpsInterface')
 				flightId: _flightId, file: _file, 
 				doneDecoding:_doneDecoding, startAnalysis:_startAnalysis, endAnalysis:_endAnalysis
 			});
-			Notification({message: 'flight '+_flightId+ ' decoding queued'}, 'warning');
+
+			//scope.type = 'warning';
+			Notification({message: 'flight '+_flightId+ ' decoding queued'});
 		}
 	}
 
@@ -449,7 +467,8 @@ angular.module('UavOpsInterface')
 				currentDecoding.progress_bar.set(currentDecoding.progress);
 		}, 1000);
 
-    	Notification({message: 'flight '+_flightId+ ' decoding starting'}, 'info');
+    	//scope.type = 'info';
+    	Notification({message: 'flight '+_flightId+ ' decoding starting'});
 
     	// initalize
 	    var file = _file;

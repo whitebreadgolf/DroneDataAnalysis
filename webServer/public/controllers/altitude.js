@@ -35,7 +35,7 @@ angular.module('UavOpsInterface')
             y: function(d){ return d.value; },
             useInteractiveGuideline: true,
             xAxis: {
-                axisLabel: 'Time (s)'
+                axisLabel: 'Time (ms)'
             },
             yAxis: {
                 axisLabel: 'Altitude (m)',
@@ -51,7 +51,7 @@ angular.module('UavOpsInterface')
         },
         subtitle: {
             enable: true,
-            text: 'This displays the drone\'s altitude in meters over seconds elapsed',
+            text: 'This displays the drone\'s altitude in meters over milliseconds elapsed',
             css: {
                 'text-align': 'center',
                 'margin': '10px 13px 0px 7px'
