@@ -361,6 +361,22 @@ var initRoutes = function (_app){
 		}
 	});
 
+	// GET flight for id
+	_app.get('/api/flight/:id', function (req, res){
+		
+		// res - {data_points: [{date: <integer>,remote_controller_charge: <double>, intelligent_flight_battery:<double>, propellers:[<boolean>, <boolean>, <boolean>, <boolean>], micro_sd: <boolean>, gimbal: <boolean>}, ….]}
+
+		if(req.user){
+			flight.getFlightsForId(req.params.id, function(err, flight){
+				if(err) res.json({success: false});
+				else res.json({success: true, data: flight});
+			});
+		}
+		else{
+			res.json({message: "flight data not available, user must be logged in", success: false});
+		}
+	});
+
 	// POST flight inspections - starts/ends a flight
 	_app.post('/api/flight', function (req, res){
 		

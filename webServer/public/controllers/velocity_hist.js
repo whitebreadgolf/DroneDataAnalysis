@@ -151,8 +151,9 @@ angular.module('UavOpsInterface')
         });
         var handleGraphClick = function (event) {
             var time = point = event[0].point.label;
-            var reroute = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
-            var text = 'You selected a point from a velocity graph. Would you like to see all datapoints collected with the timestamp: ';
+            var rerouteTime = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
+            var rerouteFlight = '/flight_overview/' + _flightId;
+            var text = 'You selected a point from a velocity graph. Would you like to see an overview of the flight? Or see all datapoints collected with the timestamp: ';
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'templates/histGraphModal.html',
@@ -161,7 +162,8 @@ angular.module('UavOpsInterface')
                 resolve: {
                     text: function(){ return text; },
                     time: function(){ return time; },
-                    reroute: function(){ return reroute; }
+                    rerouteTime: function(){ return rerouteTime; },
+                    rerouteFlight: function(){ return rerouteFlight; }
                 }
             });
         };

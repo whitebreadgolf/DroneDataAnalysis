@@ -31,7 +31,6 @@ var saveLocation = function(_data, _callback){
 	var loc = new Loc(_data);
 	loc.save(function(err, data){
 		if(err) console.log(err);
-		else console.log('collected location');
 		_callback();
 	});
 }

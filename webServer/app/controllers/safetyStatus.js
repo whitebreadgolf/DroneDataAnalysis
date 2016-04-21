@@ -31,7 +31,6 @@ var saveSafetyStatus = function(_collectData, _callback){
 	var safetyReport = new SafetyReport(_collectData);
 	safetyReport.save(function(error, data){
         if(error) console.log('error saving safety report'); 
-        else console.log('added safety report'); 
         _callback();
     });
 };

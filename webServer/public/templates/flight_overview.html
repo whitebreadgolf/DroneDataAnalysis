@@ -1,0 +1,61 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2>Flight Overview</h2>
+			</div>
+			<div class="panel-body">
+				<div>
+					<code>Flight Name:</code><span> {{flight.flight_name}}</span>
+				</div>
+				<div>
+					<code>Preflight Created:</code><span> {{flight.created_at}}</span>
+				</div>
+				<div>
+					<code>Flight Started:</code><span> {{flight.flight_started}}</span>
+				</div>
+				<div>
+					<code>Flight Ended:</code><span> {{flight.flight_ended}}</span>
+				</div>
+				<div>
+					<code>Remote Controller Charge:</code> <i class="fa fa-battery-{{flight.remote_controller_charge}}"></i>
+				</div>
+				<div>
+					<code>Flight Intelligent Battery:</code> <i class="fa fa-battery-{{flight.intelligent_flight_battery}}"></i>
+				</div>
+				<div><code>Top Left Propeller:</code>
+					<span ng-if="flight.propeller_0 == 0">Perfect condition</span>
+					<span ng-if="flight.propeller_0 == 1">Scratched</span>
+					<span ng-if="flight.propeller_0 == 2">Visibly cracked or chipped</span>
+					<span ng-if="flight.propeller_0 == 3">Large chips or piece missing</span>
+				</div>
+				<div><code>Top Right Propeller:</code>
+					<span ng-if="flight.propeller_1 == 0">Perfect condition</span>
+					<span ng-if="flight.propeller_1 == 1">Scratched</span>
+					<span ng-if="flight.propeller_1 == 2">Visibly cracked or chipped</span>
+					<span ng-if="flight.propeller_1 == 3">Large chips or piece missing</span>
+				</div>
+				<div><code>Bottom Left Propeller:</code>
+					<span ng-if="flight.propeller_2 == 0">Perfect condition</span>
+					<span ng-if="flight.propeller_2 == 1">Scratched</span>
+					<span ng-if="flight.propeller_2 == 2">Visibly cracked or chipped</span>
+					<span ng-if="flight.propeller_2 == 3">Large chips or piece missing</span>
+				</div>
+				<div><code>Bottom Right Propeller:</code>
+					<span ng-if="flight.propeller_3 == 0">Perfect condition</span>
+					<span ng-if="flight.propeller_3 == 1">Scratched</span>
+					<span ng-if="flight.propeller_3 == 2">Visibly cracked or chipped</span>
+					<span ng-if="flight.propeller_3 == 3">Large chips or piece missing</span>
+				</div>
+				<div><code>Micro SD Card:</code>
+					<i class="fa fa-check" ng-if="flight.micro_sd == 1 || flight.micro_sd == 2"></i>
+					<i class="fa fa-close" ng-if="flight.micro_sd == 0"></i>
+				</div>
+				<div><code>Gimbal:</code>
+					<i class="fa fa-check" ng-if="flight.gimbal == 0"></i>
+					<i class="fa fa-close" ng-if="flight.gimbal == 1"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -31,7 +31,6 @@ var saveAltitude = function(_data, _callback){
 	var alt = new Altitude(_data);
 	alt.save(function(err, data){
 		if(err) console.log(err);
-		else console.log('collected altitude');
 		_callback();
 	});
 }

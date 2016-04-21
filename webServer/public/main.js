@@ -64,9 +64,14 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			controller: 'PostFlightConsoleCtrl'
 		})
 
+		// overviews
 		.when('/data_overview/:flightId/:time', {
 			templateUrl: 'templates/data_overview.html',
 			controller: 'DataOverviewCtrl'
+		})
+		.when('/flight_overview/:flightId', {
+			templateUrl: 'templates/flight_overview.html',
+			controller: 'FlightOverviewCtrl'
 		})
 
 		// batery
@@ -125,6 +130,7 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 	NotificationProvider.setOptions({
 		templateUrl: 'templates/notification_template.html',
         delay: 2000,
+        duration: 2000,
         startTop: 20,
         startRight: 10,
         verticalSpacing: 20,

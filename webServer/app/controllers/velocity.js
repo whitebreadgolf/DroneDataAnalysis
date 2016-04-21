@@ -31,7 +31,6 @@ var saveVelocity = function(_data, _callback){
 	var vel = new Velocity(_data);
 	vel.save(function(err, data){
 		if(err) console.log(err);
-		else console.log('collected velocity');
 		_callback();
 	});
 };

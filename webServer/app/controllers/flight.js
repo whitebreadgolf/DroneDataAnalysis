@@ -95,6 +95,12 @@ var getAllFlightsWithCollectedData = function (_id, _callback){
 	});
 };
 
+var getFlightsForId = function(_flightId, _callback){
+	Flight.findOne({_id: _flightId}, function(err, flight){
+		_callback(err, flight);
+	});
+};
+
 /**
 @function startRTFlight 
 @description starts a flight for realtime analysis
@@ -195,6 +201,7 @@ module.exports = {
 	removePreflightInspection: removePreflightInspection,
 	getAllFlightsWithoutCollectedData: getAllFlightsWithoutCollectedData,
 	getAllFlightsWithCollectedData: getAllFlightsWithCollectedData,
+	getFlightsForId: getFlightsForId,
 	startRTFlight: startRTFlight,
 	startDFlight: startDFlight,
 	endDFlight: endDFlight,

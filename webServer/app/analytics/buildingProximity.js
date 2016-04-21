@@ -968,7 +968,7 @@ var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
     }
 
     // locate quadrant and calculate index
-    var CENTER = 25;
+    var CENTER = 50;
     var closeMap = _maps[min];
     var closeLat = closeMap.lat;
     var closeLon = closeMap.lon;
@@ -977,8 +977,8 @@ var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
     var dy = Math.floor((measure(_lat, closeLon, closeLat, closeLon)/distance)*100);
     var pos = {};
     if (closeLat > _lat && closeLon < _lon){
-        pos.x = CENTER - dx;
-        pos.y = CENTER - dy;
+        pos.x = CENTER + dx;//changed
+        pos.y = CENTER + dy;
     }
     else if (closeLat > _lat && closeLon > _lon){
         pos.x = CENTER + dx;
@@ -989,11 +989,9 @@ var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
         pos.y = CENTER + dy;
     }
     else if (closeLat < _lat && closeLon > _lon){
-        pos.x = CENTER + dx;
-        pos.y = CENTER + dy;
+        pos.x = CENTER - dx;// changed
+        pos.y = CENTER - dy;
     }
-
-    console.log(pos);
 
     _callback(closeMap, pos);
 };
@@ -1016,6 +1014,8 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback)
         _callback(0);
         return;
     }
+
+    //printMap(_binaryMap.values);
 
     // load maps and then do search
     loadSurroundingMaps(_id, _binaryMap, function (_mapArray){
@@ -1178,6 +1178,8 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback)
 @return {Number} - distance from the drone (in units of cells in map tile)
  */
 var getDistanceFromDrone = function (_droneloc, _point, _tilewidth, _tileheight) {
+    console.log(_droneloc);
+    console.log(_point);
     var pointx = _point.i * _tileheight + _point.x;
     var pointy = _point.j * _tilewidth + _point.y;
 
