@@ -980,11 +980,11 @@ var translateLatLonToGridPoint = function(_lat, _lon, _maps, _callback){
         pos.x = CENTER + dx;//changed
         pos.y = CENTER + dy;
     }
-    else if (closeLat > _lat && closeLon > _lon){
+    else if (closeLat < _lat && closeLon < _lon){
         pos.x = CENTER + dx;
         pos.y = CENTER - dy;
     }
-    else if (closeLat < _lat && closeLon < _lon){
+    else if (closeLat > _lat && closeLon > _lon){
         pos.x = CENTER - dx;
         pos.y = CENTER + dy;
     }
@@ -1071,7 +1071,8 @@ var getNearestBuildingLocation = function(_id, _binaryMap, _droneloc, _callback)
             // check if current location is a building 
             if (_mapArray[currLocation.i][currLocation.j] !== null) {
                 var currentTile = _mapArray[currLocation.i][currLocation.j];
-                if (currentTile.values[currLocation.x * MAP_DIM + currLocation.y] === true) {// changed to map dim
+                // fixed value's accessor right here
+                if (currentTile.values[currLocation.y * MAP_DIM + currLocation.x] === true) {// changed to map dim
                     building = currLocation;
                     break;
                 }
