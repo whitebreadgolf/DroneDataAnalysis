@@ -25,10 +25,10 @@ var velAltFilter = function (_time, _collect, _isLive, _id, _flightId, _data_str
 
 	// apply both filters synchronously
 	if(_data_stream.altitude !== null && _data_stream.velocity_x !== null && _data_stream.velocity_y !== null && _data_stream.velocity_z !== null){
-		var altitude = Number.parseFloat(_data_stream.altitude);
-		var speed_x = Number.parseFloat(_data_stream.velocity_x);
-		var speed_y = Number.parseFloat(_data_stream.velocity_y);
-		var speed_z = Number.parseFloat(_data_stream.velocity_z);
+		var altitude = parseFloat(_data_stream.altitude);
+		var speed_x = parseFloat(_data_stream.velocity_x);
+		var speed_y = parseFloat(_data_stream.velocity_y);
+		var speed_z = parseFloat(_data_stream.velocity_z);
 		altFilter(_time, _collect, _isLive, _id, _flightId, altitude, function(){
 			velFilter(_time, _collect, _isLive, _id, _flightId, speed_x, speed_y, speed_z, function(){
 				_callback();
@@ -36,15 +36,15 @@ var velAltFilter = function (_time, _collect, _isLive, _id, _flightId, _data_str
 		});	
 	}
 	else if(_data_stream.velocity_x !== null && _data_stream.velocity_y !== null && _data_stream.velocity_z !== null){
-		var speed_x = Number.parseFloat(_data_stream.velocity_x);
-		var speed_y = Number.parseFloat(_data_stream.velocity_y);
-		var speed_z = Number.parseFloat(_data_stream.velocity_z);
+		var speed_x = parseFloat(_data_stream.velocity_x);
+		var speed_y = parseFloat(_data_stream.velocity_y);
+		var speed_z = parseFloat(_data_stream.velocity_z);
 		velFilter(_time, _collect, _isLive, _id, _flightId, speed_x, speed_y, speed_z, function(){
 			_callback();
 		});
 	}
 	else if(_data_stream.altitude !== null){
-		var altitude = Number.parseFloat(_data_stream.altitude);
+		var altitude = parseFloat(_data_stream.altitude);
 		altFilter(_time, _collect, _isLive, _id, _flightId, altitude, function(){
 			_callback();
 		});	
