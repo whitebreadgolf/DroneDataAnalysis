@@ -81,7 +81,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.altitude !== null && jsonData.altitude !== undefined){
 						if(jsonData.altitude < 0.01 && jsonData.altitude > -0.01) 
 							jsonData.altitude = 0;
-						var pushAlt = { "label" : jsonData.time/1000 , "value":jsonData.altitude};
+						var pushAlt = { label: jsonData.time/1000, value:jsonData.altitude};
 						altitude[0].values.push(pushAlt);
 						if (altitude[0].values.length > 15)
 							altitude[0].values.shift();
@@ -91,7 +91,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.velocity_x !== null && jsonData.velocity_x !== undefined){
 						if(jsonData.velocity_x < 0.01 && jsonData.velocity_x > -0.01) 
 							jsonData.velocity_x = 0;
-						var pushX = {"label":jsonData.time/1000, "value":jsonData.velocity_x};
+						var pushX = {label:jsonData.time/1000, value:jsonData.velocity_x};
 						speed[0].values.push(pushX);
 						if (speed[0].values.length > 15)
 							speed[0].values.shift();
@@ -101,7 +101,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.velocity_y !== null && jsonData.velocity_y !== undefined){
 						if(jsonData.velocity_y < 0.01 && jsonData.velocity_y > -0.01) 
 							jsonData.velocity_y = 0;
-						var pushY = {"label":jsonData.time/1000, "value":jsonData.velocity_y};
+						var pushY = {label:jsonData.time/1000, value:jsonData.velocity_y};
 						speed[1].values.push(pushY);
 						if (speed[1].values.length > 15)
 							speed[1].values.shift();
@@ -111,7 +111,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.velocity_z !== null && jsonData.velocity_z !== undefined){
 						if(jsonData.velocity_z < 0.01 && jsonData.velocity_z > -0.01) 
 							jsonData.velocity_z = 0;
-						var pushZ = {"label":jsonData.time/1000, "value":jsonData.velocity_z};
+						var pushZ = {label:jsonData.time/1000, value:jsonData.velocity_z};
 						speed[2].values.push(pushZ);
 						if (speed[2].values.length > 15)
 							speed[2].values.shift();
@@ -121,7 +121,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.acc_x !== null && jsonData.acc_x !== undefined){
 						if(jsonData.acc_x < 0.01 && jsonData.acc_x > -0.01) 
 							jsonData.acc_x = 0;
-						var pushX = {"label":jsonData.time/1000, "value":jsonData.acc_x};
+						var pushX = {label:jsonData.time/1000, value:jsonData.acc_x};
 						acceleration[0].values.push(pushX);
 						if (acceleration[0].values.length > 15)
 							acceleration[0].values.shift();
@@ -131,7 +131,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.acc_y !== null && jsonData.acc_y !== undefined){
 						if(jsonData.acc_y < 0.01 && jsonData.acc_y > -0.01) 
 							jsonData.acc_y = 0;
-						var pushY = {"label":jsonData.time/1000, "value":jsonData.acc_y};
+						var pushY = {label:jsonData.time/1000, value:jsonData.acc_y};
 						acceleration[1].values.push(pushY);
 						if (acceleration[1].values.length > 15)
 							acceleration[1].values.shift();
@@ -141,7 +141,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.acc_z !== null && jsonData.acc_z !== undefined){
 						if(jsonData.acc_z < 0.01 && jsonData.acc_z > -0.01) 
 							jsonData.acc_z = 0;
-						var pushZ = {"label":jsonData.time/1000, "value":jsonData.acc_z};
+						var pushZ = {label:jsonData.time/1000, value:jsonData.acc_z};
 						acceleration[2].values.push(pushZ);
 						if (acceleration[2].values.length > 15)
 							acceleration[2].values.shift();
@@ -151,7 +151,7 @@ angular.module('UavOpsInterface')
 					if(jsonData.battery !== null && jsonData.battery !== undefined){
 						if(jsonData.battery < 0.01 && jsonData.battery > -0.01) 
 							jsonData.battery = 0;
-						var pushBat = {"label":jsonData.time/1000, "value":jsonData.battery};
+						var pushBat = {label:jsonData.time/1000, value:jsonData.battery};
 						battery[0].values[0] = pushBat;
 					}					
 				}
@@ -182,7 +182,7 @@ angular.module('UavOpsInterface')
 				else if(jsonData.type === 'proximity'){
 					console.log(jsonData);
 					if(jsonData.param === 'building'){
-						building[0].values[0] = {label:jsonData.time, value:jsonData.dist};
+						building[0].values[0] = {label:jsonData.time/1000, value:jsonData.dist};
 					}
 					else if(jsonData.param === 'airport'){
 						var flag = false;

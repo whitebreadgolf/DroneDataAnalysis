@@ -4,7 +4,13 @@
 @requires Notification
 */
 angular.module('UavOpsInterface')
-.controller('LoginCtrl', function($scope, $http, Notification){
+.controller('LoginCtrl', function($scope, $http, $location, Session, $window, Notification){
+
+	Session.getUser().then(function(data){
+		if(data.name){
+			$location.path('/about');
+		}
+	});
 	
 	/**
 	@function loginSubmit
@@ -27,13 +33,12 @@ angular.module('UavOpsInterface')
 				return;
 			}
 		}
-
 		var req = { method: 'POST', url: 'api/login', data: data};
 		$http(req).then(function(data){
 
 			if(data.data.success) {
-				$scope.type = 'success';
-				Notification({message: 'Welcome '+data.data.user.name, scope: $scope});
+				//Notification({message: 'Welcome '+data.data.user.name, scope: $scope});
+				$window.location.reload();
 			} 
 			else {
 				$scope.type = 'error';

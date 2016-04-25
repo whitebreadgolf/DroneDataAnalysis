@@ -64,15 +64,15 @@ angular.module('UavOpsInterface')
 	@description This function takes in a flight id and stops the corresponding 
 	decoding process of that flight's data.
 	*/
-	$scope.stopDecoding = function(_flightId){
+	$scope.stopDecoding = function(_flight){
 
 		// stop decoder for id
 		// do not need analysis callbacks
-		Decoder.stopDecoding(_flightId);
+		Decoder.stopDecoding(_flight);
 
 		// removes button
 		for(var i=0;i<$scope.flights.length;i++){
-			if($scope.flights[i]._id === _flightId){
+			if($scope.flights[i]._id === _flight._id){
 				$scope.flights[i].started = false;
 			}
 		}   
@@ -86,9 +86,9 @@ angular.module('UavOpsInterface')
 	is associated with the flightId. It also notifies the user as to the status
 	of the start action.
 	*/
-	$scope.startLiveFlight = function(_flightId){
+	$scope.startLiveFlight = function(_flight){
 		for(var i=0;i<$scope.flights.length;i++){
-			if($scope.flights[i]._id === _flightId){
+			if($scope.flights[i]._id === _flight._id){
 				$scope.flights[i].started = true;
 				$scope.flights[i].decoding = false;
 			}
@@ -96,7 +96,7 @@ angular.module('UavOpsInterface')
 		var req = {
 			method: 'POST',
 			url: 'api/flight',
-			data: {type: 'real_time', flight_id: _flightId, action: 'start'}
+			data: {type: 'real_time', flight_id: _flight._id, action: 'start'}
 		};
 		$http(req).then(function(data){
 			if(data.data.success){ 
@@ -119,16 +119,16 @@ angular.module('UavOpsInterface')
 	flight process. It also notifies the user as to the status of the stop 
 	action.
 	*/
-	$scope.stopLiveFlight = function(_flightId){
+	$scope.stopLiveFlight = function(_flight){
 		for(var i=0;i<$scope.flights.length;i++){
-			if($scope.flights[i]._id === _flightId){
+			if($scope.flights[i]._id === _flight._id){
 				$scope.flights[i].started = false;
 			}
 		}  
 		var req = {
 			method: 'POST',
 			url: 'api/flight',
-			data: {type: 'real_time', flight_id: _flightId, action: 'end'}
+			data: {type: 'real_time', flight_id: _flight._id, action: 'end'}
 		};
 		$http(req).then(function(data){
 			if(data.data.success){ 
@@ -153,15 +153,15 @@ angular.module('UavOpsInterface')
 	convert the uploaded DAT file into a format that we can use to access
 	contained data.
 	*/
-	$scope.uploadFile = function(_file, _flightId){
+	$scope.uploadFile = function(_file, _flight){
 
 		// start decoder
-        Decoder.startDecoder(_flightId, _file, function(){
+        Decoder.startDecoder(_flight, _file, function(){
 
         	// this may or may not be called
         	// we already called stop in the Decoder factory
 			for(var i=0;i<$scope.flights.length;i++){
-				if($scope.flights[i]._id === _flightId){
+				if($scope.flights[i]._id === _flight._id){
 					$scope.flights[i].started = false;
 				}
 			}   
@@ -169,7 +169,7 @@ angular.module('UavOpsInterface')
 
         	// set animation
         	for(var i=0;i<$scope.flights.length;i++){
-				if($scope.flights[i]._id === _flightId)
+				if($scope.flights[i]._id === _flight._id)
 					$scope.flights[i].analyzing = true;
 			}
 		
@@ -177,14 +177,14 @@ angular.module('UavOpsInterface')
 
         	// end animation
         	for(var i=0;i<$scope.flights.length;i++){
-				if($scope.flights[i]._id === _flightId)
+				if($scope.flights[i]._id === _flight._id)
 					$scope.flights[i].analyzing = false;
 			}
         });
 
         // set started to true
         for(var i=0;i<$scope.flights.length;i++){
-			if($scope.flights[i]._id === _flightId){
+			if($scope.flights[i]._id === _flight._id){
 				$scope.flights[i].started = true;
 				$scope.flights[i].decoding = true;
 			}

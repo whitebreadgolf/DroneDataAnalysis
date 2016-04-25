@@ -23,6 +23,27 @@ angular.module('UavOpsInterface')
         $scope.showChart = false;
         $scope.showBack = false;
     };
+    $scope.searchFlights = function(){
+        $scope.flights = [];
+        if($scope.toggleInput){
+            var startDate = new Date($scope.startDate);
+            var endDate = new Date($scope.endDate);
+            for(var i in allFlights){
+                var date = new Date(allFlights[i].flight_started);
+                
+                if(date > startDate && date < endDate){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }
+        }
+        else{
+            for(var i in allFlights){
+                if(allFlights[i].flight_name.indexOf($scope.searchFilter) > -1){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }       
+        }
+    }
   
     /**
     @function getAltitudeHistory
@@ -52,7 +73,7 @@ angular.module('UavOpsInterface')
             altitudes.sort(sortFunc);
             $scope.altitudes = [
                 {
-                    key: "altitudes",
+                    key: "Altitudes",
                     values: altitudes
                 }
             ];
@@ -78,13 +99,13 @@ angular.module('UavOpsInterface')
                         }
                     },
                     x: function(d){ return d.label; },
-                    y: function(d){ return d.value; },
+                    y: function(d){ return d.value*3.280839895; },
                     useInteractiveGuideline: true,
                     xAxis: {
-                        axisLabel: 'Time (ms)'
+                        axisLabel: 'Time'
                     },
                     yAxis: {
-                        axisLabel: 'Altitude (m)',
+                        axisLabel: 'Altitude (ft)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -94,14 +115,6 @@ angular.module('UavOpsInterface')
                 title: {
                     enable: true,
                     text: 'Drone Altitude Over Time'
-                },
-                subtitle: {
-                    enable: true,
-                    text: 'This displays the drone altitude in meters over seconds. To get more information, click on a point.',
-                    css: {
-                        'text-align': 'center',
-                        'margin': '10px 13px 0px 7px'
-                    }
                 }
             };
         });

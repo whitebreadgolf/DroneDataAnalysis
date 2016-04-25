@@ -67,7 +67,7 @@ angular.module('UavOpsInterface')
             $scope.allMarkers = data.data.data;
         });
 
-        $scope.handleGraphClick = function (evt, _time) {
+        $scope.handleGraphClick = function (_evt, _time) {
             var time = _time.created_at;
             var rerouteTime = '/data_overview/' + _flightId + '/' + (new Date(time)).getTime();
             var rerouteFlight = '/flight_overview/' + _flightId;

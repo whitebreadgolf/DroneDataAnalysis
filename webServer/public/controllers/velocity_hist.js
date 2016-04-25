@@ -73,15 +73,15 @@ angular.module('UavOpsInterface')
             var velocities = data.data.data
             for(var i in velocities){
                 xVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
+                    label: (new Date(velocities[i].created_at)),
                     value: velocities[i].vel_x
                 });
                 yVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
+                    label: (new Date(velocities[i].created_at)),
                     value: velocities[i].vel_y
                 });
                 zVals.push({
-                    label: (new Date(velocities[i].created_at)).getTime(),
+                    label: (new Date(velocities[i].created_at)),
                     value: velocities[i].vel_z
                 });
             }
@@ -125,10 +125,10 @@ angular.module('UavOpsInterface')
                     },
                     useInteractiveGuideline: true,
                     xAxis: {
-                        axisLabel: 'Time (ms)'
+                        axisLabel: 'Time'
                     },
                     yAxis: {
-                        axisLabel: 'Velocity (m/s)',
+                        axisLabel: 'Directional Speed (knots)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -137,15 +137,7 @@ angular.module('UavOpsInterface')
                 },
                 title: {
                     enable: true,
-                    text: 'Drone\'s Velocity Over Time'
-                },
-                subtitle: {
-                    enable: true,
-                    text: 'This displays the drone\'s velocity in meters per second over milliseconds elapsed. To get more information, click on a point.',
-                    css: {
-                        'text-align': 'center',
-                        'margin': '10px 13px 0px 7px'
-                    }
+                    text: 'Drone\'s Directional Speed Over Time'
                 }
             };
         });

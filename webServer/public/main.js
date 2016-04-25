@@ -7,6 +7,10 @@ angular.module('UavOpsInterface', ['ngRoute', 'ngMap', 'nvd3', 'ui-notification'
 			templateUrl: 'templates/login.html',
 			controller: 'LoginCtrl'
 		})
+		.when('/logout', {
+			templateUrl: 'templates/logout.html',
+			controller: 'LogoutCtrl'
+		})
 		.when('/newprofile', {
 			templateUrl: 'templates/newprofile.html',
 			controller: 'NewProfileCtrl'

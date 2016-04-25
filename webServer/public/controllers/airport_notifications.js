@@ -134,7 +134,7 @@ angular.module('UavOpsInterface')
 		             	return d.label; 
 		         	},
 		            y: function(d){ 
-		            	return d.value; 
+		            	return d.value*3.280839895; 
 		        	},
 		        	lines: {
 			            dispatch: {
@@ -146,7 +146,7 @@ angular.module('UavOpsInterface')
 		                axisLabel: 'Time (ms)'
 		            },
 		            yAxis: {
-		                axisLabel: 'Distance (m)',
+		                axisLabel: 'Distance (ft)',
 		                tickFormat: function(d){
 		                    return d3.format('.02f')(d);
 		                },
@@ -156,22 +156,6 @@ angular.module('UavOpsInterface')
 		        title: {
 		            enable: true,
 		            text: 'Drone\'s Airport Proximity'
-		        },
-		        subtitle: {
-		            enable: true,
-		            text: 'This displays the drone\'s proximity to an airport',
-		            css: {
-		                'text-align': 'center',
-		                'margin': '10px 13px 0px 7px'
-		            }
-		        },
-		        caption: {
-		            enable: false,
-		            html: ' ',
-		            css: {
-		                'text-align': 'justify',
-		                'margin': '10px 13px 0px 7px'
-		            }
 		        }
 		    };
 		});

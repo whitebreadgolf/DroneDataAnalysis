@@ -1,3 +1,0 @@
-/**
-@namespace angular_factories
-*/

@@ -91,13 +91,13 @@ angular.module('UavOpsInterface')
                         }
                     },
                     x: function(d){ return d.label; },
-                    y: function(d){ return d.value; },
+                    y: function(d){ return d.value*3.280839895; },
                     useInteractiveGuideline: true,
                     xAxis: {
                         axisLabel: 'Time (ms)'
                     },
                     yAxis: {
-                        axisLabel: 'Distance (m)',
+                        axisLabel: 'Distance (ft)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -107,14 +107,6 @@ angular.module('UavOpsInterface')
                 title: {
                     enable: true,
                     text: 'Drone\'s Obstacle Proximity'
-                },
-                subtitle: {
-                    enable: true,
-                    text: 'This displays the drone\'s proximity to an obstacle',
-                    css: {
-                        'text-align': 'center',
-                        'margin': '10px 13px 0px 7px'
-                    }
                 }
             };
         });

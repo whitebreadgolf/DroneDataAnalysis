@@ -6,7 +6,7 @@
 angular.module('UavOpsInterface')
 .controller('NewProfileCtrl', function($scope, $http, Notification){
 	
-	/**
+	/** 
 	@function newProfileSubmit
 	@memberOf angular_controller.NewProfile
 	@description This function takes in a name, username, and password

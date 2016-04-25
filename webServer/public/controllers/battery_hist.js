@@ -18,6 +18,27 @@ angular.module('UavOpsInterface')
         $scope.showChart = false;
         $scope.showBack = false;
     };
+    $scope.searchFlights = function(){
+        $scope.flights = [];
+        if($scope.toggleInput){
+            var startDate = new Date($scope.startDate);
+            var endDate = new Date($scope.endDate);
+            for(var i in allFlights){
+                var date = new Date(allFlights[i].flight_started);
+                
+                if(date > startDate && date < endDate){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }
+        }
+        else{
+            for(var i in allFlights){
+                if(allFlights[i].flight_name.indexOf($scope.searchFilter) > -1){
+                    $scope.flights.push(allFlights[i]);
+                }
+            }       
+        }
+    }
   
     $scope.flightSearch = function(_flightId){
         var req = {
@@ -64,10 +85,10 @@ angular.module('UavOpsInterface')
                     y: function(d){ return d.value; },
                     useInteractiveGuideline: true,
                     xAxis: {
-                        axisLabel: 'Time (ms)'
+                        axisLabel: 'Time'
                     },
                     yAxis: {
-                        axisLabel: 'Charge',
+                        axisLabel: 'Charge (%)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -77,14 +98,6 @@ angular.module('UavOpsInterface')
                 title: {
                     enable: true,
                     text: 'Drone Battery Charge Over Time'
-                },
-                subtitle: {
-                    enable: true,
-                    text: 'This displays the battery charge of the drone over milliseconds. To get more information, click on a point.',
-                    css: {
-                        'text-align': 'center',
-                        'margin': '10px 13px 0px 7px'
-                    }
                 }
             };
         });

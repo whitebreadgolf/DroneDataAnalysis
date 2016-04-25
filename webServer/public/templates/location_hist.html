@@ -73,7 +73,7 @@
 			<custom-marker 
 				ng-repeat="pos in allMarkers" 
 				position="{{pos.lat}},{{pos.lon}}"
-				on-click="handleGraphClick(mark, mark.created_at)"
+				on-click="handleGraphClick(pos, pos.created_at)"
 			><div class="customDot"><div></div> </div></custom-marker>
 		</ng-map>
 	</div>

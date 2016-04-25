@@ -24,14 +24,14 @@ angular.module('UavOpsInterface')
                 "left": 55
             },
             x: function(d){ return d.label; },
-            y: function(d){ return d.value; },
+            y: function(d){ return d.value*3.280839895; },
             showValues: true,
             duration: 500,
             xAxis: {
-                axisLabel: "Time"
+                axisLabel: "Airport"
             },
             yAxis: {
-                axisLabel: "Meters",
+                axisLabel: "Distance (ft)",
                 axisLabelDistance: -10
             }
         }

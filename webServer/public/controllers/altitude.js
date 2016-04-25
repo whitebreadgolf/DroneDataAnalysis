@@ -32,13 +32,13 @@ angular.module('UavOpsInterface')
                 left: 55
             },
             x: function(d){ return d.label; },
-            y: function(d){ return d.value; },
+            y: function(d){ return d.value*3.280839895; },
             useInteractiveGuideline: true,
             xAxis: {
-                axisLabel: 'Time (ms)'
+                axisLabel: 'Time (s)'
             },
             yAxis: {
-                axisLabel: 'Altitude (m)',
+                axisLabel: 'Altitude (ft)',
                 tickFormat: function(d){
                     return d3.format('.02f')(d);
                 },
@@ -48,22 +48,6 @@ angular.module('UavOpsInterface')
         title: {
             enable: true,
             text: 'Drone\'s Altitude Over Time'
-        },
-        subtitle: {
-            enable: true,
-            text: 'This displays the drone\'s altitude in meters over milliseconds elapsed',
-            css: {
-                'text-align': 'center',
-                'margin': '10px 13px 0px 7px'
-            }
-        },
-        caption: {
-            enable: false,
-            html: ' ',
-            css: {
-                'text-align': 'justify',
-                'margin': '10px 13px 0px 7px'
-            }
         }
     };
 

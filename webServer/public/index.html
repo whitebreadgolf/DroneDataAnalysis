@@ -12,6 +12,57 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 </head>
 <body ng-app="UavOpsInterface">
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/nvd3/build/nv.d3.js"></script> 
+<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+<script src="bower_components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
+<script src="bower_components/typeahead.js/dist/typeahead.jquery.min.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+<script src="bower_components/ngprogress/build/ngprogress.min.js"></script>
+<script src="bower_components/ngtweet/dist/ngtweet.min.js"></script>
+<script src="bower_components/angular-track-height/angular-track-height.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/angularjs-datepicker/src/js/angular-datepicker.js"></script>
+<script src="main.js"></script>
+<script src="factories/websocket.js"></script>
+<script src="factories/decoderFactory.js"></script>
+<script src="factories/flightNameFactory.js"></script>
+<script src="factories/session.js"></script>
+<script src="controllers/login.js"></script>
+<script src="controllers/logout.js"></script>
+<script src="controllers/newprofile.js"></script>
+<script src="controllers/configmap.js"></script>
+<script src="controllers/velocity.js"></script>
+<script src="controllers/velocity_hist.js"></script>
+<script src="controllers/altitude.js"></script>
+<script src="controllers/altitude_hist.js"></script>
+<script src="controllers/flight_console.js"></script>
+<script src="controllers/postflight_console.js"></script>
+<script src="controllers/preflight.js"></script>
+<script src="controllers/notifications.js"></script>
+<script src="controllers/altvel_notifications.js"></script>
+<script src="controllers/airport_notifications.js"></script>
+<script src="controllers/obstical_notifications.js"></script>
+<script src="controllers/add_obstacle.js"></script>
+<script src="controllers/location_hist.js"></script>
+<script src="controllers/legal.js"></script>
+<script src="controllers/battery.js"></script>
+<script src="controllers/airport_proximity.js"></script>
+<script src="controllers/building_proximity.js"></script>
+<script src="controllers/histGraphModal.js"></script>
+<script src="controllers/data_overview.js"></script>
+<script src="controllers/acceleration_hist.js"></script>
+<script src="controllers/acceleration.js"></script>
+<script src="controllers/battery_hist.js"></script>
+<script src="controllers/flight_overview.js"></script>
+<script src="controllers/user.js"></script>
+
 <nav class="navbar navbar-default" style="border-radius:0px">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -56,16 +107,18 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul ng-controller="UserCtrl" class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            Account <i class="fa fa-caret-square-o-down"></i>
+            <div ng-show="loggedIn">{{name}} <i class="fa fa-caret-square-o-down"></i></div>
+            <div ng-show="!loggedIn">Account <i class="fa fa-caret-square-o-down"></i></div>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#/login">Login</a></li>
-            <li><a href="#/newprofile">New Account</a></li>
-            <li><a href="#/configmap"><i class="fa fa-map-o"></i> Configure Map</a></li>
-            <li><a href="#/add_obstacle"><i class="fa fa-plus"></i> Add Obstacle</a></li>
+              <li ng-if="loggedIn"><a href="#/configmap"><i class="fa fa-map-o"></i> Configure Map</a></li>
+              <li ng-if="loggedIn"><a href="#/add_obstacle"><i class="fa fa-plus"></i> Add Obstacle</a></li>
+              <li ng-if="loggedIn"><a href="#/logout">Logout</a></li>
+              <li ng-if="!loggedIn"><a href="#/login">Login</a></li>
+              <li ng-if="!loggedIn"><a href="#/newprofile">New Account</a></li>
           </ul>
         </li>
       </ul>
@@ -76,51 +129,4 @@
 <div ng-view="" class="container"></div>
 
 </body>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/angular/angular.min.js"></script>
-<script src="bower_components/angular-route/angular-route.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js"></script>
-<script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
-<script src="bower_components/d3/d3.js"></script>
-<script src="bower_components/nvd3/build/nv.d3.js"></script> 
-<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
-<script src="bower_components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
-<script src="bower_components/typeahead.js/dist/typeahead.jquery.min.js"></script>
-<script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
-<script src="bower_components/ngprogress/build/ngprogress.min.js"></script>
-<script src="bower_components/ngtweet/dist/ngtweet.min.js"></script>
-<script src="bower_components/angular-track-height/angular-track-height.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script src="bower_components/angularjs-datepicker/src/js/angular-datepicker.js"></script>
-<script src="main.js"></script>
-<script src="factories/websocket.js"></script>
-<script src="factories/decoderFactory.js"></script>
-<script src="factories/flightNameFactory.js"></script>
-<script src="controllers/login.js"></script>
-<script src="controllers/newprofile.js"></script>
-<script src="controllers/configmap.js"></script>
-<script src="controllers/velocity.js"></script>
-<script src="controllers/velocity_hist.js"></script>
-<script src="controllers/altitude.js"></script>
-<script src="controllers/altitude_hist.js"></script>
-<script src="controllers/flight_console.js"></script>
-<script src="controllers/postflight_console.js"></script>
-<script src="controllers/preflight.js"></script>
-<script src="controllers/notifications.js"></script>
-<script src="controllers/altvel_notifications.js"></script>
-<script src="controllers/airport_notifications.js"></script>
-<script src="controllers/obstical_notifications.js"></script>
-<script src="controllers/add_obstacle.js"></script>
-<script src="controllers/location_hist.js"></script>
-<script src="controllers/legal.js"></script>
-<script src="controllers/battery.js"></script>
-<script src="controllers/airport_proximity.js"></script>
-<script src="controllers/building_proximity.js"></script>
-<script src="controllers/histGraphModal.js"></script>
-<script src="controllers/data_overview.js"></script>
-<script src="controllers/acceleration_hist.js"></script>
-<script src="controllers/acceleration.js"></script>
-<script src="controllers/battery_hist.js"></script>
-<script src="controllers/flight_overview.js"></script>
 </html>

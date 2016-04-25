@@ -11,7 +11,7 @@ angular.module('UavOpsInterface')
 	// map for current decodings
 	var currentDecoding = null;
 	var decodeQueue = [];
-	var scope = {};
+
 	/**
 	@function convert 
 	@memberOf angular_factories.DecoderFactory
@@ -274,10 +274,10 @@ angular.module('UavOpsInterface')
 	};
 
 	var	isRunningOrInQueue = function(_flightId){
-		if(currentDecoding && currentDecoding.flight_id === _flightId) return true;
+		if(currentDecoding && currentDecoding.flight._id === _flightId) return true;
 		else{
 			for(var i=0;i<decodeQueue.length;i++){
-				if(decodeQueue[i].flightId === _flightId) return true;
+				if(decodeQueue[i].flight._id === _flightId) return true;
 			}
 
 			// no trues were returned
@@ -294,9 +294,8 @@ angular.module('UavOpsInterface')
 	@param {Callback} _endAnalysis - callbacks to end analysis
 	@returns {Number} 
 	*/
-	var	stopDecoding = function(_flightId, _startAnalysis, _endAnalysis){
-		if(currentDecoding.flight_id === _flightId){
-
+	var	stopDecoding = function(_flight, _startAnalysis, _endAnalysis){
+		if(currentDecoding.flight._id === _flight._id){
 			// first check if the decoding was finished
 			if(currentDecoding.finished === true){
 
@@ -304,7 +303,7 @@ angular.module('UavOpsInterface')
 				var req = {
 					method: 'POST',
 					url: 'api/flight',
-					data: {type: 'decoding', flight_id: _flightId, action: 'start'}
+					data: {type: 'decoding', flight_id: _flight._id, action: 'start'}
 				};
 				$http(req).then(function(data){
 					if(data.data.success){
@@ -314,7 +313,7 @@ angular.module('UavOpsInterface')
 						var req = {
 							method: 'POST',
 							url: 'api/data',
-							data: {type: 'multi', csv_string: currentDecoding.csv_string, flight_id: _flightId}
+							data: {type: 'multi', csv_string: currentDecoding.csv_string, flight_id: _flight._id}
 						};
 						$http(req).then(function(data){
 							if(data.data.success) {
@@ -324,7 +323,7 @@ angular.module('UavOpsInterface')
 								var req = {
 									method: 'POST',
 									url: 'api/flight',
-									data: {type: 'decoding', flight_id: _flightId, action: 'end'}
+									data: {type: 'decoding', flight_id: _flight._id, action: 'end'}
 								};
 								$http(req).then(function(data){
 									if(data.data.success){
@@ -341,7 +340,7 @@ angular.module('UavOpsInterface')
 							}
 							else {
 								//scope.type = 'error';
-								Notification({message: data.data.message, scope: scope});
+								Notification({message: data.data.message});
 							}
 						});
 
@@ -353,14 +352,14 @@ angular.module('UavOpsInterface')
 						currentDecoding.progress_bar.stop();
 						currentDecoding.reader.abort();
 
+						// kill object
+						currentDecoding = null;
+
 						// check if we need to start another decoding and start
 						if(decodeQueue.length > 0){ 
 							var decodingProcess = decodeQueue.pop();
-							startDecoderHelper(decodingProcess.flightId, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
+							startDecoderHelper(decodingProcess.flight, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
 						}
-
-						// kill object
-						currentDecoding = null;
 					}
 					else {
 						//scope.type = 'error';
@@ -370,7 +369,7 @@ angular.module('UavOpsInterface')
 			}
 			else{ 
 				//scope.type = 'info';
-				Notification({message: 'flight '+_flightId+ ' stopped', scope: scope}); 
+				Notification({message: 'flight '+_flight.flight_name+ ' stopped'}); 
 
 				// destroy current updating and set current object data and stop progress bar animation
 				// stop file reading
@@ -379,24 +378,24 @@ angular.module('UavOpsInterface')
 				currentDecoding.progress_bar.reset();
 				currentDecoding.progress_bar.stop();
 				currentDecoding.reader.abort();
+				
+				// kill object
+				currentDecoding = null;
 
 				// check if we need to start another decoding and start
 				if(decodeQueue.length > 0){ 
 					var decodingProcess = decodeQueue.pop();
-					startDecoderHelper(decodingProcess.flightId, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
-				}
-
-				// kill object
-				currentDecoding = null;
+					startDecoderHelper(decodingProcess.flight, decodingProcess.file, decodingProcess.doneDecoding, decodingProcess.startAnalysis, decodingProcess.endAnalysis);
+				}	
 			}
 		}
 
 		// it is a queued element
 		else{
 			for(var i=0;i<decodeQueue.length;i++){
-				if(decodeQueue[i].flightId === _flightId){ 
+				if(decodeQueue[i].flightId === _flight._id){ 
 					//scope.type = 'info';
-					Notification({message: 'flight '+_flightId+ ' dequeued'});
+					Notification({message: 'flight '+_flight.flight_name+ ' dequeued'});
 					decodeQueue.splice(i, 1);
 				}
 			}
@@ -415,20 +414,24 @@ angular.module('UavOpsInterface')
 	@param {Callback} _endAnalysis - callbacks to end analysis
 	@returns {Number} 
 	*/
-	var startDecoder = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
+	var startDecoder = function(_flight, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// start decoder now
-		if(!currentDecoding) startDecoderHelper(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis);
+		if(!currentDecoding) 
+			startDecoderHelper(_flight, _file, _doneDecoding, _startAnalysis, _endAnalysis);
 
 		// wait till finished
 		else{
 			decodeQueue.push({
-				flightId: _flightId, file: _file, 
-				doneDecoding:_doneDecoding, startAnalysis:_startAnalysis, endAnalysis:_endAnalysis
+				flight: _flight, 
+				file: _file, 
+				doneDecoding:_doneDecoding, 
+				startAnalysis:_startAnalysis, 
+				endAnalysis:_endAnalysis
 			});
 
 			//scope.type = 'warning';
-			Notification({message: 'flight '+_flightId+ ' decoding queued'});
+			Notification({message: 'flight '+_flight.flight_name+ ' decoding queued'});
 		}
 	}
 
@@ -444,11 +447,11 @@ angular.module('UavOpsInterface')
 	@param {Callback} _endAnalysis - callbacks to end analysis
 	@returns {Number} 
 	*/
-	var	startDecoderHelper = function(_flightId, _file, _doneDecoding, _startAnalysis, _endAnalysis){
+	var	startDecoderHelper = function(_flight, _file, _doneDecoding, _startAnalysis, _endAnalysis){
 
 		// create object
 		currentDecoding = {
-			flight_id: _flightId,
+			flight: _flight,
 			progress: 0,
 			finished: false,
 			reader: new FileReader(),
@@ -468,7 +471,7 @@ angular.module('UavOpsInterface')
 		}, 1000);
 
     	//scope.type = 'info';
-    	Notification({message: 'flight '+_flightId+ ' decoding starting'});
+    	Notification({message: 'flight '+_flight.flight_name+ ' decoding starting'});
 
     	// initalize
 	    var file = _file;
@@ -838,7 +841,7 @@ angular.module('UavOpsInterface')
 	            // DONE WITH DECODING
 	            _doneDecoding();
 	            currentDecoding.finished = true;
-	    		stopDecoding(_flightId, _startAnalysis, _endAnalysis);
+	    		stopDecoding(_flight, _startAnalysis, _endAnalysis);
 	        }
 	        if (file_length - (blob_count * 500000) > 500000) {
 	            blob = file.slice(blob_count * 500000, blob_count * 500000 + 500000);

@@ -30,10 +30,10 @@ angular.module('UavOpsInterface')
             "showValues": true,
             "duration": 500,
             "xAxis": {
-                "axisLabel": "Time"
+                "axisLabel": "Time of Last Update (s)"
             },
             "yAxis": {
-                "axisLabel": "Charge",
+                "axisLabel": "Charge (in %)",
                 "axisLabelDistance": -10
             }
         }

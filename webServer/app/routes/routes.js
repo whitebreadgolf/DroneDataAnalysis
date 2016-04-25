@@ -148,6 +148,14 @@ var initRoutes = function (_app){
 		res.json(req.user);
 	});
 
+	// GET login
+	_app.post('/api/logout', function (req, res){
+
+		// res - {user: <Object>}
+		User.logOut();
+		res.json();
+	});
+
 	// POST createprofile
 	_app.post('/api/createprofile', function (req, res){
 
@@ -162,7 +170,7 @@ var initRoutes = function (_app){
 			reg_id: req.body.reg_id
 		}), req.body.pass, function(err) {
 			if (err) {
-				res.json({success: false, message:'user not registered'});
+				res.json({success: false, message:err.message});
 			}
 			else{
 				res.json({success: true, message:'user registered'});

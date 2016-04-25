@@ -32,7 +32,7 @@ angular.module('UavOpsInterface')
 	        },
 	        useInteractiveGuideline: false,
 	        x: function(d){ return d.label; },
-	        y: function(d){ return d.value; },
+	        y: function(d){ return d.value*1.943844; },
 	        showValues: true,
 	        valueFormat: function(d){
 	            return d3.format(',.4f')(d);
@@ -42,7 +42,7 @@ angular.module('UavOpsInterface')
 	            axisLabel: 'Time elapsed (s)'
 	        },
 	        yAxis: {
-	            axisLabel: 'Velocity (m/s)',
+	            axisLabel: 'Directional Speed (knots)',
                 tickFormat: function(d){
                     return d3.format('.02f')(d);
                 },
@@ -51,21 +51,13 @@ angular.module('UavOpsInterface')
     	}, 
     	title: {
             enable: true,
-            text: 'Drone\'s Velocity Over Time'
+            text: 'Drone\'s Directional Speed Over Time'
         },
         subtitle: {
             enable: true,
             text: 'This displays the drone\'s velocity in meters per second over seconds elapsed',
             css: {
                 'text-align': 'center',
-                'margin': '10px 13px 0px 7px'
-            }
-        },
-        caption: {
-            enable: false,
-            html: ' ',
-            css: {
-                'text-align': 'justify',
                 'margin': '10px 13px 0px 7px'
             }
         }

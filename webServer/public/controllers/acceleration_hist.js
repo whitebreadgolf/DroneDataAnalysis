@@ -24,7 +24,6 @@ angular.module('UavOpsInterface')
             var endDate = new Date($scope.endDate);
             for(var i in allFlights){
                 var date = new Date(allFlights[i].flight_started);
-                
                 if(date > startDate && date < endDate){
                     $scope.flights.push(allFlights[i]);
                 }
@@ -81,15 +80,15 @@ angular.module('UavOpsInterface')
 
             $scope.accelerations = [
                 {
-                    key: "x acceleration",
+                    key: "x Directional Speed Per Unit Time",
                     values: xVals
                 },
                 {
-                    key: "y acceleration",
+                    key: "y Directional Speed Per Unit Time",
                     values: yVals
                 },
                 {
-                    key: "z acceleration",
+                    key: "z Directional Speed Per Unit Time",
                     values: zVals
                 }
             ];
@@ -105,7 +104,7 @@ angular.module('UavOpsInterface')
                         left: 55
                     },
                     x: function(d){ return d.label; },
-                    y: function(d){ return d.value; },
+                    y: function(d){ return d.value*0.514444444; },
                     lines: {
                         dispatch: {
                             elementClick: handleGraphClick
@@ -113,10 +112,10 @@ angular.module('UavOpsInterface')
                     },
                     useInteractiveGuideline: true,
                     xAxis: {
-                        axisLabel: 'Time (ms)'
+                        axisLabel: 'Time'
                     },
                     yAxis: {
-                        axisLabel: 'Acceleration (m/s)',
+                        axisLabel: 'Directional Speed Per Unit Time (knots per second)',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
@@ -125,15 +124,7 @@ angular.module('UavOpsInterface')
                 },
                 title: {
                     enable: true,
-                    text: 'Drone\'s Acceleration Over Time'
-                },
-                subtitle: {
-                    enable: true,
-                    text: 'This displays the drone\'s acceleration in meters per second squared over milliseconds elapsed. To get more information, click on a point.',
-                    css: {
-                        'text-align': 'center',
-                        'margin': '10px 13px 0px 7px'
-                    }
+                    text: 'Drone\'s Directional Speed Per Unit Time Over Time'
                 }
             };
         });
