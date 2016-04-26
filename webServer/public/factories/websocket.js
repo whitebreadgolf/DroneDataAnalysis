@@ -177,7 +177,7 @@ angular.module('UavOpsInterface')
 				}
 				else if(jsonData.type === 'proximity'){
 					if(jsonData.param === 'building'){
-						building[0].values[0] = {label:jsonData.time/1000, value:jsonData.dist};
+						building[0].values[0] = {label:(new Date(jsonData.time)).toUTCString(), value:jsonData.dist};
 					}
 					else if(jsonData.param === 'airport'){
 						var flag = false;
