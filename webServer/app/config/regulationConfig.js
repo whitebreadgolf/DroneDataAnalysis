@@ -27,7 +27,7 @@ Stores application constants
 */
 var app_constants = {
 	dji_dat_collect_rate: 10,
-	app_collection_rate: 20000 // milliseconds
+	app_collection_rate: 2000 // milliseconds
 };
 
 /**

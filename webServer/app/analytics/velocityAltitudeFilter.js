@@ -82,7 +82,10 @@ var altFilter = function(_time, _collect, _isLive, _id, _flightId, _altitude, _c
 				text: 'Your drone is operating above the legal altitude for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(_time, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else if(_altitude > regulationConfig.faa_reg.max_altitude.warning){
@@ -95,7 +98,10 @@ var altFilter = function(_time, _collect, _isLive, _id, _flightId, _altitude, _c
 				text: 'Your drone is operating 90% of the legal altitude for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(_time, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else _callback();
@@ -159,7 +165,10 @@ var velXFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_x, _c
 				text: 'Your drone is operating above the legal x velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else if(_speed_x > regulationConfig.faa_reg.max_velocity.warning){
@@ -173,7 +182,10 @@ var velXFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_x, _c
 				text: 'Your drone is operating at 90% the legal x velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else _callback();
@@ -212,7 +224,10 @@ var velYFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_y, _c
 				text: 'Your drone is operating above the legal y velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else if(_speed_y > regulationConfig.faa_reg.max_velocity.warning){
@@ -226,7 +241,10 @@ var velYFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_y, _c
 				text: 'Your drone is operating at 90% the legal y velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}	
 	else _callback();
@@ -264,7 +282,10 @@ var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _c
 				text: 'Your drone is operating above the legal z velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			};
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else if(_speed_z > regulationConfig.faa_reg.max_velocity.warning){
@@ -278,7 +299,10 @@ var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _c
 				text: 'Your drone is operating at 90% the legal z velocity for FAA drone regulations',
 				time: curTime - regulationConfig.cur_flight[_id].start_time
 			}
-			routeLiveAndSave(_collect, _isLive, _id, _flightId, data, _callback);
+			routeLiveAndSave(curTime, _collect, _isLive, _id, _flightId, data, _callback);
+		}
+		else{
+			_callback();
 		}
 	}
 	else _callback();
@@ -294,7 +318,7 @@ var velZFilter = function(_collect, _isLive, _id, _flightId, _time, _speed_z, _c
 @param {Number} _data_stream - the flight data
 @param {function} _callback - a generic callback
 */
-var routeLiveAndSave = function(_collect, _isLive, _id, _flightId, _data_stream, _callback){
+var routeLiveAndSave = function(_time, _collect, _isLive, _id, _flightId, _data_stream, _callback){
 	if(_isLive.status) wss.broadcast(JSON.stringify(_data_stream));
 	if(_collect){
 
@@ -306,7 +330,7 @@ var routeLiveAndSave = function(_collect, _isLive, _id, _flightId, _data_stream,
 			report: _data_stream.text, 
 			value: 0,
 			icon: null,
-			created_at: new Date()
+			created_at: _time
 		};	
 
 		safetyStatus.saveSafetyStatus(collectData, function(){

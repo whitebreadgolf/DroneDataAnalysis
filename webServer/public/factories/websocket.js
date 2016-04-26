@@ -6,7 +6,6 @@
 angular.module('UavOpsInterface')
 .factory('Websocket', function (Notification){
 	// websocket data structures
-	var scope = {};
 	var ws;
 	var speed = [
 		{
@@ -167,20 +166,16 @@ angular.module('UavOpsInterface')
 					notifications.push(pushNotif);
 
 					if(jsonData.level === 'warning'){
-						scope.type = 'warning';
-						Notification({message: jsonData.param, scope: scope});
+						Notification({message: jsonData.param});
 					} 
 					else if(jsonData.level === 'hazard') {
-						scope.type = 'error';
-						Notification({message: jsonData.param, scope: scope}); 
+						Notification({message: jsonData.param}); 
 					} 
 					else if(jsonData.level === 'update') {
-						scope.type = 'info';
-						Notification({message: jsonData.param, scope: scope});
+						Notification({message: jsonData.param});
 					} 
 				}
 				else if(jsonData.type === 'proximity'){
-					console.log(jsonData);
 					if(jsonData.param === 'building'){
 						building[0].values[0] = {label:jsonData.time/1000, value:jsonData.dist};
 					}

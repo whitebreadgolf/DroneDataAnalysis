@@ -97,7 +97,7 @@ var dataFlow = function(_id, _flightId, _rows, _fd){
 		res.on('end', function(){
 			response = JSON.parse(response);
 			console.log(response.message);
-	 		sleep.sleep(2);
+	 		sleep.sleep(1);
 	 		dataFlow(_id, _flightId, _rows, _fd+1);
 		});
 	});	
