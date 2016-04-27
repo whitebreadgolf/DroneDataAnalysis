@@ -130,12 +130,8 @@ angular.module('UavOpsInterface')
 		                bottom: 40,
 		                left: 55
 		            },
-		            x: function(d){
-		             	return d.label; 
-		         	},
-		            y: function(d){ 
-		            	return d.value*3.280839895; 
-		        	},
+		            x: function(d){	return d.label; },
+		            y: function(d){ return (d.value*3.280839895)/5280; },
 		        	lines: {
 			            dispatch: {
 			                elementClick: handleGraphClick
@@ -146,7 +142,7 @@ angular.module('UavOpsInterface')
 		                axisLabel: 'Time (ms)'
 		            },
 		            yAxis: {
-		                axisLabel: 'Distance (ft)',
+		                axisLabel: 'Distance (mi)',
 		                tickFormat: function(d){
 		                    return d3.format('.02f')(d);
 		                },

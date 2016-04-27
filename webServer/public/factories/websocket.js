@@ -181,6 +181,12 @@ angular.module('UavOpsInterface')
 					}
 					else if(jsonData.param === 'airport'){
 						var flag = false;
+						var airpStr = 'Airport';
+						var arpInd = jsonData.name.indexOf(airpStr);
+						if(arpInd > 0){
+							var len = jsonData.name.length;
+							jsonData.name = jsonData.name.substring(0, arpInd) + jsonData.name.substring(arpInd+airpStr.length, len);
+						}
 						for(var i in airports[0].values){
 							if(airports[0].values[i].label === jsonData.name){
 								flag = true;
